@@ -1,10 +1,9 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const routes = (0, express_1.Router)();
-routes.get('/', (req, res) => {
-    res.status(200).send({
-        message: 'Hola Mundo'
-    });
-});
-module.exports = routes;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+const { Router } = require('express');
+const property_1 = __importDefault(require("./property"));
+const router = Router();
+router.use('/logout', property_1.default);
+module.exports = router;
