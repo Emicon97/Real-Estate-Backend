@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 // import cors from 'cors';
 const { CORS_URL } = process.env;
+//const routes = require('./routes/index');
 const routes = require('./routes/index');
 const app = (0, express_1.default)();
 app.use((0, morgan_1.default)('dev'));
