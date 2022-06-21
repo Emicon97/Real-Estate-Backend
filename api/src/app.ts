@@ -2,7 +2,8 @@ import express from 'express';
 import morgan from 'morgan';
 // import cors from 'cors';
 const { CORS_URL } = process.env
-const routes = require('./routes/index');
+//const routes = require('./routes/index');
+const routes = require('./routes/index')
 
 const app = express();
 
