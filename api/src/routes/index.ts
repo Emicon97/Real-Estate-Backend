@@ -1,11 +1,10 @@
-import { Router } from "express";
+const { Router } = require('express');
 
-const routes: Router = Router();
+import propertyRoutes from './property';
 
-routes.get('/',(req,res)=>{
-    res.status(200).send({
-        message: 'Hola World'
-    })
-})
+const router = Router();
 
-module.exports = routes
+router.use('/logout', propertyRoutes);
+
+
+export = router;
