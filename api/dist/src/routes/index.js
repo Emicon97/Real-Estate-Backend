@@ -4,7 +4,7 @@ const express_1 = require("express");
 const routes = (0, express_1.Router)();
 routes.get('/', (req, res) => {
     res.status(200).send({
-        message: 'Hola Mundo'
+        message: 'Hola World'
     });
 });
 module.exports = routes;

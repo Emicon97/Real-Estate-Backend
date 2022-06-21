@@ -4,7 +4,7 @@ const routes: Router = Router();
 
 routes.get('/',(req,res)=>{
     res.status(200).send({
-        message: 'Hola Mundo'
+        message: 'Hola World'
     })
 })
 

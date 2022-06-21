@@ -19,9 +19,6 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     next();
 });
-// app.use((req, res, next) => {
-//   next()
-// }, cors({ maxAge: 84600 }))
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use('/', routes);
