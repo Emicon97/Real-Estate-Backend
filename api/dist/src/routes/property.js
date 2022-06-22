@@ -14,6 +14,8 @@ const propertyControllers_1 = require("../controllers/propertyControllers");
 const router = (0, express_1.Router)();
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        let allP = yield (0, propertyControllers_1.getAllProperties)();
+        res.json(allP);
     }
     catch (error) {
         if (error instanceof Error) {

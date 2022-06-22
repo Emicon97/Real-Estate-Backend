@@ -12,8 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createProperty = void 0;
+exports.getAllProperties = exports.createProperty = void 0;
 const properties_1 = __importDefault(require("../models/properties"));
+function getAllProperties() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const allProperties = yield properties_1.default.find();
+        if (allProperties.length) {
+            return allProperties;
+        }
+        throw new Error("No se encontraron props");
+    });
+}
+exports.getAllProperties = getAllProperties;
 function createProperty(address, area, type, rooms, status, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice) {
     return __awaiter(this, void 0, void 0, function* () {
         const property = yield properties_1.default.create({

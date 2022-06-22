@@ -1,10 +1,14 @@
 import { Router } from 'express';
-import { createProperty } from '../controllers/propertyControllers';
+import { createProperty,  getAllProperties} from '../controllers/propertyControllers';
 
 const router = Router();
 
 router.get('/', async(req, res) => {
    try{
+      
+      let allP = await getAllProperties();       
+       
+      res.json(allP);
 
    }catch(error:any){
       if (error instanceof Error) {

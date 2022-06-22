@@ -1,6 +1,15 @@
 import propertyModel from "../models/properties";
 import { Property, Status } from "../models/properties";
 
+async function getAllProperties():Promise<Property[]>{
+   const allProperties = await propertyModel.find();
+   
+   if(allProperties.length){
+    return allProperties; 
+   }
+   throw new Error("No se encontraron props");
+}
+
 async function createProperty(
     address:string,         
     area:string,
@@ -36,5 +45,6 @@ async function createProperty(
 }
 
 export{
-    createProperty
+    createProperty,
+    getAllProperties
 }
