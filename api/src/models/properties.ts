@@ -1,4 +1,8 @@
-export enum Status { 'available', 'reserved', 'negotiation' };
+export enum Status {
+   available = 'available',
+   reserveed = 'reserved',
+   negotiotion = 'negotiation'
+};
 
 import { getModelForClass, prop, modelOptions, Severity } from "@typegoose/typegoose";
 @modelOptions({options: { allowMixed: Severity.ALLOW }})
@@ -22,13 +26,13 @@ export class Property {
    @prop({ required: true })
    public rooms: number;
    
-   @prop()
-   public bathrooms?: number;
+   @prop({ default: 1 })
+   public bathrooms: number;
    
    @prop({ required: true })
    public city: string;
 
-   @prop()
+   @prop({ default: 'No especificado' })
    public neighbourhood?: string;
 
    @prop()
@@ -37,10 +41,10 @@ export class Property {
    @prop()
    public renovationDate?: Date;
 
-   @prop()
+   @prop({ default: false })
    public parkingSlot: boolean;
 
-   @prop({ required: true, enum: Status })
+   @prop({ required: true, enum: Status, default: 'available' })
    public status: Status;
 
    @prop()

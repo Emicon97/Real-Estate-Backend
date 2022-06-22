@@ -8,7 +8,7 @@ async function getAllProperties():Promise<Property[]>{
     return allProperties; 
    }
    
-   throw new Error("No se encontraron props");
+   throw new Error("No se encontraron propiedades.");
 }
 
 async function getPropById(id:string):Promise<Property> {
@@ -19,7 +19,7 @@ async function getPropById(id:string):Promise<Property> {
         return propById;
     }
 
-   throw new Error("No existe Propiedad para dicho ID"); 
+   throw new Error("Esta propiedad no está disponible."); 
 }
 
 async function createProperty({
@@ -27,7 +27,6 @@ async function createProperty({
     area,
     type,
     rooms,
-    status,
     city,
     bathrooms,
     neighbourhood,
@@ -42,7 +41,6 @@ async function createProperty({
     area:string,
     type:string,
     rooms:number,
-    status:string,
     city:string,
     bathrooms?:number,
     neighbourhood?:string,
@@ -60,13 +58,12 @@ async function createProperty({
         area,
         type,
         rooms,
-        status,
         city,
-        bathrooms: bathrooms ? bathrooms : 1,
-        neighbourhood: neighbourhood ? neighbourhood : undefined,
+        bathrooms,
+        neighbourhood,
         constructionDate: constructionDate ? constructionDate : undefined,
         renovationDate: renovationDate ? renovationDate : undefined,
-        parkingSlot: parkingSlot ? parkingSlot : undefined,
+        parkingSlot,
         rentPrice: rentPrice ? rentPrice : 'No se alquila',
         sellPrice: sellPrice ? sellPrice : 'No está a la venta',
         pictures: pictures && pictures.length ? pictures : undefined

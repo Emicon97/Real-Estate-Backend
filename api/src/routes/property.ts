@@ -22,7 +22,7 @@ router.get('/', async(req, res) => {
 
 //ruta detalle get by id
 //"_id" para postman--> "62b2748be1138fd711ff07a5",
-router.get('/details/:id', async(req, res) => {
+router.get('/:id', async(req, res) => {
    try{
       let {id} = req.params;
       let propById = await getPropById(id);       

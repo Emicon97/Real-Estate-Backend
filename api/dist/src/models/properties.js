@@ -12,9 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Property = exports.Status = void 0;
 var Status;
 (function (Status) {
-    Status[Status["available"] = 0] = "available";
-    Status[Status["reserved"] = 1] = "reserved";
-    Status[Status["negotiation"] = 2] = "negotiation";
+    Status["available"] = "available";
+    Status["reserveed"] = "reserved";
+    Status["negotiotion"] = "negotiation";
 })(Status = exports.Status || (exports.Status = {}));
 ;
 const typegoose_1 = require("@typegoose/typegoose");
@@ -45,7 +45,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Property.prototype, "rooms", void 0);
 __decorate([
-    (0, typegoose_1.prop)(),
+    (0, typegoose_1.prop)({ default: 1 }),
     __metadata("design:type", Number)
 ], Property.prototype, "bathrooms", void 0);
 __decorate([
@@ -53,7 +53,7 @@ __decorate([
     __metadata("design:type", String)
 ], Property.prototype, "city", void 0);
 __decorate([
-    (0, typegoose_1.prop)(),
+    (0, typegoose_1.prop)({ default: 'No especificado' }),
     __metadata("design:type", String)
 ], Property.prototype, "neighbourhood", void 0);
 __decorate([
@@ -65,12 +65,12 @@ __decorate([
     __metadata("design:type", Date)
 ], Property.prototype, "renovationDate", void 0);
 __decorate([
-    (0, typegoose_1.prop)(),
+    (0, typegoose_1.prop)({ default: false }),
     __metadata("design:type", Boolean)
 ], Property.prototype, "parkingSlot", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true, enum: Status }),
-    __metadata("design:type", Number)
+    (0, typegoose_1.prop)({ required: true, enum: Status, default: 'available' }),
+    __metadata("design:type", String)
 ], Property.prototype, "status", void 0);
 __decorate([
     (0, typegoose_1.prop)(),

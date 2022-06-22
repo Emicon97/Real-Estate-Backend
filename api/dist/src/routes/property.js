@@ -29,7 +29,7 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 }));
 //ruta detalle get by id
 //"_id" para postman--> "62b2748be1138fd711ff07a5",
-router.get('/details/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let { id } = req.params;
         let propById = yield (0, propertyControllers_1.getPropById)(id);

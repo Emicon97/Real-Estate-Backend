@@ -20,7 +20,7 @@ function getAllProperties() {
         if (allProperties.length) {
             return allProperties;
         }
-        throw new Error("No se encontraron props");
+        throw new Error("No se encontraron propiedades.");
     });
 }
 exports.getAllProperties = getAllProperties;
@@ -30,24 +30,23 @@ function getPropById(id) {
         if (propById) {
             return propById;
         }
-        throw new Error("No existe Propiedad para dicho ID");
+        throw new Error("Esta propiedad no está disponible.");
     });
 }
 exports.getPropById = getPropById;
-function createProperty({ address, area, type, rooms, status, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice, pictures }) {
+function createProperty({ address, area, type, rooms, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice, pictures  }) {
     return __awaiter(this, void 0, void 0, function* () {
         const property = yield properties_1.default.create({
             address,
             area,
             type,
             rooms,
-            status,
             city,
-            bathrooms: bathrooms ? bathrooms : 1,
-            neighbourhood: neighbourhood ? neighbourhood : undefined,
+            bathrooms,
+            neighbourhood,
             constructionDate: constructionDate ? constructionDate : undefined,
             renovationDate: renovationDate ? renovationDate : undefined,
-            parkingSlot: parkingSlot ? parkingSlot : undefined,
+            parkingSlot,
             rentPrice: rentPrice ? rentPrice : 'No se alquila',
             sellPrice: sellPrice ? sellPrice : 'No está a la venta',
             pictures: pictures && pictures.length ? pictures : undefined
