@@ -7,7 +7,19 @@ async function getAllProperties():Promise<Property[]>{
    if(allProperties.length){
     return allProperties; 
    }
-   throw new Error("No se encontraron props");
+   
+   throw new Error("No se encontraron propiedades.");
+}
+
+async function getPropById(id:string):Promise<Property> {
+
+    const propById = await propertyModel.findById(id);
+
+    if(propById){
+        return propById;
+    }
+
+   throw new Error("Esta propiedad no está disponible."); 
 }
 
 async function createProperty({
@@ -62,5 +74,6 @@ async function createProperty({
 
 export{
     createProperty,
-    getAllProperties
+    getAllProperties,
+    getPropById
 }
