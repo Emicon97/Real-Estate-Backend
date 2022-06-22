@@ -27,6 +27,24 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
 }));
+//ruta detalle get by id
+//"_id" para postman--> "62b2748be1138fd711ff07a5",
+router.get('/details/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let { id } = req.params;
+        let propById = yield (0, propertyControllers_1.getPropById)(id);
+        res.json(propById);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(404).json(error);
+        }
+        else {
+            console.log('Unexpected Error', error);
+        }
+    }
+}));
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let { address, area, type, rooms, status, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice } = req.body;
