@@ -24,22 +24,22 @@ function getAllProperties() {
     });
 }
 exports.getAllProperties = getAllProperties;
-function createProperty(address, area, type, rooms, status, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice) {
+function createProperty({ address, area, type, rooms, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice, pictures }) {
     return __awaiter(this, void 0, void 0, function* () {
         const property = yield properties_1.default.create({
             address,
             area,
             type,
             rooms,
-            status,
             city,
-            bathrooms: bathrooms ? bathrooms : 1,
-            neighbourhood: neighbourhood ? neighbourhood : undefined,
+            bathrooms,
+            neighbourhood,
             constructionDate: constructionDate ? constructionDate : undefined,
             renovationDate: renovationDate ? renovationDate : undefined,
-            parkingSlot: parkingSlot ? parkingSlot : undefined,
+            parkingSlot,
             rentPrice: rentPrice ? rentPrice : 'No se alquila',
-            sellPrice: sellPrice ? sellPrice : 'No está a la venta'
+            sellPrice: sellPrice ? sellPrice : 'No está a la venta',
+            pictures: pictures && pictures.length ? pictures : undefined
         });
         const savedProperty = yield property.save();
         return savedProperty;
