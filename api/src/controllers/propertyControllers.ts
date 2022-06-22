@@ -4,7 +4,10 @@ import { Property, Status } from "../models/properties";
 async function getAllProperties():Promise<Property[]>{
    const allProperties = await propertyModel.find();
    
-   return allProperties;
+   if(allProperties.length){
+    return allProperties; 
+   }
+   throw new Error("No se encontraron props");
 }
 
 async function createProperty(

@@ -6,15 +6,10 @@ const router = Router();
 router.get('/', async(req, res) => {
    try{
       
-       let allP = await getAllProperties();
+      let allP = await getAllProperties();       
        
-       /* if(!allP.length){
-         res.send("No hay propiedades cargadas!!");
-       }else{ */
-         res.json(allP);
-       ///*  */}
-       
-       //res.send("hola");
+      res.json(allP);
+
    }catch(error:any){
       if (error instanceof Error) {
          console.log(error.message);
