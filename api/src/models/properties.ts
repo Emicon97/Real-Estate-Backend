@@ -40,7 +40,7 @@ export class Property {
    public parkingSlot: boolean;
 
    @prop({ required: true, enum: Status })
-   public status: string;
+   public status: Status;
    
 }
 
