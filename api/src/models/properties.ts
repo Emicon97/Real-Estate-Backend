@@ -1,6 +1,6 @@
 import { getModelForClass, prop } from "@typegoose/typegoose";
 
-enum Status { left, reserved, negotiation };
+export enum Status { 'available', 'reserved', 'negotiation' };
 export class Property {
 
    @prop({ required: true })
