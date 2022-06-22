@@ -9,14 +9,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Property = void 0;
+exports.Property = exports.Status = void 0;
 const typegoose_1 = require("@typegoose/typegoose");
 var Status;
 (function (Status) {
-    Status[Status["left"] = 0] = "left";
+    Status[Status["available"] = 0] = "available";
     Status[Status["reserved"] = 1] = "reserved";
     Status[Status["negotiation"] = 2] = "negotiation";
-})(Status || (Status = {}));
+})(Status = exports.Status || (exports.Status = {}));
 ;
 class Property {
 }

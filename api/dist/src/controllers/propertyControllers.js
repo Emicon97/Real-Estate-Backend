@@ -23,16 +23,16 @@ function createProperty(address, area, type, rooms, status, city, bathrooms, nei
             rooms,
             status,
             city,
-            bathrooms,
-            neighbourhood,
-            constructionDate,
-            renovationDate,
-            parkingSlot,
-            rentPrice,
-            sellPrice
+            bathrooms: bathrooms ? bathrooms : 1,
+            neighbourhood: neighbourhood ? neighbourhood : undefined,
+            constructionDate: constructionDate ? constructionDate : undefined,
+            renovationDate: renovationDate ? renovationDate : undefined,
+            parkingSlot: parkingSlot ? parkingSlot : undefined,
+            rentPrice: rentPrice ? rentPrice : 'No se alquila',
+            sellPrice: sellPrice ? sellPrice : 'No está a la venta'
         });
-        yield property.save();
-        return property;
+        const savedProperty = yield property.save();
+        return savedProperty;
     });
 }
 exports.createProperty = createProperty;
