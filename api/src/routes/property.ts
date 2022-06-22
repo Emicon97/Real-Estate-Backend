@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import propertyModel from '../models/properties';
 import { createProperty } from '../controllers/propertyControllers';
 
 const router = Router();
@@ -32,7 +31,8 @@ router.post('/', async(req, res) => {
          renovationDate,
          parkingSlot,
          rentPrice,
-         sellPrice,}=req.body
+         sellPrice
+      } = req.body
       const property = await createProperty(
          address,         
          area,
@@ -46,7 +46,7 @@ router.post('/', async(req, res) => {
          renovationDate,
          parkingSlot,
          rentPrice,
-         sellPrice,
+         sellPrice
       );
       res.status(201).send(property)  
    }catch(error:any){
