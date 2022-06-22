@@ -1,4 +1,3 @@
-import { isNumber } from '@typegoose/typegoose/lib/internal/utils';
 import { Router } from 'express';
 import { createProperty,  getAllProperties, getPropById} from '../controllers/propertyControllers';
 
@@ -42,36 +41,8 @@ router.get('/details/:id', async(req, res) => {
 
 router.post('/', async(req, res) => {
    try{
-      let{
-         address,         
-         area,
-         type,
-         rooms,
-         status,
-         city,
-         bathrooms,
-         neighbourhood,
-         constructionDate,
-         renovationDate,
-         parkingSlot,
-         rentPrice,
-         sellPrice
-      } = req.body
-      const property = await createProperty(
-         address,         
-         area,
-         type,
-         rooms,
-         status,
-         city,
-         bathrooms,
-         neighbourhood,
-         constructionDate,
-         renovationDate,
-         parkingSlot,
-         rentPrice,
-         sellPrice
-      );
+      const data = req.body;
+      const property = await createProperty(data);
       res.status(201).send(property)  
    }catch(error:any){
       if (error instanceof Error) {
