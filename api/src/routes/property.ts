@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProperty,  getAllProperties, getPropById} from '../controllers/propertyControllers';
+import { createProperty,  getAllProperties, getPropById, deleteProperty} from '../controllers/propertyControllers';
 
 const router = Router();
 
@@ -53,4 +53,20 @@ router.post('/', async(req, res) => {
       }
    }
 })
+
+router.delete('/',async(req,res) => {
+   try {
+      const data = req.body.id;
+      const message = await deleteProperty(data);
+      res.status(201).send(message)
+   } catch (error:any) {
+      if (error instanceof Error) {
+         console.log(error.message);
+         res.status(404).json(error);
+      } else {
+         console.log('Unexpected Error', error);
+      }
+   }
+})
+
 export default router;

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPropById = exports.getAllProperties = exports.createProperty = void 0;
+exports.deleteProperty = exports.getPropById = exports.getAllProperties = exports.createProperty = void 0;
 const properties_1 = __importDefault(require("../models/properties"));
 function getAllProperties() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -34,7 +34,7 @@ function getPropById(id) {
     });
 }
 exports.getPropById = getPropById;
-function createProperty({ address, area, type, rooms, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice, pictures }) {
+function createProperty({ address, area, type, rooms, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice, pictures  }) {
     return __awaiter(this, void 0, void 0, function* () {
         const property = yield properties_1.default.create({
             address,
@@ -56,3 +56,15 @@ function createProperty({ address, area, type, rooms, city, bathrooms, neighbour
     });
 }
 exports.createProperty = createProperty;
+function deleteProperty(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield properties_1.default.findByIdAndDelete(id);
+            return 'Propiedad eliminada con éxito';
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+}
+exports.deleteProperty = deleteProperty;

@@ -72,8 +72,16 @@ async function createProperty({
     return savedProperty;    
 }
 
+async function deleteProperty(id:string):Promise<string> {
+   
+        await propertyModel.findByIdAndDelete(id);
+        return 'Propiedad eliminada con éxito'
+   
+}
+
 export{
     createProperty,
     getAllProperties,
-    getPropById
+    getPropById,
+    deleteProperty,
 }
