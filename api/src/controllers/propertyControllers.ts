@@ -1,8 +1,8 @@
 import propertyModel from "../models/properties";
-import { Property, Status } from "../models/properties";
+import { Property } from "../models/properties";
 
 async function getAllProperties():Promise<Property[]>{
-   const allProperties = await propertyModel.find();
+   const allProperties:Property[] = await propertyModel.find();
    
    if(allProperties.length){
     return allProperties; 
@@ -10,7 +10,22 @@ async function getAllProperties():Promise<Property[]>{
    throw new Error("No se encontraron props");
 }
 
-async function createProperty(
+async function createProperty({
+    address,         
+    area,
+    type,
+    rooms,
+    status,
+    city,
+    bathrooms,
+    neighbourhood,
+    constructionDate,
+    renovationDate,
+    parkingSlot,
+    rentPrice,
+    sellPrice,
+    pictures
+}: {
     address:string,         
     area:string,
     type:string,
@@ -23,7 +38,10 @@ async function createProperty(
     renovationDate?:Date,
     parkingSlot?:boolean,
     rentPrice?:string,
-    sellPrice?:string
+    sellPrice?:string,
+    pictures?:string[]
+}
+    
     ):Promise<Property>{
     const property = await propertyModel.create({
         address,         
@@ -38,7 +56,8 @@ async function createProperty(
         renovationDate: renovationDate ? renovationDate : undefined,
         parkingSlot: parkingSlot ? parkingSlot : undefined,
         rentPrice: rentPrice ? rentPrice : 'No se alquila',
-        sellPrice: sellPrice ? sellPrice : 'No está a la venta'
+        sellPrice: sellPrice ? sellPrice : 'No está a la venta',
+        pictures: pictures && pictures.length ? pictures : undefined
     });
     const savedProperty = await property.save();
     return savedProperty;    
