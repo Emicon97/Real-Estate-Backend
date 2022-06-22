@@ -1,6 +1,7 @@
-import { getModelForClass, prop } from "@typegoose/typegoose";
-
 export enum Status { 'available', 'reserved', 'negotiation' };
+
+import { getModelForClass, prop, modelOptions, Severity } from "@typegoose/typegoose";
+@modelOptions({options: { allowMixed: Severity.ALLOW }})
 export class Property {
 
    @prop({ required: true })
@@ -41,6 +42,9 @@ export class Property {
 
    @prop({ required: true, enum: Status })
    public status: Status;
+
+   @prop()
+   public pictures: string[]
    
 }
 
