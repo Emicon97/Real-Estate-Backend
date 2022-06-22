@@ -47,9 +47,25 @@ router.get('/details/:id', (req, res) => __awaiter(void 0, void 0, void 0, funct
 }));
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let { address, area, type, rooms, status, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice } = req.body;
-        const property = yield (0, propertyControllers_1.createProperty)(address, area, type, rooms, status, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice);
+        const data = req.body;
+        const property = yield (0, propertyControllers_1.createProperty)(data);
         res.status(201).send(property);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(404).json(error);
+        }
+        else {
+            console.log('Unexpected Error', error);
+        }
+    }
+}));
+router.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const data = req.body.id;
+        const message = yield (0, propertyControllers_1.deleteProperty)(data);
+        res.status(201).send(message);
     }
     catch (error) {
         if (error instanceof Error) {

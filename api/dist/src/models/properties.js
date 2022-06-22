@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Property = exports.Status = void 0;
-const typegoose_1 = require("@typegoose/typegoose");
 var Status;
 (function (Status) {
     Status[Status["available"] = 0] = "available";
@@ -18,8 +17,9 @@ var Status;
     Status[Status["negotiation"] = 2] = "negotiation";
 })(Status = exports.Status || (exports.Status = {}));
 ;
-class Property {
-}
+const typegoose_1 = require("@typegoose/typegoose");
+let Property = class Property {
+};
 __decorate([
     (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", String)
@@ -72,6 +72,13 @@ __decorate([
     (0, typegoose_1.prop)({ required: true, enum: Status }),
     __metadata("design:type", Number)
 ], Property.prototype, "status", void 0);
+__decorate([
+    (0, typegoose_1.prop)(),
+    __metadata("design:type", Array)
+], Property.prototype, "pictures", void 0);
+Property = __decorate([
+    (0, typegoose_1.modelOptions)({ options: { allowMixed: typegoose_1.Severity.ALLOW } })
+], Property);
 exports.Property = Property;
 const propertyModel = (0, typegoose_1.getModelForClass)(Property);
 exports.default = propertyModel;
