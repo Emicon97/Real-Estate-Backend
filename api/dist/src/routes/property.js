@@ -77,4 +77,20 @@ router.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
     }
 }));
+router.put('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const data = req.body;
+        const message = yield (0, propertyControllers_1.updateProperty)(data);
+        res.status(201).send(message);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(404).json(error);
+        }
+        else {
+            console.log('Unexpected Error', error);
+        }
+    }
+}));
 exports.default = router;
