@@ -79,9 +79,59 @@ async function deleteProperty(id:string):Promise<string> {
    
 }
 
+async function updateProperty({
+    id,
+    address,         
+    area,
+    type,
+    rooms,
+    city,
+    bathrooms,
+    neighbourhood,
+    constructionDate,
+    renovationDate,
+    parkingSlot,
+    rentPrice,
+    sellPrice,
+    pictures
+}:{
+    id:string,
+    address:string,         
+    area:string,
+    type:string,
+    rooms:number,
+    city:string,
+    bathrooms?:number,
+    neighbourhood?:string,
+    constructionDate?:Date,
+    renovationDate?:Date,
+    parkingSlot?:boolean,
+    rentPrice?:string,
+    sellPrice?:string,
+    pictures?:string[]
+}):Promise<string>{
+    await propertyModel.findOneAndUpdate({_id:id},{
+        address,         
+        area,
+        type,
+        rooms,
+        city,
+        bathrooms,
+        neighbourhood,
+        constructionDate,
+        renovationDate,
+        parkingSlot,
+        rentPrice,
+        sellPrice,
+        pictures
+    },{new:true})
+    return 'Propiedad actualizada con éxito'
+}
+
 export{
     createProperty,
     getAllProperties,
     getPropById,
     deleteProperty,
+    updateProperty
 }
