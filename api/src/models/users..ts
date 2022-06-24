@@ -2,8 +2,6 @@ import {
    prop,
    Ref,
    getModelForClass,
-   modelOptions,
-   Severity,
    ReturnModelType,
    DocumentType
 } from "@typegoose/typegoose";
@@ -15,7 +13,6 @@ enum Range {
    admin = 'admin'
 };
 
-@modelOptions({options: { allowMixed: Severity.ALLOW }})
 export class User {
 
    @prop({ required: true })
@@ -46,7 +43,7 @@ export class User {
    public avatar: string;
 
    @prop({ ref: () => Property })
-   properties: Ref<Property>;
+   properties: Ref<Property>[];
 
 }
 
