@@ -27,7 +27,7 @@ exports.getAllProperties = getAllProperties;
 function getPropById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         const propById = yield properties_1.default.findById(id);
-        if (propById) {
+        if (propById !== null) {
             return propById;
         }
         throw new Error("Esta propiedad no está disponible.");
@@ -47,8 +47,8 @@ function createProperty({ address, area, type, rooms, city, bathrooms, neighbour
             constructionDate: constructionDate ? constructionDate : undefined,
             renovationDate: renovationDate ? renovationDate : undefined,
             parkingSlot,
-            rentPrice: rentPrice ? rentPrice : 'No se alquila',
-            sellPrice: sellPrice ? sellPrice : 'No está a la venta',
+            rentPrice,
+            sellPrice,
             pictures: pictures && pictures.length ? pictures : undefined
         });
         const savedProperty = yield property.save();
@@ -59,13 +59,13 @@ exports.createProperty = createProperty;
 function deleteProperty(id) {
     return __awaiter(this, void 0, void 0, function* () {
         yield properties_1.default.findByIdAndDelete(id);
-        return 'Propiedad eliminada con éxito';
+        return 'Propiedad eliminada con éxito.';
     });
 }
 exports.deleteProperty = deleteProperty;
-function updateProperty({ id, address, area, type, rooms, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice, pictures }) {
+function updateProperty({ _id, address, area, type, rooms, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice, pictures }) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield properties_1.default.findOneAndUpdate({ _id: id }, {
+        yield properties_1.default.findOneAndUpdate({ _id }, {
             address,
             area,
             type,
@@ -80,7 +80,7 @@ function updateProperty({ id, address, area, type, rooms, city, bathrooms, neigh
             sellPrice,
             pictures
         }, { new: true });
-        return 'Propiedad actualizada con éxito';
+        return 'Propiedad actualizada con éxito.';
     });
 }
 exports.updateProperty = updateProperty;

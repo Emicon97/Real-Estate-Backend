@@ -9,15 +9,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Property = exports.Status = void 0;
+exports.Property = void 0;
+const typegoose_1 = require("@typegoose/typegoose");
 var Status;
 (function (Status) {
     Status["available"] = "available";
     Status["reserveed"] = "reserved";
     Status["negotiotion"] = "negotiation";
-})(Status = exports.Status || (exports.Status = {}));
+})(Status || (Status = {}));
 ;
-const typegoose_1 = require("@typegoose/typegoose");
 let Property = class Property {
 };
 __decorate([
@@ -26,11 +26,11 @@ __decorate([
 ], Property.prototype, "address", void 0);
 __decorate([
     (0, typegoose_1.prop)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Number)
 ], Property.prototype, "rentPrice", void 0);
 __decorate([
     (0, typegoose_1.prop)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Number)
 ], Property.prototype, "sellPrice", void 0);
 __decorate([
     (0, typegoose_1.prop)({ required: true }),
