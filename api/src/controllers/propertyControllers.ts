@@ -1,5 +1,6 @@
 import propertyModel from "../models/properties";
 import { Property } from "../models/properties";
+// import { InstanceType } from "@typegoose/typegoose";
 
 async function getAllProperties():Promise<Property[]>{
    const allProperties:Property[] = await propertyModel.find();
@@ -13,9 +14,9 @@ async function getAllProperties():Promise<Property[]>{
 
 async function getPropById(id:string):Promise<Property> {
 
-    const propById = await propertyModel.findById(id);
+    const propById:Property | null = await propertyModel.findById(id);
 
-    if(propById){
+    if(propById !== null){
         return propById;
     }
 
@@ -64,10 +65,11 @@ async function createProperty({
         constructionDate: constructionDate ? constructionDate : undefined,
         renovationDate: renovationDate ? renovationDate : undefined,
         parkingSlot,
-        rentPrice: rentPrice ? rentPrice : 'No se alquila',
-        sellPrice: sellPrice ? sellPrice : 'No está a la venta',
+        rentPrice,
+        sellPrice,
         pictures: pictures && pictures.length ? pictures : undefined
     });
+    console.log(typeof property)
     const savedProperty = await property.save();
     return savedProperty;    
 }
