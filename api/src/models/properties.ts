@@ -1,10 +1,18 @@
-export enum Status {
+import {
+   prop,
+   getModelForClass,
+   modelOptions,
+   Severity,
+   ReturnModelType,
+   DocumentType
+} from "@typegoose/typegoose";
+
+enum Status {
    available = 'available',
    reserveed = 'reserved',
    negotiotion = 'negotiation'
 };
 
-import { getModelForClass, prop, modelOptions, Severity } from "@typegoose/typegoose";
 @modelOptions({options: { allowMixed: Severity.ALLOW }})
 export class Property {
 
@@ -12,10 +20,10 @@ export class Property {
    public address: string;
 
    @prop()
-   public rentPrice?: string;
+   public rentPrice?: number;
 
    @prop()
-   public sellPrice?: string;
+   public sellPrice?: number;
    
    @prop({ required: true })
    public area: string;
@@ -52,5 +60,8 @@ export class Property {
    
 }
 
-const propertyModel = getModelForClass(Property);
+type TPropertyModel = ReturnModelType<typeof Property>;
+export type PropertyType = DocumentType<Property>;
+
+const propertyModel:TPropertyModel = getModelForClass(Property);
 export default propertyModel;

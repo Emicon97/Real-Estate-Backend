@@ -1,5 +1,5 @@
 import propertyModel from "../models/properties";
-import { Property } from "../models/properties";
+import { Property, PropertyType } from "../models/properties";
 
 async function getAllProperties():Promise<Property[]>{
    const allProperties:Property[] = await propertyModel.find();
@@ -13,9 +13,9 @@ async function getAllProperties():Promise<Property[]>{
 
 async function getPropById(id:string):Promise<Property> {
 
-    const propById = await propertyModel.findById(id);
+    const propById:Property | null = await propertyModel.findById(id);
 
-    if(propById){
+    if(propById !== null){
         return propById;
     }
 
@@ -53,7 +53,7 @@ async function createProperty({
 }
     
     ):Promise<Property>{
-    const property = await propertyModel.create({
+    const property:PropertyType = await propertyModel.create({
         address,         
         area,
         type,
@@ -64,23 +64,23 @@ async function createProperty({
         constructionDate: constructionDate ? constructionDate : undefined,
         renovationDate: renovationDate ? renovationDate : undefined,
         parkingSlot,
-        rentPrice: rentPrice ? rentPrice : 'No se alquila',
-        sellPrice: sellPrice ? sellPrice : 'No está a la venta',
+        rentPrice,
+        sellPrice,
         pictures: pictures && pictures.length ? pictures : undefined
     });
-    const savedProperty = await property.save();
+
+    const savedProperty:Property = await property.save();
     return savedProperty;    
 }
 
 async function deleteProperty(id:string):Promise<string> {
    
-        await propertyModel.findByIdAndDelete(id);
-        return 'Propiedad eliminada con éxito'
-   
+    await propertyModel.findByIdAndDelete(id);
+    return 'Propiedad eliminada con éxito.';
 }
 
 async function updateProperty({
-    id,
+    _id,
     address,         
     area,
     type,
@@ -95,7 +95,7 @@ async function updateProperty({
     sellPrice,
     pictures
 }:{
-    id:string,
+    _id:string,
     address:string,         
     area:string,
     type:string,
@@ -110,7 +110,7 @@ async function updateProperty({
     sellPrice?:string,
     pictures?:string[]
 }):Promise<string>{
-    await propertyModel.findOneAndUpdate({_id:id},{
+    await propertyModel.findOneAndUpdate({ _id }, {
         address,         
         area,
         type,
@@ -124,8 +124,8 @@ async function updateProperty({
         rentPrice,
         sellPrice,
         pictures
-    },{new:true})
-    return 'Propiedad actualizada con éxito'
+    }, {new:true});
+    return 'Propiedad actualizada con éxito.';
 }
 
 export{

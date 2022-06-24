@@ -5,8 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
-// import cors from 'cors';
-const { CORS_URL } = process.env;
 //const routes = require('./routes/index');
 const routes = require('./routes/index');
 const app = (0, express_1.default)();
