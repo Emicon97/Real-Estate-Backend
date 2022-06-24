@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPropById = exports.getAllProperties = exports.createProperty = void 0;
+exports.updateProperty = exports.deleteProperty = exports.getPropById = exports.getAllProperties = exports.createProperty = void 0;
 const properties_1 = __importDefault(require("../models/properties"));
 function getAllProperties() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -56,3 +56,31 @@ function createProperty({ address, area, type, rooms, city, bathrooms, neighbour
     });
 }
 exports.createProperty = createProperty;
+function deleteProperty(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield properties_1.default.findByIdAndDelete(id);
+        return 'Propiedad eliminada con éxito';
+    });
+}
+exports.deleteProperty = deleteProperty;
+function updateProperty({ id, address, area, type, rooms, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice, pictures }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield properties_1.default.findOneAndUpdate({ _id: id }, {
+            address,
+            area,
+            type,
+            rooms,
+            city,
+            bathrooms,
+            neighbourhood,
+            constructionDate,
+            renovationDate,
+            parkingSlot,
+            rentPrice,
+            sellPrice,
+            pictures
+        }, { new: true });
+        return 'Propiedad actualizada con éxito';
+    });
+}
+exports.updateProperty = updateProperty;
