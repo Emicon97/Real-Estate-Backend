@@ -1,10 +1,18 @@
-export enum Status {
+import {
+   prop,
+   getModelForClass,
+   modelOptions,
+   Severity,
+   ReturnModelType,
+   DocumentType
+} from "@typegoose/typegoose";
+
+enum Status {
    available = 'available',
    reserveed = 'reserved',
    negotiotion = 'negotiation'
 };
 
-import { getModelForClass, prop, modelOptions, Severity, ReturnModelType } from "@typegoose/typegoose";
 @modelOptions({options: { allowMixed: Severity.ALLOW }})
 export class Property {
 
@@ -53,6 +61,7 @@ export class Property {
 }
 
 type TPropertyModel = ReturnModelType<typeof Property>;
+export type PropertyType = DocumentType<Property>;
 
-const propertyModel: TPropertyModel = getModelForClass(Property);
+const propertyModel:TPropertyModel = getModelForClass(Property);
 export default propertyModel;

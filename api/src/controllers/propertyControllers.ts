@@ -1,6 +1,5 @@
 import propertyModel from "../models/properties";
-import { Property } from "../models/properties";
-// import { InstanceType } from "@typegoose/typegoose";
+import { Property, PropertyType } from "../models/properties";
 
 async function getAllProperties():Promise<Property[]>{
    const allProperties:Property[] = await propertyModel.find();
@@ -54,7 +53,7 @@ async function createProperty({
 }
     
     ):Promise<Property>{
-    const property = await propertyModel.create({
+    const property:PropertyType = await propertyModel.create({
         address,         
         area,
         type,
@@ -69,20 +68,19 @@ async function createProperty({
         sellPrice,
         pictures: pictures && pictures.length ? pictures : undefined
     });
-    console.log(typeof property)
-    const savedProperty = await property.save();
+
+    const savedProperty:Property = await property.save();
     return savedProperty;    
 }
 
 async function deleteProperty(id:string):Promise<string> {
    
-        await propertyModel.findByIdAndDelete(id);
-        return 'Propiedad eliminada con éxito'
-   
+    await propertyModel.findByIdAndDelete(id);
+    return 'Propiedad eliminada con éxito.';
 }
 
 async function updateProperty({
-    id,
+    _id,
     address,         
     area,
     type,
@@ -97,7 +95,7 @@ async function updateProperty({
     sellPrice,
     pictures
 }:{
-    id:string,
+    _id:string,
     address:string,         
     area:string,
     type:string,
@@ -112,7 +110,7 @@ async function updateProperty({
     sellPrice?:string,
     pictures?:string[]
 }):Promise<string>{
-    await propertyModel.findOneAndUpdate({_id:id},{
+    await propertyModel.findOneAndUpdate({ _id }, {
         address,         
         area,
         type,
@@ -126,8 +124,8 @@ async function updateProperty({
         rentPrice,
         sellPrice,
         pictures
-    },{new:true})
-    return 'Propiedad actualizada con éxito'
+    }, {new:true});
+    return 'Propiedad actualizada con éxito.';
 }
 
 export{
