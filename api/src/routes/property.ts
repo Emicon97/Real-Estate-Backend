@@ -9,24 +9,6 @@ import {
 
 const router = Router();
 
-router.get('/', async(req, res) => {
-   try{
-      const filter = req.body;
-      const { location } = req.query;
-      const allProperties = await getPropertyManager(filter, location as string);       
-       
-      res.json(allProperties);
-
-   }catch(error:any){
-      if (error instanceof Error) {
-         console.log(error);
-         res.status(404).json(error.message);
-      } else {
-         console.log('Unexpected Error', error);
-      }
-   }
-})
-
 //ruta detalle get by id
 //"_id" para postman--> "62b2748be1138fd711ff07a5",
 router.get('/:id', async(req, res) => {
@@ -55,6 +37,24 @@ router.post('/', async(req, res) => {
       if (error instanceof Error) {
          console.log(error.message);
          res.status(404).json(error);
+      } else {
+         console.log('Unexpected Error', error);
+      }
+   }
+})
+
+router.post('/search', async(req, res) => {
+   try{
+      const filter = req.body;
+      const { location } = req.query;
+      const allProperties = await getPropertyManager(filter, location as string);       
+       
+      res.json(allProperties);
+
+   }catch(error:any){
+      if (error instanceof Error) {
+         console.log(error);
+         res.status(404).json(error.message);
       } else {
          console.log('Unexpected Error', error);
       }
