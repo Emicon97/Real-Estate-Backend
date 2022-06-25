@@ -1,8 +1,6 @@
 import {
    prop,
    getModelForClass,
-   modelOptions,
-   Severity,
    ReturnModelType,
    DocumentType
 } from "@typegoose/typegoose";
@@ -13,7 +11,6 @@ enum Status {
    negotiotion = 'negotiation'
 };
 
-@modelOptions({options: { allowMixed: Severity.ALLOW }})
 export class Property {
 
    @prop({ required: true })
@@ -44,10 +41,10 @@ export class Property {
    public neighbourhood?: string;
 
    @prop()
-   public constructionDate?: Date;
+   public constructionDate?: number;
 
    @prop()
-   public renovationDate?: Date;
+   public renovationDate?: number;
 
    @prop({ default: false })
    public parkingSlot: boolean;
@@ -55,8 +52,8 @@ export class Property {
    @prop({ required: true, enum: Status, default: 'available' })
    public status: Status;
 
-   @prop()
-   public pictures: string[]
+   @prop({ type: String })
+   public pictures: string[];
    
 }
 

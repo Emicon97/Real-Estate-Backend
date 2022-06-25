@@ -19,8 +19,8 @@ var Range;
     Range["admin"] = "admin";
 })(Range || (Range = {}));
 ;
-let User = class User {
-};
+class User {
+}
 __decorate([
     (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", String)
@@ -59,11 +59,8 @@ __decorate([
 ], User.prototype, "avatar", void 0);
 __decorate([
     (0, typegoose_1.prop)({ ref: () => properties_1.Property }),
-    __metadata("design:type", Object)
+    __metadata("design:type", Array)
 ], User.prototype, "properties", void 0);
-User = __decorate([
-    (0, typegoose_1.modelOptions)({ options: { allowMixed: typegoose_1.Severity.ALLOW } })
-], User);
 exports.User = User;
 const userModel = (0, typegoose_1.getModelForClass)(User);
 exports.default = userModel;
