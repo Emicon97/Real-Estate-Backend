@@ -1,19 +1,26 @@
 import { Router } from 'express';
-import { createProperty,  getAllProperties, getPropById, deleteProperty, updateProperty} from '../controllers/propertyControllers';
+import {
+   createProperty,
+   getPropertyManager,
+   getPropById,
+   deleteProperty,
+   updateProperty
+} from '../controllers/propertyControllers';
 
 const router = Router();
 
 router.get('/', async(req, res) => {
    try{
-      
-      let allP = await getAllProperties();       
+      const filter = req.body;
+      const { location } = req.query;
+      const allProperties = await getPropertyManager(filter, location as string);       
        
-      res.json(allP);
+      res.json(allProperties);
 
    }catch(error:any){
       if (error instanceof Error) {
-         console.log(error.message);
-         res.status(404).json(error);
+         console.log(error);
+         res.status(404).json(error.message);
       } else {
          console.log('Unexpected Error', error);
       }
@@ -24,8 +31,8 @@ router.get('/', async(req, res) => {
 //"_id" para postman--> "62b2748be1138fd711ff07a5",
 router.get('/:id', async(req, res) => {
    try{
-      let {id} = req.params;
-      let propById = await getPropById(id);       
+      const { id } = req.params;
+      const propById = await getPropById(id);       
        
       res.json(propById);
 
@@ -54,10 +61,11 @@ router.post('/', async(req, res) => {
    }
 })
 
-router.delete('/',async(req,res) => {
+router.put('/:id', async(req,res) => {
    try {
-      const data = req.body.id;
-      const message = await deleteProperty(data);
+      const { id } = req.params;
+      const data = req.body;
+      const message = await updateProperty(id, data);
       res.status(201).send(message)
    } catch (error:any) {
       if (error instanceof Error) {
@@ -69,10 +77,10 @@ router.delete('/',async(req,res) => {
    }
 })
 
-router.put('/', async(req,res) => {
+router.delete('/',async(req,res) => {
    try {
-      const data = req.body;
-      const message = await updateProperty(data);
+      const data = req.body.id;
+      const message = await deleteProperty(data);
       res.status(201).send(message)
    } catch (error:any) {
       if (error instanceof Error) {

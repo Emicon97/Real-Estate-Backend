@@ -14,13 +14,15 @@ const propertyControllers_1 = require("../controllers/propertyControllers");
 const router = (0, express_1.Router)();
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let allP = yield (0, propertyControllers_1.getAllProperties)();
-        res.json(allP);
+        const filter = req.body;
+        const { location } = req.query;
+        const allProperties = yield (0, propertyControllers_1.getPropertyManager)(filter, location);
+        res.json(allProperties);
     }
     catch (error) {
         if (error instanceof Error) {
-            console.log(error.message);
-            res.status(404).json(error);
+            console.log(error);
+            res.status(404).json(error.message);
         }
         else {
             console.log('Unexpected Error', error);
@@ -31,8 +33,8 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 //"_id" para postman--> "62b2748be1138fd711ff07a5",
 router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let { id } = req.params;
-        let propById = yield (0, propertyControllers_1.getPropById)(id);
+        const { id } = req.params;
+        const propById = yield (0, propertyControllers_1.getPropById)(id);
         res.json(propById);
     }
     catch (error) {
@@ -61,10 +63,11 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
 }));
-router.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const data = req.body.id;
-        const message = yield (0, propertyControllers_1.deleteProperty)(data);
+        const { id } = req.params;
+        const data = req.body;
+        const message = yield (0, propertyControllers_1.updateProperty)(id, data);
         res.status(201).send(message);
     }
     catch (error) {
@@ -77,10 +80,10 @@ router.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
     }
 }));
-router.put('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const data = req.body;
-        const message = yield (0, propertyControllers_1.updateProperty)(data);
+        const data = req.body.id;
+        const message = yield (0, propertyControllers_1.deleteProperty)(data);
         res.status(201).send(message);
     }
     catch (error) {
