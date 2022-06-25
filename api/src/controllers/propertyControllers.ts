@@ -44,11 +44,11 @@ async function createProperty({
     city:string,
     bathrooms?:number,
     neighbourhood?:string,
-    constructionDate?:Date,
-    renovationDate?:Date,
+    constructionDate?:number,
+    renovationDate?:number,
     parkingSlot?:boolean,
-    rentPrice?:string,
-    sellPrice?:string,
+    rentPrice?:number,
+    sellPrice?:number,
     pictures?:string[]
 }
     
@@ -79,8 +79,7 @@ async function deleteProperty(id:string):Promise<string> {
     return 'Propiedad eliminada con éxito.';
 }
 
-async function updateProperty({
-    _id,
+async function updateProperty(_id:string, {
     address,         
     area,
     type,
@@ -95,7 +94,6 @@ async function updateProperty({
     sellPrice,
     pictures
 }:{
-    _id:string,
     address:string,         
     area:string,
     type:string,
@@ -103,11 +101,11 @@ async function updateProperty({
     city:string,
     bathrooms?:number,
     neighbourhood?:string,
-    constructionDate?:Date,
-    renovationDate?:Date,
+    constructionDate?:number,
+    renovationDate?:number,
     parkingSlot?:boolean,
-    rentPrice?:string,
-    sellPrice?:string,
+    rentPrice?:number,
+    sellPrice?:number,
     pictures?:string[]
 }):Promise<string>{
     await propertyModel.findOneAndUpdate({ _id }, {

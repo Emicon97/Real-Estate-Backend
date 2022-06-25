@@ -77,10 +77,11 @@ router.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
     }
 }));
-router.put('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { id } = req.params;
         const data = req.body;
-        const message = yield (0, propertyControllers_1.updateProperty)(data);
+        const message = yield (0, propertyControllers_1.updateProperty)(id, data);
         res.status(201).send(message);
     }
     catch (error) {

@@ -63,7 +63,7 @@ function deleteProperty(id) {
     });
 }
 exports.deleteProperty = deleteProperty;
-function updateProperty({ _id, address, area, type, rooms, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice, pictures }) {
+function updateProperty(_id, { address, area, type, rooms, city, bathrooms, neighbourhood, constructionDate, renovationDate, parkingSlot, rentPrice, sellPrice, pictures }) {
     return __awaiter(this, void 0, void 0, function* () {
         yield properties_1.default.findOneAndUpdate({ _id }, {
             address,

@@ -69,10 +69,11 @@ router.delete('/',async(req,res) => {
    }
 })
 
-router.put('/', async(req,res) => {
+router.put('/:id', async(req,res) => {
    try {
+      const { id } = req.params;
       const data = req.body;
-      const message = await updateProperty(data);
+      const message = await updateProperty(id, data);
       res.status(201).send(message)
    } catch (error:any) {
       if (error instanceof Error) {
