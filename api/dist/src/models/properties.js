@@ -18,8 +18,8 @@ var Status;
     Status["negotiotion"] = "negotiation";
 })(Status || (Status = {}));
 ;
-let Property = class Property {
-};
+class Property {
+}
 __decorate([
     (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", String)
@@ -58,11 +58,11 @@ __decorate([
 ], Property.prototype, "neighbourhood", void 0);
 __decorate([
     (0, typegoose_1.prop)(),
-    __metadata("design:type", Date)
+    __metadata("design:type", Number)
 ], Property.prototype, "constructionDate", void 0);
 __decorate([
     (0, typegoose_1.prop)(),
-    __metadata("design:type", Date)
+    __metadata("design:type", Number)
 ], Property.prototype, "renovationDate", void 0);
 __decorate([
     (0, typegoose_1.prop)({ default: false }),
@@ -73,12 +73,9 @@ __decorate([
     __metadata("design:type", String)
 ], Property.prototype, "status", void 0);
 __decorate([
-    (0, typegoose_1.prop)(),
+    (0, typegoose_1.prop)({ type: String }),
     __metadata("design:type", Array)
 ], Property.prototype, "pictures", void 0);
-Property = __decorate([
-    (0, typegoose_1.modelOptions)({ options: { allowMixed: typegoose_1.Severity.ALLOW } })
-], Property);
 exports.Property = Property;
 const propertyModel = (0, typegoose_1.getModelForClass)(Property);
 exports.default = propertyModel;

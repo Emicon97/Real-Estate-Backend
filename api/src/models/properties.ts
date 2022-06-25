@@ -41,10 +41,10 @@ export class Property {
    public neighbourhood?: string;
 
    @prop()
-   public constructionDate?: Date;
+   public constructionDate?: number;
 
    @prop()
-   public renovationDate?: Date;
+   public renovationDate?: number;
 
    @prop({ default: false })
    public parkingSlot: boolean;
