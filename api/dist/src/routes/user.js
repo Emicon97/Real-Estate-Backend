@@ -14,8 +14,7 @@ const userControllers_1 = require("../controllers/userControllers");
 const router = (0, express_1.Router)();
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const info = req.body;
-        const data = yield (0, userControllers_1.getAllUsers)(info);
+        const data = yield (0, userControllers_1.getAllUsers)();
         res.json(data);
     }
     catch (error) {

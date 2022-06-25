@@ -5,9 +5,8 @@ import { getAllUsers, createUser } from '../controllers/userControllers';
 const router = Router();
 
 router.get('/', async(req, res) => {
-   try{
-      const info = req.body;
-      const data = await getAllUsers(info);
+   try{      
+      const data = await getAllUsers();
       res.json(data);
    }catch(error:any){
       if (error instanceof Error) {

@@ -1,7 +1,7 @@
 import userModel from "../models/users.";
 import { User, UserType } from './../models/users.';
 
-async function getAllUsers(info:User):Promise<User[]>{
+async function getAllUsers():Promise<User[]>{
     const allUsers:User[] = await userModel.find();
     
     if(allUsers.length){
