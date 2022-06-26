@@ -18,6 +18,11 @@ var Status;
     Status["negotiotion"] = "negotiation";
 })(Status || (Status = {}));
 ;
+var Operation;
+(function (Operation) {
+    Operation["sell"] = "sell";
+    Operation["rent"] = "rent";
+})(Operation || (Operation = {}));
 class Property {
 }
 __decorate([
@@ -25,13 +30,13 @@ __decorate([
     __metadata("design:type", String)
 ], Property.prototype, "address", void 0);
 __decorate([
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", Number)
-], Property.prototype, "rentPrice", void 0);
+    (0, typegoose_1.prop)({ required: true, enum: Operation }),
+    __metadata("design:type", String)
+], Property.prototype, "operation", void 0);
 __decorate([
-    (0, typegoose_1.prop)(),
+    (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", Number)
-], Property.prototype, "sellPrice", void 0);
+], Property.prototype, "price", void 0);
 __decorate([
     (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", String)

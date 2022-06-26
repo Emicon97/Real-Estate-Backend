@@ -10,17 +10,21 @@ enum Status {
    reserveed = 'reserved',
    negotiotion = 'negotiation'
 };
+enum Operation {
+   sell = 'sell',
+   rent = 'rent'
+}
 
 export class Property {
 
    @prop({ required: true })
    public address: string;
 
-   @prop()
-   public rentPrice?: number;
+   @prop({ required: true, enum: Operation })
+   public operation: Operation;
 
-   @prop()
-   public sellPrice?: number;
+   @prop({ required: true })
+   public price?: number;
    
    @prop({ required: true })
    public area: string;

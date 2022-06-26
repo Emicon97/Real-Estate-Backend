@@ -49,8 +49,8 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 router.post('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const filter = req.body;
-        const { location } = req.query;
-        const allProperties = yield (0, propertyControllers_1.getPropertyManager)(filter, location);
+        const { location, max } = req.query;
+        const allProperties = yield (0, propertyControllers_1.getPropertyManager)(filter, location, max);
         res.json(allProperties);
     }
     catch (error) {

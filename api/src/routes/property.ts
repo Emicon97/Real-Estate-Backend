@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { query, Router } from 'express';
 import {
    createProperty,
    getPropertyManager,
@@ -46,8 +46,12 @@ router.post('/', async(req, res) => {
 router.post('/search', async(req, res) => {
    try{
       const filter = req.body;
-      const { location } = req.query;
-      const allProperties = await getPropertyManager(filter, location as string);       
+      const { location, max } = req.query;
+      const allProperties = await getPropertyManager(
+         filter,
+         location as string,
+         max as any
+         );       
        
       res.json(allProperties);
 

@@ -14,16 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateProperty = exports.deleteProperty = exports.getPropById = exports.getPropertyManager = exports.createProperty = void 0;
 const properties_1 = __importDefault(require("../models/properties"));
-function getPropertyManager(filters, location) {
+function getPropertyManager(filters, location, max) {
     return __awaiter(this, void 0, void 0, function* () {
         const allProperties = yield getAllProperties();
         if (filters && location) {
-            const filtered = yield searchByFilter(filters);
+            const filtered = yield searchByFilter(filters, max);
             const searched = yield searchByLocation(location, filtered);
             return searched;
         }
         else if (filters) {
-            const filtered = yield searchByFilter(filters);
+            const filtered = yield searchByFilter(filters, max);
             return filtered;
         }
         else if (location) {
@@ -45,10 +45,16 @@ function getAllProperties() {
         throw new Error("No se encontraron propiedades.");
     });
 }
-function searchByFilter(filtered) {
+function searchByFilter(filtered, max) {
     return __awaiter(this, void 0, void 0, function* () {
-        const property = yield properties_1.default.find(filtered);
-        return property;
+        if (max) {
+            const property = yield properties_1.default.find(filtered).where('price').gt(0).lt(max);
+            return property;
+        }
+        else {
+            const property = yield properties_1.default.find(filtered);
+            return property;
+        }
     });
 }
 function searchByLocation(location, properties) {
