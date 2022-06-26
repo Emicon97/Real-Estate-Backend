@@ -17,12 +17,12 @@ const properties_1 = __importDefault(require("../models/properties"));
 function getPropertyManager(filters, location, max) {
     return __awaiter(this, void 0, void 0, function* () {
         const allProperties = yield getAllProperties();
-        if (filters && location) {
+        if ((filters && Object.keys(filters).length) && location) {
             const filtered = yield searchByFilter(filters, max);
             const searched = yield searchByLocation(location, filtered);
             return searched;
         }
-        else if (filters) {
+        else if ((filters && Object.keys(filters).length)) {
             const filtered = yield searchByFilter(filters, max);
             return filtered;
         }
@@ -48,7 +48,8 @@ function getAllProperties() {
 function searchByFilter(filtered, max) {
     return __awaiter(this, void 0, void 0, function* () {
         if (max) {
-            const property = yield properties_1.default.find(filtered).where('price').gt(0).lt(max);
+            const property = yield properties_1.default.find(filtered)
+                .where('price').gt(0).lt(max);
             return property;
         }
         else {

@@ -17,7 +17,6 @@ router.get('/:id', async(req, res) => {
       const propById = await getPropById(id);       
        
       res.json(propById);
-
    }catch(error:any){
       if (error instanceof Error) {
          console.log(error.message);
@@ -46,11 +45,11 @@ router.post('/', async(req, res) => {
 router.post('/search', async(req, res) => {
    try{
       const filter = req.body;
-      const { location, max } = req.query;
+      const { location, max }:any = req.query;
       const allProperties = await getPropertyManager(
          filter,
          location as string,
-         max as any
+         max as number
          );       
        
       res.json(allProperties);

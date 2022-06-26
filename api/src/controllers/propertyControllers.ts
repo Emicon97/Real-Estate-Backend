@@ -1,18 +1,17 @@
-import { getType } from "@typegoose/typegoose/lib/internal/utils";
 import propertyModel from "../models/properties";
 import { Property, PropertyType } from "../models/properties";
 
 async function getPropertyManager(
     filters?:Property,
-    location?:string,
-    max?:any, 
+    location?:string,   
+    max?:number, 
     ):Promise<Property[]>{
     const allProperties:Property[] = await getAllProperties();
-    if (filters && location) {
+    if ((filters && Object.keys(filters).length) && location) {
         const filtered:Property[] = await searchByFilter(filters, max);
         const searched:Property[] = await searchByLocation(location, filtered);
         return searched;
-    } else if (filters) {
+    } else if ((filters && Object.keys(filters).length)) {
         const filtered:Property[] = await searchByFilter(filters, max);
         return filtered;
     } else if (location) {
@@ -35,13 +34,13 @@ async function getAllProperties():Promise<Property[]>{
 
 async function searchByFilter(
     filtered:Property,
-    max?:any
+    max?:number
 ):Promise<Property[]>{
     if (max) {
-        const property:Property[] = await propertyModel.find(filtered).where('price').gt(0).lt(max);
+        const property:Property[] = await propertyModel.find(filtered)
+            .where('price').gt(0).lt(max);
         return property;
-    }
-    else {
+    }else {
         const property:Property[] = await propertyModel.find(filtered);
         return property;
     }
@@ -75,8 +74,6 @@ async function searchByLocation(
 
     return toFilter;
 }
-
-
 
 async function getPropById(id:string):Promise<Property> {
 
