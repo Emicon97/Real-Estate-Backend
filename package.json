@@ -2,12 +2,12 @@
   "name": "api",
   "version": "0.0.1",
   "description": "api initialised with create-express-typescript-application.",
-  "main": "src/index.ts",
+  "main": "api/src/index.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node ./dist/src/index.js",
-    "dev": "ts-node-dev ./src/index.ts",
-    "dev:nodemon": "nodemon -w src -e ts,json -x ts-node ./src/index.ts",
+    "start": "node ./api/dist/src/index.js",
+    "dev": "ts-node-dev ./api/src/index.ts",
+    "dev:nodemon": "nodemon -w src -e ts,json -x ts-node ./api/src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
