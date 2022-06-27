@@ -82,8 +82,8 @@ router.put('/:id', async(req,res) => {
 
 router.delete('/',async(req,res) => {
    try {
-      const data = req.body.id;
-      const message = await deleteProperty(data);
+      const { _id } = req.body;
+      const message = await deleteProperty(_id);
       res.status(201).send(message)
    } catch (error:any) {
       if (error instanceof Error) {
