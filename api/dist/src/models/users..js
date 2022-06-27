@@ -16,6 +16,7 @@ var Range;
 (function (Range) {
     Range["free"] = "free";
     Range["premium"] = "premium";
+    Range["vip"] = "vip";
     Range["admin"] = "admin";
 })(Range || (Range = {}));
 ;
@@ -57,10 +58,34 @@ __decorate([
     (0, typegoose_1.prop)(),
     __metadata("design:type", String)
 ], User.prototype, "avatar", void 0);
+exports.User = User;
+class Free extends User {
+}
 __decorate([
     (0, typegoose_1.prop)({ ref: () => properties_1.Property }),
     __metadata("design:type", Array)
-], User.prototype, "properties", void 0);
-exports.User = User;
+], Free.prototype, "favourites", void 0);
+class Premium extends User {
+}
+__decorate([
+    (0, typegoose_1.prop)({ ref: () => properties_1.Property }),
+    __metadata("design:type", Array)
+], Premium.prototype, "properties", void 0);
+class Vip extends User {
+}
+__decorate([
+    (0, typegoose_1.prop)({ ref: () => properties_1.Property }),
+    __metadata("design:type", Array)
+], Vip.prototype, "properties", void 0);
+class Admin extends User {
+}
+__decorate([
+    (0, typegoose_1.prop)({ enum: Range }),
+    __metadata("design:type", String)
+], Admin.prototype, "userType", void 0);
+__decorate([
+    (0, typegoose_1.prop)({ refPath: 'userType' }),
+    __metadata("design:type", Object)
+], Admin.prototype, "sender", void 0);
 const userModel = (0, typegoose_1.getModelForClass)(User);
 exports.default = userModel;
