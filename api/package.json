@@ -10,6 +10,10 @@
     "dev:nodemon": "nodemon -w src -e ts,json -x ts-node ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Emicon97/Real-Estate-Backend.git"
+  },
   "keywords": [
     "express",
     "typescript"
@@ -36,5 +40,9 @@
     "fs": "^0.0.1-security",
     "helmet": "^4.6.0",
     "morgan": "^1.10.0"
+  },
+  "engines": {
+    "npm": "8.x",
+    "node": "16.x"
   }
 }
