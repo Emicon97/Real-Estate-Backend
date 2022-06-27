@@ -12,15 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_1 = __importDefault(require("./app"));
-const config_json_1 = __importDefault(require("../config.json"));
-const index_1 = __importDefault(require("./db/index"));
-// Start the application by listening to specific port
-const port = Number(process.env.PORT || config_json_1.default.PORT || 3001);
-const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, index_1.default)();
-    app_1.default.listen(port, () => {
-        console.info('Express application started on port: ' + port);
+exports.getAllUsers = exports.createUser = void 0;
+const users_1 = __importDefault(require("../models/users."));
+function getAllUsers() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const allUsers = yield users_1.default.find();
+        if (allUsers.length) {
+            return allUsers;
+        }
+        throw new Error("No se encontraron usuarios.");
     });
-});
-main();
+}
+exports.getAllUsers = getAllUsers;
+function createUser(data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = yield users_1.default.create(data);
+        const savedUser = yield user.save();
+        return savedUser;
+    });
+}
+exports.createUser = createUser;
