@@ -67,7 +67,13 @@ class Vip extends User {
 }
 
 class Admin extends User {
-   
+
+   @prop({ enum: Range })
+   public userType: string;
+
+   @prop({ refPath: 'userType' })
+   public sender: Ref<Free | Premium | Vip >;
+
 }
 
 type TUserType = ReturnModelType<typeof User>;
