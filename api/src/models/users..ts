@@ -10,6 +10,7 @@ import { Property } from "./properties";
 enum Range {
    free = 'free',
    premium = 'premium',
+   vip = 'vip',
    admin = 'admin'
 };
 
@@ -42,9 +43,31 @@ export class User {
    @prop()
    public avatar: string;
 
+}
+
+class Free extends User {
+
+   @prop({ ref: () => Property })
+   favourites: Ref<Property>[];
+
+}
+
+class Premium extends User {
+
    @prop({ ref: () => Property })
    properties: Ref<Property>[];
 
+}
+
+class Vip extends User {
+
+   @prop({ ref: () => Property })
+   properties: Ref<Property>[];
+
+}
+
+class Admin extends User {
+   
 }
 
 type TUserType = ReturnModelType<typeof User>;
