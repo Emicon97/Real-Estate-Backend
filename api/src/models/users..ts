@@ -43,38 +43,47 @@ export class User {
    @prop()
    public avatar: string;
 
-}
-
-class Free extends User {
-
    @prop({ ref: () => Property })
    favourites: Ref<Property>[];
 
-}
-
-class Premium extends User {
-
    @prop({ ref: () => Property })
    properties: Ref<Property>[];
 
-}
-
-class Vip extends User {
-
-   @prop({ ref: () => Property })
-   properties: Ref<Property>[];
+   @prop({ ref: () => User})
+   public user: Ref< User >[];
 
 }
 
-class Admin extends User {
+// export class Free extends User {
 
-   @prop({ enum: Range })
-   public userType: string;
+//    @prop({ ref: () => Property })
+//    favourites: Ref<Property>[];
 
-   @prop({ refPath: 'userType' })
-   public sender: Ref<Free | Premium | Vip >;
+// }
 
-}
+// export class Premium extends User {
+
+//    @prop({ ref: () => Property })
+//    properties: Ref<Property>[];
+
+// }
+
+// export class Vip extends User {
+
+//    @prop({ ref: () => Property })
+//    properties: Ref<Property>[];
+
+// }
+
+// export class Admin extends User {
+
+//    @prop({ enum: Range })
+//    public userType: string;
+
+//    @prop({ ref: () => User})
+//    public user: Ref< User >[];
+
+// }
 
 type TUserType = ReturnModelType<typeof User>;
 export type UserType = DocumentType<User>;
