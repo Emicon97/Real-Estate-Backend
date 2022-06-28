@@ -43,4 +43,37 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
 }));
+router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const data = req.body;
+        const message = yield (0, userControllers_1.updateUser)(id, data);
+        res.status(201).send(message);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(404).json(error);
+        }
+        else {
+            console.log('Unexpected Error', error);
+        }
+    }
+}));
+router.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const data = req.body.id;
+        const message = yield (0, userControllers_1.deleteUser)(data);
+        res.status(201).send(message);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(404).json(error);
+        }
+        else {
+            console.log('Unexpected Error', error);
+        }
+    }
+}));
 exports.default = router;

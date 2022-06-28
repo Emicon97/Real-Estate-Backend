@@ -18,6 +18,20 @@ async function createUser(data:User):Promise<User>{
     return savedUser;    
 }
 
+async function updateUser(_id:string, data:User):Promise<string>{
+    await userModel.findOneAndUpdate({ _id }, data, {new:true});
+
+    return 'Usuario actualizado con éxito.';
+}
+
+async function deleteUser(id:string):Promise<string> {
+   
+    await userModel.findByIdAndDelete(id);
+    return 'Usuario eliminado con éxito.';
+}
+
 export {createUser,
-        getAllUsers,            
+        getAllUsers,
+        updateUser,
+        deleteUser            
 }
