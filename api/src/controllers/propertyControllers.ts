@@ -76,9 +76,9 @@ async function searchByLocation(
 }
 
 async function getPropById(id:string):Promise<Property> {
-
+    console.log(id)
     const propById:Property | null = await propertyModel.findById(id);
-
+    console.log(propById)
     if(propById !== null){
         return propById;
     }
