@@ -1,11 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { TokenCreation, RefreshToken } from '../libs/JsonWebToken';
 import { LoginTicket, OAuth2Client } from 'google-auth-library';
+import dotenv from 'dotenv'
+dotenv.config({ override: true });
 
 import userModel from '../models/users';
 import { User } from './../models/users';
 
-const client:OAuth2Client = new OAuth2Client('394343158069-32t8sde06fkbaib24hu1v95g1oqac8pm.apps.googleusercontent.com');
+
+const client:OAuth2Client = new OAuth2Client(process.env.CLIENT_ID);
 
 async function standardLogIn (req:Request, res:Response, next:NextFunction) {
    try{
@@ -30,7 +33,7 @@ async function googleLogIn (req:Request, res:Response, next:NextFunction) {
       const { tokenId }:any = req.body;
       const ticket:LoginTicket = await client.verifyIdToken({
          idToken: tokenId as string,
-         audience: '394343158069-32t8sde06fkbaib24hu1v95g1oqac8pm.apps.googleusercontent.com'
+         audience: process.env.CLIENT_ID
       });
 
       const email:string | undefined = ticket.getPayload()?.email;
