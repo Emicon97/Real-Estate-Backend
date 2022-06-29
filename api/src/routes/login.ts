@@ -1,10 +1,8 @@
 import { Router } from 'express';
-import { logInGoogle, logInManager } from '../controllers/loginControlles';
+import { googleLogIn, standardLogIn, tokenManagement } from '../controllers/loginControlles';
 
 const router = Router();
 
-router.post('/', logInManager);
-
-router.post('/google', logInGoogle);
+router.post('/', standardLogIn, googleLogIn, tokenManagement);
 
 export default router;
