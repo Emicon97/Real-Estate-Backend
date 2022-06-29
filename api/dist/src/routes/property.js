@@ -82,8 +82,8 @@ router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 }));
 router.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const data = req.body.id;
-        const message = yield (0, propertyControllers_1.deleteProperty)(data);
+        const { _id } = req.body;
+        const message = yield (0, propertyControllers_1.deleteProperty)(_id);
         res.status(201).send(message);
     }
     catch (error) {

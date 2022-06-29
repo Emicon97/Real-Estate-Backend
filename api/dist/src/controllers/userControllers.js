@@ -12,8 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUsers = exports.createUser = void 0;
-const users_1 = __importDefault(require("../models/users."));
+exports.deleteUser = exports.updateUser = exports.getAllUsers = exports.createUser = void 0;
+const users_1 = __importDefault(require("../models/users"));
 function getAllUsers() {
     return __awaiter(this, void 0, void 0, function* () {
         const allUsers = yield users_1.default.find();
@@ -32,3 +32,17 @@ function createUser(data) {
     });
 }
 exports.createUser = createUser;
+function updateUser(_id, data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield users_1.default.findOneAndUpdate({ _id }, data, { new: true });
+        return 'Usuario actualizado con éxito.';
+    });
+}
+exports.updateUser = updateUser;
+function deleteUser(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield users_1.default.findByIdAndDelete(id);
+        return 'Usuario eliminado con éxito.';
+    });
+}
+exports.deleteUser = deleteUser;
