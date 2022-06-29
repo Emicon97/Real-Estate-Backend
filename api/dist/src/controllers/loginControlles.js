@@ -15,8 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.tokenManagement = exports.googleLogIn = exports.standardLogIn = void 0;
 const JsonWebToken_1 = require("../libs/JsonWebToken");
 const google_auth_library_1 = require("google-auth-library");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config({ override: true });
 const users_1 = __importDefault(require("../models/users"));
-const client = new google_auth_library_1.OAuth2Client('394343158069-32t8sde06fkbaib24hu1v95g1oqac8pm.apps.googleusercontent.com');
+const client = new google_auth_library_1.OAuth2Client(process.env.CLIENT_ID);
 function standardLogIn(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -47,7 +49,7 @@ function googleLogIn(req, res, next) {
             const { tokenId } = req.body;
             const ticket = yield client.verifyIdToken({
                 idToken: tokenId,
-                audience: '394343158069-32t8sde06fkbaib24hu1v95g1oqac8pm.apps.googleusercontent.com'
+                audience: process.env.CLIENT_ID
             });
             const email = (_a = ticket.getPayload()) === null || _a === void 0 ? void 0 : _a.email;
             if (email !== undefined) {
