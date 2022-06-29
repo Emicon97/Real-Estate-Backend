@@ -1,5 +1,5 @@
-import userModel from "../models/users.";
-import { User, UserType } from './../models/users.';
+import userModel from "../models/users";
+import { User, UserType } from '../models/users';
 
 async function getAllUsers():Promise<User[]>{
     const allUsers:User[] = await userModel.find();

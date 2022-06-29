@@ -83,7 +83,9 @@ function searchByLocation(location, properties) {
 }
 function getPropById(id) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(id);
         const propById = yield properties_1.default.findById(id);
+        console.log(propById);
         if (propById !== null) {
             return propById;
         }
