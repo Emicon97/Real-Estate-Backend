@@ -42,11 +42,7 @@
     "google-auth-library": "^8.0.3",
     "helmet": "^4.6.0",
     "jsonwebtoken": "^8.5.1",
-<<<<<<< HEAD
-    "mongoose": "^6.4.1",
-=======
     "mongoose": "^6.3.5",
->>>>>>> 510e02375b821f2f3de5b6d1f80a670d64c92d89
     "morgan": "^1.10.0"
   },
   "engines": {
