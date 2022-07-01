@@ -17,7 +17,6 @@ async function calendarToken (req:Request, res:Response) {
    const { code } = req.body;
 
    const { tokens } = await oAuth2Client.getToken(code);
-   console.log(tokens)
    } catch (error) {
       if (error instanceof Error) {
          res.status(403);
@@ -90,15 +89,12 @@ async function getCalendar() {
       }
       const genial = res.data;
       for (let i = 0; i < genial.items.length; i++) {
-         if (i  >= (genial.items.length-5)) console.log(genial.items[i].summary)
+         if (i  >= (genial.items.length-5)) genial.items[i].summary
       }
-      console.log(genial.items.length)
    }
    );
  
  }
- 
- getCalendar();
 
 export {
    calendarToken,

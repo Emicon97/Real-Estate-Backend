@@ -81,7 +81,7 @@ async function tokenManagement (req:Request, res:Response) {
       const refresh:string = RefreshToken(user.email);
       
       const userData:[User, string, string] = [ user, token, refresh ];
-      console.log(userData)
+
       res.cookie('refresh-token', refresh);
       res.status(200).cookie('auth-token', token).json(userData);
    } catch (error) {
