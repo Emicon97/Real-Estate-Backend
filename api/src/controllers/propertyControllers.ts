@@ -13,7 +13,7 @@ async function searchProperties (req:Request, res:Response, next:NextFunction) {
             location as string,
             max as number
         );       
-
+        
         const { id:owner, follower } = req.params;
         if (owner !== undefined || follower !== undefined) {
             req.properties = allProperties;
@@ -136,7 +136,7 @@ async function searchByUser(
     const userProperties:Property[] = [];
     
     const search = follower ? user.favourites : user.properties;
-
+    
     search.forEach((property:any) => {
         properties.forEach((one:any) => {
             if (property.id === one.id) {
@@ -160,8 +160,7 @@ async function createProperty(data:Property, id:string):Promise<Property>{
     const properties:PropertyType = await propertyModel.create(data);
 
     const savedProperty:Property = await properties.save();
-    const user = await userModel.findByIdAndUpdate(id, { $push: { properties }});
-    console.log(user)
+    await userModel.findByIdAndUpdate(id, { $push: { properties }});
     return savedProperty;    
 }
 

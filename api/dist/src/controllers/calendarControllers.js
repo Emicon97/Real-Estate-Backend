@@ -22,7 +22,6 @@ function calendarToken(req, res) {
         try {
             const { code } = req.body;
             const { tokens } = yield oAuth2Client.getToken(code);
-            console.log(tokens);
         }
         catch (error) {
             if (error instanceof Error) {
@@ -95,10 +94,8 @@ function getCalendar() {
             const genial = res.data;
             for (let i = 0; i < genial.items.length; i++) {
                 if (i >= (genial.items.length - 5))
-                    console.log(genial.items[i].summary);
+                    genial.items[i].summary;
             }
-            console.log(genial.items.length);
         });
     });
 }
-getCalendar();
