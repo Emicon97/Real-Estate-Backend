@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import {
    createProperty,
-   getPropertyManager,
+   searchProperties,
    getPropById,
    deleteProperty,
-   updateProperty
+   updateProperty,
+   getPropertyByOwner
 } from '../controllers/propertyControllers';
+import { getOwnerById } from '../controllers/userControllers';
 
 const router = Router();
 
@@ -15,7 +17,7 @@ router.get('/:id', async(req, res) => {
    try{
       const { id } = req.params;
       const propById = await getPropById(id);       
-       
+      
       res.json(propById);
    }catch(error:any){
       if (error instanceof Error) {
@@ -26,6 +28,9 @@ router.get('/:id', async(req, res) => {
       }
    }
 })
+
+router.post('/search', searchProperties);
+
 
 router.post('/:id', async(req, res) => {
    try{
@@ -43,27 +48,12 @@ router.post('/:id', async(req, res) => {
    }
 })
 
-router.post('/search', async(req, res) => {
-   try{
-      const filter = req.body;
-      const { location, max }:any = req.query;
-      const allProperties = await getPropertyManager(
-         filter,
-         location as string,
-         max as number
-         );       
-       
-      res.json(allProperties);
-
-   }catch(error:any){
-      if (error instanceof Error) {
-         console.log(error);
-         res.status(404).json(error.message);
-      } else {
-         console.log('Unexpected Error', error);
-      }
-   }
-})
+router.post(
+   '/:id/search',
+   searchProperties,
+   getOwnerById,
+   getPropertyByOwner
+);
 
 router.put('/:id', async(req,res) => {
    try {

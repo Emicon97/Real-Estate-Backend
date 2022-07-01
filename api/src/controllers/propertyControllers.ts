@@ -1,6 +1,58 @@
+import { NextFunction, Request, Response } from "express";
 import propertyModel from "../models/properties";
 import { Property, PropertyType } from "../models/properties";
-import userModel from './../models/users';
+import userModel, { User } from './../models/users';
+import { getUserById } from "./userControllers";
+
+async function searchProperties (req:Request, res:Response, next:NextFunction) {
+    try{
+        const filter = req.body;
+        const { location, max }:any = req.query;
+        const allProperties = await getPropertyManager(
+            filter,
+            location as string,
+            max as number
+        );       
+
+        const { id:owner, follower } = req.params;
+        if (owner !== undefined || follower !== undefined) {
+            req.properties = allProperties;
+            return next();
+        } else {
+            res.json(allProperties);
+        }
+    } catch (error:any) {
+        if (error instanceof Error) {
+           console.log(error.message);
+           res.status(404).json(error);
+        } else {
+           console.log('Unexpected Error', error);
+        }
+    }
+}
+
+async function getPropertyByOwner(req:Request, res:Response) {
+    try{
+        const user:User = req.user;
+        const properties:Property[] = req.properties;
+        const { follower } = req.params;
+
+        const userProperties = await searchByUser(
+            user,
+            properties,
+            follower as string
+        );
+
+        res.json(userProperties);
+    } catch (error:any) {
+        if (error instanceof Error) {
+           console.log(error.message);
+           res.status(404).json(error);
+        } else {
+           console.log('Unexpected Error', error);
+        }
+    }
+}
 
 async function getPropertyManager(
     filters?:Property,
@@ -76,10 +128,27 @@ async function searchByLocation(
     return toFilter;
 }
 
+async function searchByUser(
+    user:User,
+    properties:Property[],
+    follower?:string
+    ):Promise<any>{
+    const userProperties:Property[] = [];
+    
+    const search = follower ? user.favourites : user.properties;
+
+    search.forEach((property:any) => {
+        properties.forEach((one:any) => {
+            if (property.id === one.id) {
+                userProperties.push(one);
+            }
+        })
+    })
+    return userProperties;
+}
+
 async function getPropById(id:string):Promise<Property> {
-    console.log(id)
     const propById:Property | null = await propertyModel.findById(id);
-    console.log(propById)
     if(propById !== null){
         return propById;
     }
@@ -111,7 +180,8 @@ async function deleteProperty(id:string):Promise<string> {
 
 export{
     createProperty,
-    getPropertyManager,
+    searchProperties,
+    getPropertyByOwner,
     getPropById,
     deleteProperty,
     updateProperty
