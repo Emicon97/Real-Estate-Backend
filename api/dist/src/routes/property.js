@@ -30,10 +30,11 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
     }
 }));
-router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { id } = req.body;
         const data = req.body;
-        const property = yield (0, propertyControllers_1.createProperty)(data);
+        const property = yield (0, propertyControllers_1.createProperty)(data, id);
         res.status(201).send(property);
     }
     catch (error) {
