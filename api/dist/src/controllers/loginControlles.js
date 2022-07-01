@@ -24,7 +24,7 @@ function standardLogIn(req, res, next) {
         try {
             let { email, password } = req.body;
             if (!password)
-                next();
+                return next();
             let user = yield dataBaseCheck(email, password);
             req.user = user;
             next();
@@ -43,8 +43,9 @@ exports.standardLogIn = standardLogIn;
 function googleLogIn(req, res, next) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        if (req.user)
-            next();
+        const user = req.user;
+        if (user)
+            return next();
         try {
             const { tokenId } = req.body;
             const ticket = yield client.verifyIdToken({
@@ -96,6 +97,7 @@ function tokenManagement(req, res) {
             const token = (0, JsonWebToken_1.TokenCreation)(user.name);
             const refresh = (0, JsonWebToken_1.RefreshToken)(user.email);
             const userData = [user, token, refresh];
+            console.log(userData);
             res.cookie('refresh-token', refresh);
             res.status(200).cookie('auth-token', token).json(userData);
         }

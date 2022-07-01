@@ -27,10 +27,11 @@ router.get('/:id', async(req, res) => {
    }
 })
 
-router.post('/', async(req, res) => {
+router.post('/:id', async(req, res) => {
    try{
+      const { id } = req.body
       const data = req.body;
-      const property = await createProperty(data);
+      const property = await createProperty(data, id);
       res.status(201).send(property)  
    }catch(error:any){
       if (error instanceof Error) {

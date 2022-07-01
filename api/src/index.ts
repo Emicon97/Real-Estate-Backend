@@ -7,7 +7,7 @@ const port = Number(process.env.PORT || 3001);
 const main = async () => {
   await dbConnection();
   app.listen(port, () => {
-    console.info('Express application started on port: ' + port);
+    console.info('Started on port: ' + port);
   });
 }
 
