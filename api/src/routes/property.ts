@@ -34,7 +34,7 @@ router.post('/search', searchProperties);
 
 router.post('/:id', async(req, res) => {
    try{
-      const { id } = req.body
+      const { id } = req.params;
       const data = req.body;
       const property = await createProperty(data, id);
       res.status(201).send(property)  
