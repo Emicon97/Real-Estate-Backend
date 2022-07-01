@@ -31,23 +31,23 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "lastName", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true }),
+    (0, typegoose_1.prop)({ required: true, default: 'pending' }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true }),
+    (0, typegoose_1.prop)({ required: true, default: 'pending' }),
     __metadata("design:type", Date)
 ], User.prototype, "birthday", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true }),
+    (0, typegoose_1.prop)({ required: true, default: 'pending' }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true }),
+    (0, typegoose_1.prop)({ required: true, default: 0 }),
     __metadata("design:type", Number)
 ], User.prototype, "dni", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true }),
+    (0, typegoose_1.prop)({ required: true, default: 0 }),
     __metadata("design:type", Number)
 ], User.prototype, "telephone", void 0);
 __decorate([
@@ -70,6 +70,10 @@ __decorate([
     (0, typegoose_1.prop)({ ref: () => User }),
     __metadata("design:type", Array)
 ], User.prototype, "user", void 0);
+__decorate([
+    (0, typegoose_1.prop)(),
+    __metadata("design:type", String)
+], User.prototype, "calendarRT", void 0);
 exports.User = User;
 const userModel = (0, typegoose_1.getModelForClass)(User);
 exports.default = userModel;

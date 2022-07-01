@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateProperty = exports.deleteProperty = exports.getPropById = exports.getPropertyManager = exports.createProperty = void 0;
 const properties_1 = __importDefault(require("../models/properties"));
+const users_1 = __importDefault(require("./../models/users"));
 function getPropertyManager(filters, location, max) {
     return __awaiter(this, void 0, void 0, function* () {
         const allProperties = yield getAllProperties();
@@ -93,10 +94,11 @@ function getPropById(id) {
     });
 }
 exports.getPropById = getPropById;
-function createProperty(data) {
+function createProperty(data, id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const property = yield properties_1.default.create(data);
-        const savedProperty = yield property.save();
+        const properties = yield properties_1.default.create(data);
+        const savedProperty = yield properties.save();
+        yield users_1.default.findByIdAndUpdate(id, { $push: { properties } });
         return savedProperty;
     });
 }
