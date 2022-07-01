@@ -97,7 +97,6 @@ function tokenManagement(req, res) {
             const token = (0, JsonWebToken_1.TokenCreation)(user.name);
             const refresh = (0, JsonWebToken_1.RefreshToken)(user.email);
             const userData = [user, token, refresh];
-            console.log(userData);
             res.cookie('refresh-token', refresh);
             res.status(200).cookie('auth-token', token).json(userData);
         }
