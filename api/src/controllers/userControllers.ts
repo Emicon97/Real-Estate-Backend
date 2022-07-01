@@ -11,7 +11,7 @@ async function getOwnerById(req:Request, res:Response, next:NextFunction) {
             req.user = owner;
             return next();
         } else if (properties) {
-            const followed = await getUserProperties(id, true);
+            const followed = await getUserProperties(follower, true);
             req.user = followed;
             return next();
         } else {
@@ -42,7 +42,7 @@ async function getUserProperties(id:string, follower?:boolean):Promise<User>{
         return user;
     }
 
-    throw new Error("Hubo un error al procesar sus datos.");
+    throw new Error("No hemos encontrado ninguna propiedad.");
 }
 
 async function getUserById(id:string):Promise<User>{

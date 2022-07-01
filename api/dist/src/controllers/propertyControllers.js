@@ -12,9 +12,57 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProperty = exports.deleteProperty = exports.getPropById = exports.getPropertyManager = exports.createProperty = void 0;
+exports.updateProperty = exports.deleteProperty = exports.getPropById = exports.getPropertyByOwner = exports.searchProperties = exports.createProperty = void 0;
 const properties_1 = __importDefault(require("../models/properties"));
 const users_1 = __importDefault(require("./../models/users"));
+function searchProperties(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const filter = req.body;
+            const { location, max } = req.query;
+            const allProperties = yield getPropertyManager(filter, location, max);
+            const { id: owner, follower } = req.params;
+            if (owner !== undefined || follower !== undefined) {
+                req.properties = allProperties;
+                return next();
+            }
+            else {
+                res.json(allProperties);
+            }
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
+        }
+    });
+}
+exports.searchProperties = searchProperties;
+function getPropertyByOwner(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const user = req.user;
+            const properties = req.properties;
+            const { follower } = req.params;
+            const userProperties = yield searchByUser(user, properties, follower);
+            res.json(userProperties);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
+        }
+    });
+}
+exports.getPropertyByOwner = getPropertyByOwner;
 function getPropertyManager(filters, location, max) {
     return __awaiter(this, void 0, void 0, function* () {
         const allProperties = yield getAllProperties();
@@ -36,7 +84,6 @@ function getPropertyManager(filters, location, max) {
         }
     });
 }
-exports.getPropertyManager = getPropertyManager;
 function getAllProperties() {
     return __awaiter(this, void 0, void 0, function* () {
         const allProperties = yield properties_1.default.find();
@@ -82,11 +129,23 @@ function searchByLocation(location, properties) {
         return toFilter;
     });
 }
+function searchByUser(user, properties, follower) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const userProperties = [];
+        const search = follower ? user.favourites : user.properties;
+        search.forEach((property) => {
+            properties.forEach((one) => {
+                if (property.id === one.id) {
+                    userProperties.push(one);
+                }
+            });
+        });
+        return userProperties;
+    });
+}
 function getPropById(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(id);
         const propById = yield properties_1.default.findById(id);
-        console.log(propById);
         if (propById !== null) {
             return propById;
         }

@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const propertyControllers_1 = require("../controllers/propertyControllers");
+const userControllers_1 = require("../controllers/userControllers");
 const router = (0, express_1.Router)();
 //ruta detalle get by id
 //"_id" para postman--> "62b2748be1138fd711ff07a5",
@@ -30,9 +31,10 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
     }
 }));
+router.post('/search', propertyControllers_1.searchProperties);
 router.post('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.body;
+        const { id } = req.params;
         const data = req.body;
         const property = yield (0, propertyControllers_1.createProperty)(data, id);
         res.status(201).send(property);
@@ -47,23 +49,8 @@ router.post('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         }
     }
 }));
-router.post('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const filter = req.body;
-        const { location, max } = req.query;
-        const allProperties = yield (0, propertyControllers_1.getPropertyManager)(filter, location, max);
-        res.json(allProperties);
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            console.log(error);
-            res.status(404).json(error.message);
-        }
-        else {
-            console.log('Unexpected Error', error);
-        }
-    }
-}));
+router.post('/:id/search', propertyControllers_1.searchProperties, userControllers_1.getOwnerById, propertyControllers_1.getPropertyByOwner);
+router.post('/:follower/favourites', propertyControllers_1.searchProperties, userControllers_1.getOwnerById, propertyControllers_1.getPropertyByOwner);
 router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;

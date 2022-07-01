@@ -55,6 +55,13 @@ router.post(
    getPropertyByOwner
 );
 
+router.post(
+   '/:follower/favourites',
+   searchProperties,
+   getOwnerById,
+   getPropertyByOwner
+)
+
 router.put('/:id', async(req,res) => {
    try {
       const { id } = req.params;
