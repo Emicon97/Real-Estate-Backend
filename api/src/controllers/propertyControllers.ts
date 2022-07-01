@@ -160,7 +160,8 @@ async function createProperty(data:Property, id:string):Promise<Property>{
     const properties:PropertyType = await propertyModel.create(data);
 
     const savedProperty:Property = await properties.save();
-    await userModel.findByIdAndUpdate(id, { $push: { properties }});
+    const user = await userModel.findByIdAndUpdate(id, { $push: { properties }});
+    console.log(user)
     return savedProperty;    
 }
 
