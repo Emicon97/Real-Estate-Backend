@@ -156,11 +156,12 @@ async function getPropById(id:string):Promise<Property> {
    throw new Error("Esta propiedad no está disponible."); 
 }
 
-async function createProperty(data:Property, id:string):Promise<Property>{
+async function createProperty(data:Property, _id:string):Promise<Property>{
     const properties:PropertyType = await propertyModel.create(data);
 
     const savedProperty:Property = await properties.save();
-    await userModel.findByIdAndUpdate(id, { $push: { properties }});
+    const user = await userModel.findByIdAndUpdate(_id, { $push: { properties }});
+    console.log("user:", user);
     return savedProperty;    
 }
 
