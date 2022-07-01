@@ -1,5 +1,6 @@
 import propertyModel from "../models/properties";
 import { Property, PropertyType } from "../models/properties";
+import userModel from './../models/users';
 
 async function getPropertyManager(
     filters?:Property,
@@ -86,10 +87,11 @@ async function getPropById(id:string):Promise<Property> {
    throw new Error("Esta propiedad no está disponible."); 
 }
 
-async function createProperty(data:Property):Promise<Property>{
-    const property:PropertyType = await propertyModel.create(data);
+async function createProperty(data:Property, id:string):Promise<Property>{
+    const properties:PropertyType = await propertyModel.create(data);
 
-    const savedProperty:Property = await property.save();
+    const savedProperty:Property = await properties.save();
+    await userModel.findByIdAndUpdate(id, { $push: { properties }});
     return savedProperty;    
 }
 
