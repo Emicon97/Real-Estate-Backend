@@ -6,6 +6,6 @@ const router = Router();
 router.get('/:id', getCalendarEvents);
 
 router.post('/:id', calendarToken);
-router.post('/event', createEvent);
+router.post('/:id/event', createEvent);
 
 export default router;
