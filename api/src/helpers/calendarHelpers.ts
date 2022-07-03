@@ -1,4 +1,4 @@
-import refreshModel from "../models/refresh_token";
+import refreshModel, { Refresh } from "../models/refresh_token";
 const { google } = require('googleapis');
 import dotenv from 'dotenv';
 dotenv.config({ override: true });
@@ -11,25 +11,31 @@ const oAuth2Client = new google.auth.OAuth2(
 
 async function createRefreshToken (code:string, owner:string) {
    const { tokens } = await oAuth2Client.getToken(code);
-      
-   if (tokens.refresh_token) await refreshModel.create({
-      token: tokens.refresh_token,
-      owner
-   })
+
+   if (tokens.refresh_token) {
+      console.log(tokens.refresh_token)
+      const refresh = await refreshModel.create({
+         token: tokens.refresh_token,
+         owner
+      })
+      const done = await refresh.save();
+   }
 }
 
-async function getRefreshByOwner (id:string) {
-   const refresh = await refreshModel.find({ owner: id });
-   if (refresh !== null) return refresh;
+async function getRefreshByOwner (id:string):Promise<void> {
+   const refresh:Refresh | null = await refreshModel.findOne({ owner: id });
+   
+   if (refresh !== null) {
+      oAuth2Client.setCredentials({ refresh_token: refresh.token });
+      return;
+   }
    
    throw new Error ('No ha dado autorización para acceder al calendario.');
 }
 
 async function eventCreation (id:string, data:any) {
-   const refresh_token = await getRefreshByOwner(id);
+   await getRefreshByOwner(id);
 
-   oAuth2Client.setCredentials({ refresh_token });
-   
    const calendar = google.calendar('v3');
 
    const eventStartTime = new Date()
@@ -60,34 +66,27 @@ async function eventCreation (id:string, data:any) {
 }
 
 async function getCalendar (id:string) {
-   const refresh_token = await getRefreshByOwner(id);
-
-   oAuth2Client.setCredentials({ refresh_token });
+   await getRefreshByOwner(id);
 
    const service = google.calendar({ version: "v3", auth: oAuth2Client });
-
-   const calendar:any[] = [];
-
-   service.events.list(
-   {
-      calendarId: 'primary',
-      singleEvents: true,
-   },
-   (err:any, res:any) => {
-      if (err) {
-         console.log(err);
-         return;
+   
+   var calendar:any[] = [];
+   const hola = await service.events.list(
+      {
+         calendarId: 'primary'
       }
-      const genial = res.data;
-      for (let i = 0; i < genial.items.length; i++) {
-         if (i  >= (genial.items.length-5)) genial.items[i].summary
+   )
+      const events = hola.data.items;
+      for (let i = 0; i < events.length; i++) {
+      if (events[i].summary === 'Ventas' || events[i].summary === 'Alquiler') {
+         calendar.push(events[i]);
       }
-   });
+   }
+   return calendar;
 }
 
 export {
    createRefreshToken,
-   getRefreshByOwner,
    eventCreation,
    getCalendar
 }

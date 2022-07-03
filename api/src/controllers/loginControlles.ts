@@ -4,8 +4,8 @@ import { LoginTicket, OAuth2Client } from 'google-auth-library';
 import dotenv from 'dotenv'
 dotenv.config({ override: true });
 
-import userModel from '../models/users';
 import { User } from './../models/users';
+import { dataBaseCheck } from "../helpers/loginHelpers";
 
 
 const client:OAuth2Client = new OAuth2Client(process.env.CLIENT_ID);
@@ -38,7 +38,7 @@ async function googleLogIn (req:Request, res:Response, next:NextFunction) {
          idToken: tokenId as string,
          audience: process.env.CLIENT_ID
       });
-
+      
       const email:string | undefined = ticket.getPayload()?.email;
 
       if (email !== undefined) {
@@ -54,22 +54,6 @@ async function googleLogIn (req:Request, res:Response, next:NextFunction) {
       } else {
          console.log('Unexpected Error', error);
       }
-   }
-}
-
-async function dataBaseCheck (email:string, password?:string):Promise<User> {
-   if(email && password){
-      let user:User | null = await userModel.findOne({email, password});
-
-      if(user !== null) return user;
-      throw new Error ('Los datos ingresados son incorrectos.');
-   } else if (email) {
-      let user:User | null = await userModel.findOne({email});
-
-      if(user !== null) return user;
-      throw new Error ('No se encuentra registrado.');
-   } else {
-      throw new Error('Complete los campos requeridos.');
    }
 }
 
