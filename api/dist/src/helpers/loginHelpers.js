@@ -12,14 +12,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_1 = __importDefault(require("./app"));
-const index_1 = __importDefault(require("./db/index"));
-// Start the application by listening to specific port
-const port = Number(process.env.PORT || 3001);
-const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, index_1.default)();
-    app_1.default.listen(port, () => {
-        console.info('Started on port: ' + port);
+exports.dataBaseCheck = void 0;
+const users_1 = __importDefault(require("./../models/users"));
+function dataBaseCheck(email, password) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (email && password) {
+            let user = yield users_1.default.findOne({ email, password });
+            if (user !== null)
+                return user;
+            throw new Error('Los datos ingresados son incorrectos.');
+        }
+        else if (email) {
+            let user = yield users_1.default.findOne({ email });
+            if (user !== null)
+                return user;
+            throw new Error('No se encuentra registrado.');
+        }
+        else {
+            throw new Error('Complete los campos requeridos.');
+        }
     });
-});
-main();
+}
+exports.dataBaseCheck = dataBaseCheck;

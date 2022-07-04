@@ -8,41 +8,114 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUser = exports.getAllUsers = exports.createUser = void 0;
-const users_1 = __importDefault(require("../models/users"));
-function getAllUsers() {
+exports.banUser = exports.updateData = exports.getOwnerById = exports.postUser = exports.getUsers = void 0;
+const userHelpers_1 = require("../helpers/userHelpers");
+function getUsers(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const allUsers = yield users_1.default.find();
-        if (allUsers.length) {
-            return allUsers;
+        try {
+            const data = yield (0, userHelpers_1.getAllUsers)();
+            res.json(data);
         }
-        throw new Error("No se encontraron usuarios.");
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
+        }
     });
 }
-exports.getAllUsers = getAllUsers;
-function createUser(data) {
+exports.getUsers = getUsers;
+function postUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const user = yield users_1.default.create(data);
-        const savedUser = yield user.save();
-        return savedUser;
+        try {
+            const data = req.body;
+            const property = yield (0, userHelpers_1.createUser)(data);
+            res.status(201).send(property);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
+        }
     });
 }
-exports.createUser = createUser;
-function updateUser(_id, data) {
+exports.postUser = postUser;
+function getOwnerById(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield users_1.default.findOneAndUpdate({ _id }, data, { new: true });
-        return 'Usuario actualizado con éxito.';
+        try {
+            const { id, follower } = req.params;
+            const properties = req.properties;
+            if (properties && !follower) {
+                const owner = yield (0, userHelpers_1.getUserProperties)(id);
+                req.user = owner;
+                return next();
+            }
+            else if (properties) {
+                const followed = yield (0, userHelpers_1.getUserProperties)(follower, true);
+                req.user = followed;
+                return next();
+            }
+            else {
+                const user = yield (0, userHelpers_1.getUserById)(id);
+                res.json(user);
+            }
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
+        }
     });
 }
-exports.updateUser = updateUser;
-function deleteUser(id) {
+exports.getOwnerById = getOwnerById;
+function updateData(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield users_1.default.findByIdAndDelete(id);
-        return 'Usuario eliminado con éxito.';
+        try {
+            const { id } = req.params;
+            const data = req.body;
+            const message = yield (0, userHelpers_1.updateUser)(id, data);
+            res.status(201).send(message);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
+        }
     });
 }
-exports.deleteUser = deleteUser;
+exports.updateData = updateData;
+function banUser(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const data = req.body.id;
+            const message = yield (0, userHelpers_1.deleteUser)(data);
+            res.status(201).send(message);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
+        }
+    });
+}
+exports.banUser = banUser;

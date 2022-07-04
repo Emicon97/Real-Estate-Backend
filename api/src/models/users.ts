@@ -22,19 +22,19 @@ export class User {
    @prop({ required: true })
    public lastName: string;
 
-   @prop({ required: true })
+   @prop({ required: true, default: 'pending' })
    public password: string;
 
-   @prop({ required: true })
+   @prop({ required: true, default: 'pending' })
    public birthday: Date;
 
-   @prop({ required: true })
+   @prop({ required: true, default: 'pending' })
    public email: string;
 
-   @prop({ required: true })
+   @prop({ required: true, default: 0 })
    public dni: number;
 
-   @prop({ required: true })
+   @prop({ required: true, default: 0 })
    public telephone: number;
 
    @prop({ required: true, enum: Range, default: 'free' })
@@ -44,46 +44,18 @@ export class User {
    public avatar: string;
 
    @prop({ ref: () => Property })
-   favourites: Ref<Property>[];
+   public favourites: Ref<Property>[];
 
    @prop({ ref: () => Property })
-   properties: Ref<Property>[];
+   public properties: Ref<Property>[];
 
    @prop({ ref: () => User})
    public user: Ref< User >[];
 
+   @prop()
+   public calendarRT: string;
+
 }
-
-// export class Free extends User {
-
-//    @prop({ ref: () => Property })
-//    favourites: Ref<Property>[];
-
-// }
-
-// export class Premium extends User {
-
-//    @prop({ ref: () => Property })
-//    properties: Ref<Property>[];
-
-// }
-
-// export class Vip extends User {
-
-//    @prop({ ref: () => Property })
-//    properties: Ref<Property>[];
-
-// }
-
-// export class Admin extends User {
-
-//    @prop({ enum: Range })
-//    public userType: string;
-
-//    @prop({ ref: () => User})
-//    public user: Ref< User >[];
-
-// }
 
 type TUserType = ReturnModelType<typeof User>;
 export type UserType = DocumentType<User>;
