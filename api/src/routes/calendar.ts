@@ -1,9 +1,11 @@
 import { Router } from 'express';
-import { calendarToken, createEvent } from '../controllers/calendarControllers';
+import { calendarToken, createEvent, getCalendarEvents } from '../controllers/calendarControllers';
 
 const router = Router();
 
-router.post('/', calendarToken);
-router.post('/event', createEvent);
+router.get('/:id', getCalendarEvents);
+
+router.post('/:id', calendarToken);
+router.post('/:id/event', createEvent);
 
 export default router;
