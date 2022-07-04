@@ -17,7 +17,7 @@ const TokenValidation = (req, res, next) => {
     if (!refresh) {
         return res.sendStatus(403);
     }
-    const id = req.headers['auth-token'];
+    const id = req.headers['id'];
     const token = (0, exports.TokenCreation)(id);
     res.cookie('auth-token', token);
     next();
@@ -46,6 +46,7 @@ function verifyJWT(token) {
 }
 function verifyRefreshJWT(token) {
     try {
+        console.log('estaaaa');
         const decoded = jsonwebtoken_1.default.verify(token, process.env.TOKEN_REFRESH);
         return { payload: decoded, expired: false };
     }
