@@ -23,7 +23,7 @@ async function createRefreshToken (code:string, owner:string) {
 }
 
 async function getRefreshByOwner (id:string):Promise<void> {
-   const refresh:Refresh | null = await refreshModel.findOne({ owner: '62b77256748ecce00e66f578' });
+   const refresh:Refresh | null = await refreshModel.findOne({ owner: id });
    
    if (refresh !== null) {
       oAuth2Client.setCredentials({ refresh_token: refresh.token });
@@ -34,69 +34,39 @@ async function getRefreshByOwner (id:string):Promise<void> {
 }
 
 async function eventCreation (id:string, data:any) {
-   // await getRefreshByOwner(id);
-   // oAuth2Client.setCredentials({ refresh_token: '1//0d4jKteBcsAybCgYIARAAGA0SNwF-L9IrYuIk7ykOcfYJN4Ci7oyWSch9bNqujtYP51wddNQ_fY8ywNxOWYjbUHbED30LFMsZeQA' });
-
-   // const calendar = google.calendar('v3');
-
-   // const eventStartTime = new Date()
-   // eventStartTime.setDate(eventStartTime.getMonth() + 3)
-   // eventStartTime.setDate(eventStartTime.getDay() + 3)
-
-   // const eventEndTime = new Date()
-   // eventEndTime.setDate(eventEndTime.getMonth() + 5)
-   // console.log(eventEndTime);
-   // eventEndTime.setDate(eventEndTime.getDay() + 3)
-   // eventEndTime.setMinutes(eventEndTime.getMinutes() + 45)
-   
-   // await calendar.events.insert({
-   //    auth: oAuth2Client,
-   //    calendarId: 'primary',
-   //    resource: {
-   //       summary: 'Alquiler',
-   //       colorId: '8',
-   //       start: {
-   //          dateTime: '2022-07-11T05:04:04.275Z'
-   //       },
-   //       end: {
-   //          dateTime: '2022-07-11T05:04:04.275Z'
-   //       }
-   //    }
-   // })
-   oAuth2Client.setCredentials({
-      refresh_token: '1//0d4jKteBcsAybCgYIARAAGA0SNwF-L9IrYuIk7ykOcfYJN4Ci7oyWSch9bNqujtYP51wddNQ_fY8ywNxOWYjbUHbED30LFMsZeQA'
-    });
+   await getRefreshByOwner(id);
+   const { summary, location, description, dateTime } = data;
     
     const calendar = google.calendar('v3');
 
     const eventStartTime = new Date()
-    eventStartTime.setDate(eventStartTime.getMonth() + 3)
-    eventStartTime.setDate(eventStartTime.getDay() + 3)
+    eventStartTime.setDate(eventStartTime.getMonth())
+    eventStartTime.setDate(eventStartTime.getDay())
 
     const eventEndTime = new Date()
-    eventEndTime.setDate(eventEndTime.getMonth() + 5)
-    eventEndTime.setDate(eventEndTime.getDay() + 3)
-    eventEndTime.setMinutes(eventEndTime.getMinutes() + 45)
+    eventEndTime.setDate(eventEndTime.getMonth())
+    eventEndTime.setDate(eventEndTime.getDay())
    try {
       await calendar.events.insert({
+         auth: oAuth2Client,
          calendarId: 'primary',
          requestBody: {
-            summary: 'Ventas',
-            location: 'tu casa',
-            description: 'hola',
-            colorId: '8',
+            summary,
+            location,
+            description,
+            colorId: summary === 'Venta' ? 1 : 2,
             start: {
                dateTime: eventStartTime
             },
             end: {
                dateTime: eventEndTime
-            }
+            },
+            attendees: [ 'derleuchtturm@gmail.com' ]
          }
-      })
+      });
    } catch (error:any) {
       console.log(error)
    }
-   // console.log(response)
 }
 
 async function getCalendar (id:string) {
@@ -116,7 +86,7 @@ async function getCalendar (id:string) {
          calendar.push(events[i]);
       }
    }
-   return calendar.length;
+   return calendar;
 }
 
 export {
