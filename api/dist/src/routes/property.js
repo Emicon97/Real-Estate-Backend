@@ -5,7 +5,7 @@ const propertyControllers_1 = require("../controllers/propertyControllers");
 const userControllers_1 = require("../controllers/userControllers");
 const JsonWebToken_1 = require("./../libs/JsonWebToken");
 const router = (0, express_1.Router)();
-router.get('/getowner/:id', propertyControllers_1.getOwnerByProperty);
+router.get('/getownersphone/:id', propertyControllers_1.getOwnersTelephoneByProperty);
 router.get('/:id', propertyControllers_1.getPropertyById);
 router.post('/search', propertyControllers_1.searchProperties);
 router.post('/:id', propertyControllers_1.postProperty);

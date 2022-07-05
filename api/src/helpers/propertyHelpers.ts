@@ -1,6 +1,6 @@
 import propertyModel from "../models/properties";
 import { Property, PropertyType } from "../models/properties";
-import userModel from './../models/users';
+import userModel, { User } from './../models/users';
 import { searchByFilter, searchByLocation } from "./filters";
 
 async function getPropertyManager(
@@ -63,9 +63,10 @@ async function deleteProperty(id:string):Promise<string> {
    return 'Propiedad eliminada con éxito.';
 }
 
-async function getOwner(id:string) {
-   const owner = await userModel.findOne({ properties: id });
-   return owner
+async function getOwnersTelephone(id:string):Promise<number> {
+   const owner:User | null = await userModel.findOne({ properties: id });
+   if (owner) return owner.telephone;
+   throw new Error ('No fue posible encontrar datos sobre el dueño.');
 }
 
 export {
@@ -74,5 +75,5 @@ export {
    getPropById,
    updateProperty,
    deleteProperty,
-   getOwner
+   getOwnersTelephone
 }

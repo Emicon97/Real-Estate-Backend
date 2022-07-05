@@ -7,7 +7,7 @@ import {
     deleteProperty,
     updateProperty,
     getPropertyManager,
-    getOwner
+    getOwnersTelephone
 } from "../helpers/propertyHelpers";
 import { searchByUser } from "../helpers/filters";
 
@@ -124,11 +124,11 @@ async function deleteProperties (req:Request, res:Response) {
     }
 }
 
-async function getOwnerByProperty (req:Request, res:Response) {
+async function getOwnersTelephoneByProperty (req:Request, res:Response) {
     try{
         const { id } = req.params;
 
-        const owner = await getOwner(id);
+        const owner = await getOwnersTelephone(id);
 
         res.json(owner);
     } catch (error:any) {
@@ -148,5 +148,5 @@ export {
     getPropertyById,
     updateProperties,
     deleteProperties,
-    getOwnerByProperty
+    getOwnersTelephoneByProperty
 }

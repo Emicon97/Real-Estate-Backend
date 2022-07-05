@@ -6,14 +6,14 @@ import {
    getPropertyByOwner,
    updateProperties,
    deleteProperties,
-   getOwnerByProperty
+   getOwnersTelephoneByProperty
 } from '../controllers/propertyControllers';
 import { getOwnerById } from '../controllers/userControllers';
 import { TokenValidation } from './../libs/JsonWebToken';
 
 const router = Router();
 
-router.get('/getowner/:id', getOwnerByProperty);
+router.get('/getownersphone/:id', getOwnersTelephoneByProperty);
 router.get('/:id', getPropertyById);
 
 router.post('/search', searchProperties);
