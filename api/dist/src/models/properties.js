@@ -14,8 +14,9 @@ const typegoose_1 = require("@typegoose/typegoose");
 var Status;
 (function (Status) {
     Status["available"] = "available";
-    Status["reserveed"] = "reserved";
-    Status["negotiotion"] = "negotiation";
+    Status["reserved"] = "reserved";
+    Status["negotiation"] = "negotiation";
+    Status["invisible"] = "invisible";
 })(Status || (Status = {}));
 ;
 var Operation;

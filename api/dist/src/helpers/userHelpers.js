@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUser = exports.getUserById = exports.getAllUsers = exports.createUser = exports.getUserProperties = void 0;
+exports.deleteUser = exports.favs = exports.updateUser = exports.getUserById = exports.getAllUsers = exports.createUser = exports.getUserProperties = void 0;
 const users_1 = __importDefault(require("../models/users"));
 function getUserProperties(id, follower) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -67,6 +67,22 @@ function updateUser(_id, data) {
     });
 }
 exports.updateUser = updateUser;
+function favs(id, favourites) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = yield users_1.default.findById(id);
+        if (user === null)
+            throw new Error('No encontramos sus datos.');
+        const properties = user === null || user === void 0 ? void 0 : user.favourites;
+        if (properties.includes(favourites)) {
+            yield users_1.default.findByIdAndUpdate(id, { $pull: { favourites } });
+        }
+        else {
+            yield users_1.default.findByIdAndUpdate(id, { $push: { favourites } });
+        }
+        return user;
+    });
+}
+exports.favs = favs;
 function deleteUser(id) {
     return __awaiter(this, void 0, void 0, function* () {
         yield users_1.default.findByIdAndDelete(id);
