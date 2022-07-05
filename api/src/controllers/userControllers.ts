@@ -5,7 +5,8 @@ import {
     getAllUsers,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    favs
 } from '../helpers/userHelpers';
 
 async function getUsers (req:Request, res:Response) {
@@ -63,12 +64,28 @@ async function getOwnerById (req:Request, res:Response, next:NextFunction) {
     }
 }
 
+async function addFavs (req:Request, res:Response) {
+    try {
+        const { id } = req.params;
+        const { property } = req.body;
+        const message = await favs(id, property);
+        res.status(201).json(message)
+    } catch (error:any) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(404).json(error);
+        } else {
+            console.log('Unexpected Error', error);
+        }
+    }
+}
+
 async function updateData (req:Request, res:Response) {
     try {
         const { id } = req.params;
         const data = req.body;
         const message = await updateUser(id, data);
-        res.status(201).send(message)
+        res.status(201).json(message)
     } catch (error:any) {
         if (error instanceof Error) {
             console.log(error.message);
@@ -98,6 +115,7 @@ export {
     getUsers,
     postUser,
     getOwnerById,
+    addFavs,
     updateData,
     banUser            
 }
