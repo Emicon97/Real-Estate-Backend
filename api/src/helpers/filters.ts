@@ -49,7 +49,7 @@ async function searchByUser(
    user:User,
    properties:Property[],
    follower?:string
-   ):Promise<any>{
+   ):Promise<Property[]>{
    const userProperties:Property[] = [];
    
    const search = follower ? user.favourites : user.properties;

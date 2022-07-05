@@ -1,5 +1,6 @@
 import userModel from "../models/users";
 import { User, UserType } from '../models/users';
+import propertyModel, { PropertyType } from './../models/properties';
 
 async function getUserProperties(id:string, follower?:boolean):Promise<User>{
    var user:User | null;
@@ -51,6 +52,19 @@ async function updateUser(_id:string, data:User):Promise<string>{
    return 'Usuario actualizado con éxito.';
 }
 
+async function favs(id:string, favourites:string):Promise<User> {
+   const user:User | null = await userModel.findById(id);
+   if (user === null) throw new Error ('No encontramos sus datos.');
+   
+   const properties:unknown[] = user?.favourites as unknown[];
+   if (properties.includes(favourites)) {
+      await userModel.findByIdAndUpdate(id, { $pull: { favourites }});
+   } else {
+      await userModel.findByIdAndUpdate(id, { $push: { favourites }});
+   }
+   return user;
+}
+
 async function deleteUser(id:string):Promise<string> {
    
    await userModel.findByIdAndDelete(id);
@@ -63,5 +77,6 @@ export {
    getAllUsers,
    getUserById,
    updateUser,
+   favs,
    deleteUser            
 }

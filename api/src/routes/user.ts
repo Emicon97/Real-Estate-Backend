@@ -1,13 +1,14 @@
 import { Router } from 'express';
-import { getUsers, postUser, updateData, banUser } from '../controllers/userControllers';
+import { getUsers, postUser, updateData, addFavs, banUser, getOwnerById } from '../controllers/userControllers';
 
 const router = Router();
 
+router.get('/:id', getOwnerById);
 router.get('/', getUsers);
 
 router.post('/', postUser);
 
-router.put('/addFavs', );
+router.put('/addfavs/:id', addFavs);
 router.put('/:id', updateData);
 
 router.delete('/', banUser);

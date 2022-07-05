@@ -7,8 +7,9 @@ import {
 
 enum Status {
    available = 'available',
-   reserveed = 'reserved',
-   negotiotion = 'negotiation'
+   reserved = 'reserved',
+   negotiation = 'negotiation',
+   invisible = 'invisible'
 };
 enum Operation {
    sell = 'sell',

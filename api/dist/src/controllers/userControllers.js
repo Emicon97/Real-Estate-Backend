@@ -8,29 +8,63 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUser = exports.getUserById = exports.getAllUsers = exports.createUser = exports.getOwnerById = void 0;
-const users_1 = __importDefault(require("../models/users"));
+exports.banUser = exports.updateData = exports.addFavs = exports.getOwnerById = exports.postUser = exports.getUsers = void 0;
+const userHelpers_1 = require("../helpers/userHelpers");
+function getUsers(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const data = yield (0, userHelpers_1.getAllUsers)();
+            res.json(data);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
+        }
+    });
+}
+exports.getUsers = getUsers;
+function postUser(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const data = req.body;
+            const property = yield (0, userHelpers_1.createUser)(data);
+            res.status(201).send(property);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
+        }
+    });
+}
+exports.postUser = postUser;
 function getOwnerById(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id, follower } = req.params;
             const properties = req.properties;
             if (properties && !follower) {
-                const owner = yield getUserProperties(id);
+                const owner = yield (0, userHelpers_1.getUserProperties)(id);
                 req.user = owner;
                 return next();
             }
             else if (properties) {
-                const followed = yield getUserProperties(follower, true);
+                const followed = yield (0, userHelpers_1.getUserProperties)(follower, true);
                 req.user = followed;
                 return next();
             }
             else {
-                const user = yield getUserById(id);
+                const user = yield (0, userHelpers_1.getUserById)(id);
                 res.json(user);
             }
         }
@@ -46,62 +80,62 @@ function getOwnerById(req, res, next) {
     });
 }
 exports.getOwnerById = getOwnerById;
-function getUserProperties(id, follower) {
+function addFavs(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        var user;
-        if (!follower) {
-            user = yield users_1.default.findById(id)
-                .populate({ path: 'properties' });
+        try {
+            const { id } = req.params;
+            const { property } = req.body;
+            const message = yield (0, userHelpers_1.favs)(id, property);
+            res.status(201).json(message);
         }
-        else {
-            user = yield users_1.default.findById(id)
-                .populate({ path: 'favourites' });
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
         }
-        if (user !== null) {
-            return user;
+    });
+}
+exports.addFavs = addFavs;
+function updateData(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { id } = req.params;
+            const data = req.body;
+            const message = yield (0, userHelpers_1.updateUser)(id, data);
+            res.status(201).json(message);
         }
-        throw new Error("No hemos encontrado ninguna propiedad.");
-    });
-}
-function getUserById(id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const user = yield users_1.default.findById(id);
-        if (user !== null) {
-            return user;
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
         }
-        throw new Error("Hubo un error al procesar sus datos.");
     });
 }
-exports.getUserById = getUserById;
-function getAllUsers() {
+exports.updateData = updateData;
+function banUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const allUsers = yield users_1.default.find();
-        if (allUsers.length) {
-            return allUsers;
+        try {
+            const data = req.body.id;
+            const message = yield (0, userHelpers_1.deleteUser)(data);
+            res.status(201).send(message);
         }
-        throw new Error("No se encontraron usuarios.");
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
+        }
     });
 }
-exports.getAllUsers = getAllUsers;
-function createUser(data) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const user = yield users_1.default.create(data);
-        const savedUser = yield user.save();
-        return savedUser;
-    });
-}
-exports.createUser = createUser;
-function updateUser(_id, data) {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield users_1.default.findOneAndUpdate({ _id }, data, { new: true });
-        return 'Usuario actualizado con éxito.';
-    });
-}
-exports.updateUser = updateUser;
-function deleteUser(id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield users_1.default.findByIdAndDelete(id);
-        return 'Usuario eliminado con éxito.';
-    });
-}
-exports.deleteUser = deleteUser;
+exports.banUser = banUser;
