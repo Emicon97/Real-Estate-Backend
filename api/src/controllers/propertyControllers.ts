@@ -6,7 +6,8 @@ import {
     getPropById,
     deleteProperty,
     updateProperty,
-    getPropertyManager
+    getPropertyManager,
+    getOwner
 } from "../helpers/propertyHelpers";
 import { searchByUser } from "../helpers/filters";
 
@@ -123,11 +124,29 @@ async function deleteProperties (req:Request, res:Response) {
     }
 }
 
+async function getOwnerByProperty (req:Request, res:Response) {
+    try{
+        const { id } = req.params;
+
+        const owner = await getOwner(id);
+
+        res.json(owner);
+    } catch (error:any) {
+        if (error instanceof Error) {
+           console.log(error.message);
+           res.status(404).json(error);
+        } else {
+           console.log('Unexpected Error', error);
+        }
+    }
+}
+
 export {
     postProperty,
     searchProperties,
     getPropertyByOwner,
     getPropertyById,
     updateProperties,
-    deleteProperties
+    deleteProperties,
+    getOwnerByProperty
 }

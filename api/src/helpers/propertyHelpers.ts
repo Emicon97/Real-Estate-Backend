@@ -63,10 +63,16 @@ async function deleteProperty(id:string):Promise<string> {
    return 'Propiedad eliminada con éxito.';
 }
 
+async function getOwner(id:string) {
+   const owner = await userModel.findOne({ properties: id });
+   return owner
+}
+
 export {
    getPropertyManager,
    createProperty,
    getPropById,
+   updateProperty,
    deleteProperty,
-   updateProperty
+   getOwner
 }
