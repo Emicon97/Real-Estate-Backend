@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProperty = exports.deleteProperty = exports.getPropById = exports.createProperty = exports.getPropertyManager = void 0;
+exports.getOwnersTelephone = exports.deleteProperty = exports.updateProperty = exports.getPropById = exports.createProperty = exports.getPropertyManager = void 0;
 const properties_1 = __importDefault(require("../models/properties"));
 const users_1 = __importDefault(require("./../models/users"));
 const filters_1 = require("./filters");
@@ -80,3 +80,12 @@ function deleteProperty(id) {
     });
 }
 exports.deleteProperty = deleteProperty;
+function getOwnersTelephone(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const owner = yield users_1.default.findOne({ properties: id });
+        if (owner)
+            return owner.telephone;
+        throw new Error('No fue posible encontrar datos sobre el dueño.');
+    });
+}
+exports.getOwnersTelephone = getOwnersTelephone;
