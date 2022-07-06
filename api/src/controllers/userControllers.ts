@@ -1,8 +1,44 @@
 import { NextFunction, Request, Response } from "express";
-import userModel from "../models/users";
-import { User, UserType } from '../models/users';
+import {
+    getUserProperties,
+    getUserById,
+    getAllUsers,
+    createUser,
+    updateUser,
+    deleteUser,
+    favs
+} from '../helpers/userHelpers';
 
-async function getOwnerById(req:Request, res:Response, next:NextFunction) {
+async function getUsers (req:Request, res:Response) {
+    try{      
+       const data = await getAllUsers();
+       res.json(data);
+    }catch(error:any){
+       if (error instanceof Error) {
+          console.log(error.message);
+          res.status(404).json(error);
+       } else {
+          console.log('Unexpected Error', error);
+       }
+    }
+}
+
+async function postUser (req:Request, res:Response) {
+    try{
+        const data = req.body;
+        const property = await createUser(data);
+        res.status(201).send(property)  
+    }catch(error:any){
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(404).json(error);
+        } else {
+            console.log('Unexpected Error', error);
+        }
+    }
+}
+
+async function getOwnerById (req:Request, res:Response, next:NextFunction) {
     try{
         const { id, follower } = req.params;
         const properties = req.properties;
@@ -28,67 +64,58 @@ async function getOwnerById(req:Request, res:Response, next:NextFunction) {
     }
 }
 
-async function getUserProperties(id:string, follower?:boolean):Promise<User>{
-    var user:User | null;
-    if (!follower) {
-        user = await userModel.findById(id)
-            .populate({ path: 'properties' });
-    } else {
-        user = await userModel.findById(id)
-            .populate({ path: 'favourites' });
+async function addFavs (req:Request, res:Response) {
+    try {
+        const { id } = req.params;
+        const { property } = req.body;
+        const message = await favs(id, property);
+        res.status(201).json(message)
+    } catch (error:any) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(404).json(error);
+        } else {
+            console.log('Unexpected Error', error);
+        }
     }
+}
 
-    if (user !== null) {
-        return user;
+async function updateData (req:Request, res:Response) {
+    try {
+        const { id } = req.params;
+        const data = req.body;
+        const message = await updateUser(id, data);
+        res.status(201).json(message)
+    } catch (error:any) {
+        if (error instanceof Error) {
+            console.log(error.message);
+            res.status(404).json(error);
+        } else {
+            console.log('Unexpected Error', error);
+        }
     }
-
-    throw new Error("No hemos encontrado ninguna propiedad.");
 }
 
-async function getUserById(id:string):Promise<User>{
-    const user:User | null = await userModel.findById(id);
-
-    if (user !== null) {
-        return user;
+async function banUser (req:Request, res:Response) {
+    try {
+        const data = req.body.id;
+        const message = await deleteUser(data);
+        res.status(201).send(message)
+    } catch (error:any) {
+        if (error instanceof Error) {
+           console.log(error.message);
+           res.status(404).json(error);
+        } else {
+           console.log('Unexpected Error', error);
+        }
     }
-
-    throw new Error("Hubo un error al procesar sus datos.");
-}
-
-async function getAllUsers():Promise<User[]>{
-    const allUsers:User[] = await userModel.find();
-    
-    if(allUsers.length) {
-     return allUsers; 
-    }
-    
-    throw new Error("No se encontraron usuarios.");
-}
-
-async function createUser(data:User):Promise<User>{
-    const user:UserType = await userModel.create(data);
-
-    const savedUser:User = await user.save();
-    return savedUser;    
-}
-
-async function updateUser(_id:string, data:User):Promise<string>{
-    await userModel.findOneAndUpdate({ _id }, data, {new:true});
-
-    return 'Usuario actualizado con éxito.';
-}
-
-async function deleteUser(id:string):Promise<string> {
-   
-    await userModel.findByIdAndDelete(id);
-    return 'Usuario eliminado con éxito.';
 }
 
 export {
+    getUsers,
+    postUser,
     getOwnerById,
-    createUser,
-    getAllUsers,
-    getUserById,
-    updateUser,
-    deleteUser            
+    addFavs,
+    updateData,
+    banUser            
 }

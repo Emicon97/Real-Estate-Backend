@@ -75,11 +75,9 @@ function tokenManagement(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const user = req.user;
-            const token = (0, JsonWebToken_1.TokenCreation)(user.name);
-            const refresh = (0, JsonWebToken_1.RefreshToken)(user.email);
-            const userData = [user, token, refresh];
-            res.cookie('refresh-token', refresh);
-            res.status(200).cookie('auth-token', token).json(userData);
+            const token = (0, JsonWebToken_1.TokenCreation)(user.email);
+            yield (0, JsonWebToken_1.RefreshToken)(user._id);
+            res.status(200).cookie('auth-token', token).json(user).send('cookies');
         }
         catch (error) {
             if (error instanceof Error) {

@@ -8,19 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProperty = exports.deleteProperty = exports.getPropById = exports.getPropertyByOwner = exports.searchProperties = exports.createProperty = void 0;
-const properties_1 = __importDefault(require("../models/properties"));
-const users_1 = __importDefault(require("./../models/users"));
+exports.getOwnersTelephoneByProperty = exports.deleteProperties = exports.updateProperties = exports.getPropertyById = exports.getPropertyByOwner = exports.searchProperties = exports.postProperty = void 0;
+const propertyHelpers_1 = require("../helpers/propertyHelpers");
+const filters_1 = require("../helpers/filters");
 function searchProperties(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const filter = req.body;
             const { location, max } = req.query;
-            const allProperties = yield getPropertyManager(filter, location, max);
+            const allProperties = yield (0, propertyHelpers_1.getPropertyManager)(filter, location, max);
             const { id: owner, follower } = req.params;
             if (owner !== undefined || follower !== undefined) {
                 req.properties = allProperties;
@@ -48,7 +45,7 @@ function getPropertyByOwner(req, res) {
             const user = req.user;
             const properties = req.properties;
             const { follower } = req.params;
-            const userProperties = yield searchByUser(user, properties, follower);
+            const userProperties = yield (0, filters_1.searchByUser)(user, properties, follower);
             res.json(userProperties);
         }
         catch (error) {
@@ -63,116 +60,100 @@ function getPropertyByOwner(req, res) {
     });
 }
 exports.getPropertyByOwner = getPropertyByOwner;
-function getPropertyManager(filters, location, max) {
+function postProperty(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const allProperties = yield getAllProperties();
-        if ((filters && Object.keys(filters).length) && location) {
-            const filtered = yield searchByFilter(filters, max);
-            const searched = yield searchByLocation(location, filtered);
-            return searched;
+        try {
+            const { id } = req.params;
+            const data = req.body;
+            const property = yield (0, propertyHelpers_1.createProperty)(data, id);
+            res.status(201).send(property);
         }
-        else if ((filters && Object.keys(filters).length)) {
-            const filtered = yield searchByFilter(filters, max);
-            return filtered;
-        }
-        else if (location) {
-            const searched = yield searchByLocation(location, allProperties);
-            return searched;
-        }
-        else {
-            return allProperties;
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
         }
     });
 }
-function getAllProperties() {
+exports.postProperty = postProperty;
+function getPropertyById(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const allProperties = yield properties_1.default.find();
-        if (allProperties.length) {
-            return allProperties;
+        try {
+            const { id } = req.params;
+            const propById = yield (0, propertyHelpers_1.getPropById)(id);
+            res.json(propById);
         }
-        throw new Error("No se encontraron propiedades.");
-    });
-}
-function searchByFilter(filtered, max) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (max) {
-            const property = yield properties_1.default.find(filtered)
-                .where('price').gt(0).lt(max);
-            return property;
-        }
-        else {
-            const property = yield properties_1.default.find(filtered);
-            return property;
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
         }
     });
 }
-function searchByLocation(location, properties) {
+exports.getPropertyById = getPropertyById;
+function updateProperties(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const toFilter = [];
-        const names = location.trim().split(' ');
-        properties.forEach((property) => {
-            names.forEach((word) => {
-                var _a;
-                if (word.length) {
-                    if (!toFilter.includes(property) &&
-                        property.city.includes(word)) {
-                        toFilter.push(property);
-                    }
-                    else if (!toFilter.includes(property) &&
-                        ((_a = property.neighbourhood) === null || _a === void 0 ? void 0 : _a.includes(word)) &&
-                        property.neighbourhood !== 'No especificado') {
-                        toFilter.push(property);
-                    }
-                }
-            });
-        });
-        return toFilter;
-    });
-}
-function searchByUser(user, properties, follower) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const userProperties = [];
-        const search = follower ? user.favourites : user.properties;
-        search.forEach((property) => {
-            properties.forEach((one) => {
-                if (property.id === one.id) {
-                    userProperties.push(one);
-                }
-            });
-        });
-        return userProperties;
-    });
-}
-function getPropById(id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const propById = yield properties_1.default.findById(id);
-        if (propById !== null) {
-            return propById;
+        try {
+            const { id } = req.params;
+            const data = req.body;
+            const message = yield (0, propertyHelpers_1.updateProperty)(id, data);
+            res.status(201).send(message);
         }
-        throw new Error("Esta propiedad no está disponible.");
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
+        }
     });
 }
-exports.getPropById = getPropById;
-function createProperty(data, id) {
+exports.updateProperties = updateProperties;
+function deleteProperties(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const properties = yield properties_1.default.create(data);
-        const savedProperty = yield properties.save();
-        yield users_1.default.findByIdAndUpdate(id, { $push: { properties } });
-        return savedProperty;
+        try {
+            const { id } = req.body;
+            const message = yield (0, propertyHelpers_1.deleteProperty)(id);
+            res.status(201).send(message);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
+        }
     });
 }
-exports.createProperty = createProperty;
-function updateProperty(_id, data) {
+exports.deleteProperties = deleteProperties;
+function getOwnersTelephoneByProperty(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield properties_1.default.findOneAndUpdate({ _id }, data, { new: true });
-        return 'Propiedad actualizada con éxito.';
+        try {
+            const { id } = req.params;
+            const owner = yield (0, propertyHelpers_1.getOwnersTelephone)(id);
+            res.json(owner);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log('Unexpected Error', error);
+            }
+        }
     });
 }
-exports.updateProperty = updateProperty;
-function deleteProperty(id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield properties_1.default.findByIdAndDelete(id);
-        return 'Propiedad eliminada con éxito.';
-    });
-}
-exports.deleteProperty = deleteProperty;
+exports.getOwnersTelephoneByProperty = getOwnersTelephoneByProperty;

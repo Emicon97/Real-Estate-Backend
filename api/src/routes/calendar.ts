@@ -1,9 +1,12 @@
 import { Router } from 'express';
-import { calendarToken, createEvent } from '../controllers/calendarControllers';
+import { calendarToken, createEvent, getCalendarEvents } from '../controllers/calendarControllers';
+import { TokenValidation } from '../libs/JsonWebToken';
 
 const router = Router();
 
-router.post('/', calendarToken);
-router.post('/event', createEvent);
+router.get('/:id', TokenValidation, getCalendarEvents);
+
+router.post('/:id', TokenValidation, calendarToken);
+router.post('/:id/event', TokenValidation, createEvent);
 
 export default router;

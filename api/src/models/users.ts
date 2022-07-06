@@ -44,16 +44,13 @@ export class User {
    public avatar: string;
 
    @prop({ ref: () => Property })
-   favourites: Ref<Property>[];
+   public favourites: Ref<Property>[];
 
    @prop({ ref: () => Property })
-   properties: Ref<Property>[];
+   public properties: Ref<Property>[];
 
    @prop({ ref: () => User})
    public user: Ref< User >[];
-
-   @prop()
-   public calendarRT: string;
 
 }
 
