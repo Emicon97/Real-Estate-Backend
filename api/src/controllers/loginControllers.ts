@@ -65,7 +65,6 @@ async function tokenManagement (req:Request, res:Response) {
       await RefreshToken(user._id);
       const cookieConfig:CookieOptions = {
          sameSite: 'none',
-         domain: 'mikasanueva.herokuapp.com',
          secure: true,
          httpOnly: true
       }
