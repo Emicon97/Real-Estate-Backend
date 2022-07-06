@@ -6,7 +6,7 @@ dotenv.config({ override: true });
 const oAuth2Client = new google.auth.OAuth2(
    process.env.CLIENT_ID,
    process.env.CLIENT_SECRET,
-   'http://localhost:3000'
+   'mikasa-nueva.vercel.app'
 );
 
 async function createRefreshToken (code:string, owner:string) {
