@@ -1,16 +1,17 @@
 import { Router } from 'express';
 import { getUsers, postUser, updateData, addFavs, banUser, getOwnerById } from '../controllers/userControllers';
+import { TokenValidation } from '../libs/JsonWebToken';
 
 const router = Router();
 
 router.get('/:id', getOwnerById);
-router.get('/', getUsers);
+router.get('/', TokenValidation, getUsers);
 
 router.post('/', postUser);
 
-router.put('/addfavs/:id', addFavs);
-router.put('/:id', updateData);
+router.put('/addfavs/:id', TokenValidation, addFavs);
+router.put('/:id', TokenValidation, updateData);
 
-router.delete('/', banUser);
+router.delete('/', TokenValidation, banUser);
 
 export default router;

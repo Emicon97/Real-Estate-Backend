@@ -2,11 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const userControllers_1 = require("../controllers/userControllers");
+const JsonWebToken_1 = require("../libs/JsonWebToken");
 const router = (0, express_1.Router)();
 router.get('/:id', userControllers_1.getOwnerById);
-router.get('/', userControllers_1.getUsers);
+router.get('/', JsonWebToken_1.TokenValidation, userControllers_1.getUsers);
 router.post('/', userControllers_1.postUser);
-router.put('/addfavs/:id', userControllers_1.addFavs);
-router.put('/:id', userControllers_1.updateData);
-router.delete('/', userControllers_1.banUser);
+router.put('/addfavs/:id', JsonWebToken_1.TokenValidation, userControllers_1.addFavs);
+router.put('/:id', JsonWebToken_1.TokenValidation, userControllers_1.updateData);
+router.delete('/', JsonWebToken_1.TokenValidation, userControllers_1.banUser);
 exports.default = router;
