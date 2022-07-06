@@ -11,7 +11,7 @@ export class Login {
    @prop({ required: true, unique: true })
    public token: string;
 
-   @prop({ required: true, unique: true })
+   @prop({ required: true })
    public owner: string;
 
 }

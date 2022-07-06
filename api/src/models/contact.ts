@@ -5,8 +5,6 @@ import {
    ReturnModelType,
    DocumentType
 } from "@typegoose/typegoose";
-import { User } from "./users";
-import { Property } from "./properties";
 
 export class Contact {
 
@@ -22,11 +20,11 @@ export class Contact {
    @prop()
    public message: string;
 
-   public user: Ref< User >;
-   @prop({ ref: () => User})
+   @prop()
+   public user: string;
 
-   @prop({ ref: () => Property })
-   public property: Ref<Property>;
+   @prop()
+   public property: string;
 
 }
 
