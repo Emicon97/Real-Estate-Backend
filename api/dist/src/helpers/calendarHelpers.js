@@ -17,7 +17,7 @@ const refresh_token_1 = __importDefault(require("../models/refresh_token"));
 const { google } = require('googleapis');
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ override: true });
-const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, 'http://localhost:3000');
+const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, 'mikasa-nueva.vercel.app');
 function createRefreshToken(code, owner) {
     return __awaiter(this, void 0, void 0, function* () {
         const { tokens } = yield oAuth2Client.getToken(code);
