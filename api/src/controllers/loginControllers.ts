@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, CookieOptions } from "express";
 import { TokenCreation, RefreshToken } from '../libs/JsonWebToken';
 import { LoginTicket, OAuth2Client } from 'google-auth-library';
 import dotenv from 'dotenv'
@@ -63,8 +63,14 @@ async function tokenManagement (req:Request, res:Response) {
 
       const token:string = TokenCreation(user.email);
       await RefreshToken(user._id);
-
-      res.status(200).cookie('auth-token', token).json(user);
+      // const cookieConfig:CookieOptions = {
+      //    sameSite: 'none',
+      //    secure: true,
+      //    httpOnly: true
+      // }
+      // res.status(200).cookie('auth-token', token, cookieConfig).json(user);
+      const userData:[ User, string ] = [ user, token ];
+      res.status(200).json(userData);
    } catch (error) {
       if (error instanceof Error) {
          console.log(error)
