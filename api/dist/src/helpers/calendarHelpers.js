@@ -22,12 +22,11 @@ function createRefreshToken(code, owner) {
     return __awaiter(this, void 0, void 0, function* () {
         const { tokens } = yield oAuth2Client.getToken(code);
         if (tokens.refresh_token) {
-            console.log(tokens.refresh_token);
             const refresh = yield refresh_token_1.default.create({
                 token: tokens.refresh_token,
                 owner
             });
-            const done = yield refresh.save();
+            yield refresh.save();
         }
     });
 }

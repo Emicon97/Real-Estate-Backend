@@ -4,7 +4,7 @@ import { LoginTicket, OAuth2Client } from 'google-auth-library';
 import dotenv from 'dotenv'
 dotenv.config({ override: true });
 
-import { User } from './../models/users';
+import { User } from '../models/users';
 import { dataBaseCheck } from "../helpers/loginHelpers";
 
 
@@ -61,13 +61,10 @@ async function tokenManagement (req:Request, res:Response) {
    try {
       const user = req.user;
 
-      const token:string = TokenCreation(user.name);
-      const refresh:string = RefreshToken(user.email);
-      
-      const userData:[User, string, string] = [ user, token, refresh ];
+      const token:string = TokenCreation(user.email);
+      await RefreshToken(user._id);
 
-      res.cookie('refresh-token', refresh);
-      res.status(200).cookie('auth-token', token).json(userData);
+      res.status(200).cookie('auth-token', token).json(user).send('cookies');
    } catch (error) {
       if (error instanceof Error) {
          console.log(error)

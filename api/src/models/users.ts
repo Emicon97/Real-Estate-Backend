@@ -52,9 +52,6 @@ export class User {
    @prop({ ref: () => User})
    public user: Ref< User >[];
 
-   @prop()
-   public calendarRT: string;
-
 }
 
 type TUserType = ReturnModelType<typeof User>;

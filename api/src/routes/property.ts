@@ -17,9 +17,10 @@ router.get('/getownersphone/:id', getOwnersTelephoneByProperty);
 router.get('/:id', getPropertyById);
 
 router.post('/search', searchProperties);
-router.post('/:id', postProperty);
+router.post('/:id', TokenValidation, postProperty);
 
 router.post('/:id/search',
+   TokenValidation,
    searchProperties,
    getOwnerById,
    getPropertyByOwner
@@ -31,8 +32,8 @@ router.post('/:follower/favourites',
    getPropertyByOwner
 );
 
-router.put('/:id', updateProperties);
+router.put('/:id',TokenValidation,  updateProperties);
 
-router.delete('/', deleteProperties);
+router.delete('/', TokenValidation, deleteProperties);
 
 export default router;
