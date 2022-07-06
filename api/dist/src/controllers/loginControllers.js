@@ -77,12 +77,14 @@ function tokenManagement(req, res) {
             const user = req.user;
             const token = (0, JsonWebToken_1.TokenCreation)(user.email);
             yield (0, JsonWebToken_1.RefreshToken)(user._id);
-            const cookieConfig = {
-                sameSite: 'none',
-                secure: true,
-                httpOnly: true
-            };
-            res.status(200).cookie('auth-token', token, cookieConfig).json(user);
+            // const cookieConfig:CookieOptions = {
+            //    sameSite: 'none',
+            //    secure: true,
+            //    httpOnly: true
+            // }
+            // res.status(200).cookie('auth-token', token, cookieConfig).json(user);
+            const userData = [user, token];
+            res.status(200).json(userData);
         }
         catch (error) {
             if (error instanceof Error) {
