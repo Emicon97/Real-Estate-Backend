@@ -63,11 +63,10 @@ async function tokenManagement (req:Request, res:Response) {
 
       const token:string = TokenCreation(user.email);
       await RefreshToken(user._id);
-      const cookieConfig = { samesite: "none", secure: true }
+      const cookieConfig = { samesite: "none", domain: 'localhost:3000', secure: true }
       res.status(200).cookie('auth-token', token,  {
          httpOnly: true,
          ...cookieConfig
-
      }).json(user);
    } catch (error) {
       if (error instanceof Error) {
