@@ -5,6 +5,7 @@ import {
    ReturnModelType,
    DocumentType
 } from "@typegoose/typegoose";
+import { trusted } from "mongoose";
 import { Property } from "./properties";
 
 enum Range {
@@ -28,7 +29,7 @@ export class User {
    @prop({ required: true, default: 'pending' })
    public birthday: Date;
 
-   @prop({ required: true, default: 'pending' })
+   @prop({ required: true, unique: true, default: 'pending' })
    public email: string;
 
    @prop({ required: true, default: 0 })
