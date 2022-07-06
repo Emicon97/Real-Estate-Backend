@@ -70,10 +70,6 @@ __decorate([
     (0, typegoose_1.prop)({ ref: () => User }),
     __metadata("design:type", Array)
 ], User.prototype, "user", void 0);
-__decorate([
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", String)
-], User.prototype, "calendarRT", void 0);
 exports.User = User;
 const userModel = (0, typegoose_1.getModelForClass)(User);
 exports.default = userModel;

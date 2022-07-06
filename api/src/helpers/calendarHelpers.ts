@@ -13,12 +13,11 @@ async function createRefreshToken (code:string, owner:string) {
    const { tokens } = await oAuth2Client.getToken(code);
 
    if (tokens.refresh_token) {
-      console.log(tokens.refresh_token)
       const refresh = await refreshModel.create({
          token: tokens.refresh_token,
          owner
       })
-      const done = await refresh.save();
+      await refresh.save();
    }
 }
 
