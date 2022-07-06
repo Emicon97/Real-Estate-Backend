@@ -64,7 +64,7 @@ async function tokenManagement (req:Request, res:Response) {
       const token:string = TokenCreation(user.email);
       await RefreshToken(user._id);
 
-      res.status(200).cookie('auth-token', token).json(user).send('cookies');
+      res.status(200).cookie('auth-token', token).json(user);
    } catch (error) {
       if (error instanceof Error) {
          console.log(error)
