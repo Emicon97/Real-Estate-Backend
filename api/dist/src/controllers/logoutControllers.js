@@ -18,7 +18,6 @@ function logout(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { owner } = req.params;
-            console.log('got out');
             yield refresh_login_1.default.findOneAndDelete({ owner });
             res.status(200).cookie('auth-token', '');
         }
