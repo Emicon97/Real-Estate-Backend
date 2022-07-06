@@ -1,19 +1,17 @@
 import {
    prop,
-   Ref,
    getModelForClass,
    ReturnModelType,
    DocumentType
 } from "@typegoose/typegoose";
-import { User } from "./users";
 
 export class Refresh {
 
    @prop({ required: true, unique: true })
    public token: string;
 
-   @prop({ required: true, unique: true, ref: () => User })
-   public owner: Ref<User>;
+   @prop({ required: true, unique: true })
+   public owner: string;
 
 }
 
