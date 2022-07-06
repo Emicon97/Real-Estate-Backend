@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Refresh = void 0;
 const typegoose_1 = require("@typegoose/typegoose");
-const users_1 = require("./users");
 class Refresh {
 }
 __decorate([
@@ -19,8 +18,8 @@ __decorate([
     __metadata("design:type", String)
 ], Refresh.prototype, "token", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true, unique: true, ref: () => users_1.User }),
-    __metadata("design:type", Object)
+    (0, typegoose_1.prop)({ required: true, unique: true }),
+    __metadata("design:type", String)
 ], Refresh.prototype, "owner", void 0);
 exports.Refresh = Refresh;
 const refreshModel = (0, typegoose_1.getModelForClass)(Refresh);
