@@ -63,7 +63,7 @@ async function tokenManagement (req:Request, res:Response) {
 
       const token:string = TokenCreation(user.email);
       await RefreshToken(user._id);
-      const cookieConfig = { secure: true }
+      const cookieConfig = { samesite: "none", secure: true }
       res.status(200).cookie('auth-token', token,  {
          httpOnly: true,
          ...cookieConfig
