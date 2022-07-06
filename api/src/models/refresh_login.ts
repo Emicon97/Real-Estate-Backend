@@ -5,15 +5,14 @@ import {
    ReturnModelType,
    DocumentType
 } from "@typegoose/typegoose";
-import { User } from "./users";
 
 export class Login {
 
    @prop({ required: true, unique: true })
    public token: string;
 
-   @prop({ required: true, unique: true, ref: () => User })
-   public owner: Ref<User>;
+   @prop({ required: true, unique: true })
+   public owner: string;
 
 }
 
