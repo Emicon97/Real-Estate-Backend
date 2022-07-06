@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, CookieOptions } from "express";
 import { TokenCreation, RefreshToken } from '../libs/JsonWebToken';
 import { LoginTicket, OAuth2Client } from 'google-auth-library';
 import dotenv from 'dotenv'
@@ -63,8 +63,8 @@ async function tokenManagement (req:Request, res:Response) {
 
       const token:string = TokenCreation(user.email);
       await RefreshToken(user._id);
-      const cookieConfig = {
-         SameSite: "None",
+      const cookieConfig:CookieOptions = {
+         sameSite: 'none',
          domain: 'mikasanueva.herokuapp.com',
          secure: true,
          httpOnly: true
