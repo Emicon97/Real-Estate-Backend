@@ -34,23 +34,23 @@ async function getRefreshByOwner (id:string):Promise<void> {
 
 async function eventCreation (id:string, data:any) {
    await getRefreshByOwner(id);
-   const { summary, location, description, dateTime } = data;
+   const { summary, location, description, startDateTime } = data;
     
     const calendar = google.calendar('v3');
 
     const eventStartTime = new Date()
     eventStartTime.setDate(eventStartTime.getMonth())
-    eventStartTime.setDate(eventStartTime.getDay())
+    eventStartTime.setDate(eventStartTime.getDay() -2)
 
     const eventEndTime = new Date()
     eventEndTime.setDate(eventEndTime.getMonth())
-    eventEndTime.setDate(eventEndTime.getDay())
+    eventEndTime.setDate(eventEndTime.getDay() -1)
    try {
-      await calendar.events.insert({
+      const cal = await calendar.events.insert({
          auth: oAuth2Client,
          calendarId: 'primary',
          requestBody: {
-            summary,
+            summary: 'Venta',
             location,
             description,
             colorId: summary === 'Venta' ? 1 : 2,
@@ -63,6 +63,7 @@ async function eventCreation (id:string, data:any) {
             attendees: [ 'derleuchtturm@gmail.com' ]
          }
       });
+      console.log(cal)
    } catch (error:any) {
       console.log(error)
    }

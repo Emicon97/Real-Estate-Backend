@@ -27,7 +27,7 @@ async function postUser (req:Request, res:Response) {
     try{
         const data = req.body;
         const property = await createUser(data);
-        res.status(201).send(property)  
+        res.status(201).json(property)  
     }catch(error:any){
         if (error instanceof Error) {
             console.log(error.message);
@@ -100,7 +100,7 @@ async function banUser (req:Request, res:Response) {
     try {
         const data = req.body.id;
         const message = await deleteUser(data);
-        res.status(201).send(message)
+        res.status(201).json(message)
     } catch (error:any) {
         if (error instanceof Error) {
            console.log(error.message);

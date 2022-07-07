@@ -8,17 +8,17 @@ async function createContactForm(data:Contact):Promise<Contact>{
    return savedContact;    
 }
 
-async function getContactByReceiver(id:string):Promise<Contact>{
-   const user:Contact | null = await contactModel.findById(id);
+async function getContactByProperty(property:string):Promise<Contact[]>{
+   const contact:Contact[] = await contactModel.find({ property });
 
-   if (user !== null) {
-      return user;
+   if (!contact.length) {
+      return contact;
    }
 
-   throw new Error("Hubo un error al procesar sus datos.");
+   throw new Error("No hay contactos para esta propiedad.");
 }
 
 export {
    createContactForm,
-   getContactByReceiver
+   getContactByProperty
 }

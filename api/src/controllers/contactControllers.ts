@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
-import { createContactForm } from '../helpers/contactHelpers';
+import { createContactForm, getContactByProperty } from '../helpers/contactHelpers';
 
 async function getContact (req:Request, res:Response) {
    try{
       const { id } = req.params;
-      const data = req.body;
-      const contact = await createContactForm(data);
-      res.status(201).send(contact)  
+      const contact = await getContactByProperty(id);
+      res.status(201).json(contact)  
    }catch(error:any){
       if (error instanceof Error) {
          console.log(error.message);
@@ -21,7 +20,7 @@ async function postContactForm (req:Request, res:Response) {
    try{
       const data = req.body;
       const contact = await createContactForm(data);
-      res.status(201).send(contact)  
+      res.status(201).json(contact)  
    }catch(error:any){
       if (error instanceof Error) {
          console.log(error.message);
@@ -33,5 +32,6 @@ async function postContactForm (req:Request, res:Response) {
 }
 
 export {
+   getContact,
    postContactForm
 }

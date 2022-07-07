@@ -26,7 +26,7 @@ export class User {
    @prop({ required: true, default: 'pending' })
    public password: string;
 
-   @prop({ required: true, default: 'pending' })
+   @prop()
    public birthday: Date;
 
    @prop({ required: true, unique: true, default: 'pending' })

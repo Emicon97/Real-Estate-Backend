@@ -66,7 +66,7 @@ async function postProperty (req:Request, res:Response) {
        const { id } = req.params;
        const data = req.body;
        const property = await createProperty(data, id);
-       res.status(201).send(property)  
+       res.status(201).json(property)  
     }catch(error:any){
        if (error instanceof Error) {
           console.log(error.message);
@@ -98,7 +98,7 @@ async function updateProperties (req:Request, res:Response) {
        const { id } = req.params;
        const data = req.body;
        const message = await updateProperty(id, data);
-       res.status(201).send(message)
+       res.status(201).json(message)
     } catch (error:any) {
        if (error instanceof Error) {
           console.log(error.message);
@@ -113,7 +113,7 @@ async function deleteProperties (req:Request, res:Response) {
     try {
         const { id } = req.body;
         const message = await deleteProperty(id);
-        res.status(201).send(message)
+        res.status(201).json(message)
     } catch (error:any) {
         if (error instanceof Error) {
             console.log(error.message);

@@ -20,10 +20,7 @@ export class Contact {
    @prop()
    public message: string;
 
-   @prop()
-   public user: string;
-
-   @prop()
+   @prop({ required: true })
    public property: string;
 
 }
