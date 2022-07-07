@@ -39,7 +39,7 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "birthday", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true, default: 'pending' }),
+    (0, typegoose_1.prop)({ required: true, unique: true, default: 'pending' }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
