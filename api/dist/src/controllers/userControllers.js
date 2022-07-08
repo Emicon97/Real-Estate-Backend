@@ -34,7 +34,7 @@ function postUser(req, res) {
         try {
             const data = req.body;
             const property = yield (0, userHelpers_1.createUser)(data);
-            res.status(201).send(property);
+            res.status(201).json(property);
         }
         catch (error) {
             if (error instanceof Error) {
@@ -125,7 +125,7 @@ function banUser(req, res) {
         try {
             const data = req.body.id;
             const message = yield (0, userHelpers_1.deleteUser)(data);
-            res.status(201).send(message);
+            res.status(201).json(message);
         }
         catch (error) {
             if (error instanceof Error) {

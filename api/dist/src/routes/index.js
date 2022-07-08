@@ -4,14 +4,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 const { Router } = require('express');
 const login_1 = __importDefault(require("./login"));
+const signup_1 = __importDefault(require("./signup"));
 const logout_1 = __importDefault(require("./logout"));
 const property_1 = __importDefault(require("./property"));
 const user_1 = __importDefault(require("./user"));
 const calendar_1 = __importDefault(require("./calendar"));
+const payment_1 = __importDefault(require("./payment"));
 const router = Router();
 router.use('/login', login_1.default);
+router.use('/signup', signup_1.default);
 router.use('/logout', logout_1.default);
 router.use('/property', property_1.default);
 router.use('/user', user_1.default);
 router.use('/calendar', calendar_1.default);
+router.use('/payment', payment_1.default);
 module.exports = router;

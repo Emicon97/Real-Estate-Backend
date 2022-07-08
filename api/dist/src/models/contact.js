@@ -30,11 +30,7 @@ __decorate([
     __metadata("design:type", String)
 ], Contact.prototype, "message", void 0);
 __decorate([
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", String)
-], Contact.prototype, "user", void 0);
-__decorate([
-    (0, typegoose_1.prop)(),
+    (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", String)
 ], Contact.prototype, "property", void 0);
 exports.Contact = Contact;

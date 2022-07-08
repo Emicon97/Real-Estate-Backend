@@ -66,7 +66,7 @@ function postProperty(req, res) {
             const { id } = req.params;
             const data = req.body;
             const property = yield (0, propertyHelpers_1.createProperty)(data, id);
-            res.status(201).send(property);
+            res.status(201).json(property);
         }
         catch (error) {
             if (error instanceof Error) {
@@ -105,7 +105,7 @@ function updateProperties(req, res) {
             const { id } = req.params;
             const data = req.body;
             const message = yield (0, propertyHelpers_1.updateProperty)(id, data);
-            res.status(201).send(message);
+            res.status(201).json(message);
         }
         catch (error) {
             if (error instanceof Error) {
@@ -124,7 +124,7 @@ function deleteProperties(req, res) {
         try {
             const { id } = req.body;
             const message = yield (0, propertyHelpers_1.deleteProperty)(id);
-            res.status(201).send(message);
+            res.status(201).json(message);
         }
         catch (error) {
             if (error instanceof Error) {

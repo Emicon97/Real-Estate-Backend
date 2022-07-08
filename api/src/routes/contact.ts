@@ -1,11 +1,11 @@
-import { Router } from 'express';
-import { getContact, postContactForm } from '../controllers/contactControllers';
-import { TokenValidation } from '../libs/JsonWebToken';
+import { Router } from "express";
+import { getContact, postContactForm } from "../controllers/contactControllers";
+import { TokenValidation } from "../libs/JsonWebToken";
 
 const router = Router();
 
-router.get('/:id', TokenValidation, getContact);
+router.get("/:id", TokenValidation, getContact);
 
-router.post('/', TokenValidation, postContactForm);
+router.post("/", TokenValidation, postContactForm);
 
 export default router;

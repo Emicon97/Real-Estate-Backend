@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dataBaseCheck = void 0;
 const users_1 = __importDefault(require("./../models/users"));
-function dataBaseCheck(email, password) {
+function dataBaseCheck(email, password, name, lastName) {
     return __awaiter(this, void 0, void 0, function* () {
         if (email && password) {
             let user = yield users_1.default.findOne({ email, password });
@@ -24,8 +24,14 @@ function dataBaseCheck(email, password) {
         }
         else if (email) {
             let user = yield users_1.default.findOne({ email });
-            if (user !== null)
+            if (user !== null && !name) {
                 return user;
+            }
+            else if (!user && name) {
+                const user = yield users_1.default.create({ name, lastName, email });
+                const savedUser = yield user.save();
+                return savedUser;
+            }
             throw new Error('No se encuentra registrado.');
         }
         else {

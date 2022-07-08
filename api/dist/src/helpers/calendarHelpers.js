@@ -16,17 +16,28 @@ exports.getCalendar = exports.eventCreation = exports.createRefreshToken = void 
 const refresh_token_1 = __importDefault(require("../models/refresh_token"));
 const { google } = require('googleapis');
 const dotenv_1 = __importDefault(require("dotenv"));
+const propertyHelpers_1 = require("./propertyHelpers");
 dotenv_1.default.config({ override: true });
-const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, 'mikasa-nueva.vercel.app');
-function createRefreshToken(code, owner) {
+const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, 'localhost:3000');
+function createRefreshToken(code, id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { tokens } = yield oAuth2Client.getToken(code);
-        if (tokens.refresh_token) {
-            const refresh = yield refresh_token_1.default.create({
-                token: tokens.refresh_token,
-                owner
-            });
-            yield refresh.save();
+        // const authorized = await userModel.findById(id);
+        try {
+            const { tokens } = yield oAuth2Client.getToken(code);
+            console.log(tokens);
+            if (tokens.refresh_token) {
+                const refresh = yield refresh_token_1.default.create({
+                    token: tokens.refresh_token,
+                    owner: id
+                });
+                yield refresh.save();
+            }
+            else {
+            }
+            // console.log(authorized)
+        }
+        catch (error) {
+            console.log(error);
         }
     });
 }
@@ -44,35 +55,30 @@ function getRefreshByOwner(id) {
 function eventCreation(id, data) {
     return __awaiter(this, void 0, void 0, function* () {
         yield getRefreshByOwner(id);
-        const { summary, location, description, dateTime } = data;
+        const { summary, location, startDateTime, endDateTime } = data;
         const calendar = google.calendar('v3');
-        const eventStartTime = new Date();
-        eventStartTime.setDate(eventStartTime.getMonth());
-        eventStartTime.setDate(eventStartTime.getDay());
-        const eventEndTime = new Date();
-        eventEndTime.setDate(eventEndTime.getMonth());
-        eventEndTime.setDate(eventEndTime.getDay());
+        const attendee = yield (0, propertyHelpers_1.getOwnersEmail)(location);
         try {
-            yield calendar.events.insert({
+            const event = yield calendar.events.insert({
                 auth: oAuth2Client,
                 calendarId: 'primary',
                 requestBody: {
                     summary,
                     location,
-                    description,
                     colorId: summary === 'Venta' ? 1 : 2,
                     start: {
-                        dateTime: eventStartTime
+                        dateTime: startDateTime
                     },
                     end: {
-                        dateTime: eventEndTime
+                        dateTime: endDateTime
                     },
-                    attendees: ['derleuchtturm@gmail.com']
+                    attendees: [attendee]
                 }
             });
+            return event;
         }
         catch (error) {
-            console.log(error);
+            throw new Error(error);
         }
     });
 }

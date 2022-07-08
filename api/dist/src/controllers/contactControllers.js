@@ -9,15 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postContactForm = void 0;
+exports.postContactForm = exports.getContact = void 0;
 const contactHelpers_1 = require("../helpers/contactHelpers");
 function getContact(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
-            const data = req.body;
-            const contact = yield (0, contactHelpers_1.createContactForm)(data);
-            res.status(201).send(contact);
+            const contact = yield (0, contactHelpers_1.getContactByProperty)(id);
+            res.status(201).json(contact);
         }
         catch (error) {
             if (error instanceof Error) {
@@ -30,12 +29,13 @@ function getContact(req, res) {
         }
     });
 }
+exports.getContact = getContact;
 function postContactForm(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const data = req.body;
             const contact = yield (0, contactHelpers_1.createContactForm)(data);
-            res.status(201).send(contact);
+            res.status(201).json(contact);
         }
         catch (error) {
             if (error instanceof Error) {

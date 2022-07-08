@@ -1,21 +1,17 @@
-const { Router } = require('express');
-import { Request, Response } from "express";
-import { createPayment } from "../controllers/paymentControllers";
-require('dotenv').config();
+const { Router } = require("express");
+import {
+  getPayment,
+  postPayment,
+  updatePayment,
+} from "../controllers/paymentControllers";
+import { TokenValidation } from "./../libs/JsonWebToken";
 
 const router = Router();
 
-router.post("/", async  function (req:Request, res:Response) {
-   let data=req.body;
-   
-   try {
-      const payment = await createPayment(data);
-  
-      return res.json(payment);
-   } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: true, msg: "Failed to create payment" });
-   }
-});
+router.get("/:id", getPayment);
+
+router.post("/", postPayment);
+
+router.put("/", updatePayment);
 
 export default router;

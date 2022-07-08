@@ -35,7 +35,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true, default: 'pending' }),
+    (0, typegoose_1.prop)(),
     __metadata("design:type", Date)
 ], User.prototype, "birthday", void 0);
 __decorate([
@@ -67,9 +67,9 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "properties", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ ref: () => User }),
-    __metadata("design:type", Array)
-], User.prototype, "user", void 0);
+    (0, typegoose_1.prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "authorized", void 0);
 exports.User = User;
 const userModel = (0, typegoose_1.getModelForClass)(User);
 exports.default = userModel;

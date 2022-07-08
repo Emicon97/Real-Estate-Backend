@@ -20,7 +20,7 @@ function calendarToken(req, res) {
         }
         catch (error) {
             if (error instanceof Error) {
-                res.status(403);
+                res.status(404).json(error);
             }
             else {
                 console.log('Unexpected Error', error);
@@ -34,11 +34,12 @@ function createEvent(req, res) {
         try {
             const { id } = req.params;
             const data = req.body;
-            yield (0, calendarHelpers_1.eventCreation)(id, data);
+            const event = yield (0, calendarHelpers_1.eventCreation)(id, data);
+            res.json(event);
         }
         catch (error) {
             if (error instanceof Error) {
-                res.status(403);
+                res.status(404).json(error);
             }
             else {
                 console.log('Unexpected Error', error);
@@ -56,7 +57,7 @@ function getCalendarEvents(req, res) {
         }
         catch (error) {
             if (error instanceof Error) {
-                res.status(403);
+                res.status(404).json(error);
             }
             else {
                 console.log('Unexpected Error', error);
