@@ -8,23 +8,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = void 0;
-const refresh_login_1 = __importDefault(require("./../models/refresh_login"));
-function logout(req, res) {
+exports.postContactForm = void 0;
+const contactHelpers_1 = require("../helpers/contactHelpers");
+function postContactForm(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { owner } = req.params;
-            yield refresh_login_1.default.findOneAndDelete({ owner });
-            res.status(200).cookie('auth-token', '');
+            const data = req.body;
+            const contact = yield (0, contactHelpers_1.createContactForm)(data);
+            res.status(201).send(contact);
         }
         catch (error) {
             if (error instanceof Error) {
-                console.log(error);
-                res.status(403);
+                console.log(error.message);
+                res.status(404).json(error);
             }
             else {
                 console.log('Unexpected Error', error);
@@ -32,4 +29,4 @@ function logout(req, res) {
         }
     });
 }
-exports.logout = logout;
+exports.postContactForm = postContactForm;

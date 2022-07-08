@@ -12,24 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = void 0;
-const refresh_login_1 = __importDefault(require("./../models/refresh_login"));
-function logout(req, res) {
+exports.getContactByReceiver = exports.createContactForm = void 0;
+const contact_1 = __importDefault(require("./../models/contact"));
+function createContactForm(data) {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const { owner } = req.params;
-            yield refresh_login_1.default.findOneAndDelete({ owner });
-            res.status(200).cookie('auth-token', '');
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                console.log(error);
-                res.status(403);
-            }
-            else {
-                console.log('Unexpected Error', error);
-            }
-        }
+        const contact = yield contact_1.default.create(data);
+        const savedContact = yield contact.save();
+        return savedContact;
     });
 }
-exports.logout = logout;
+exports.createContactForm = createContactForm;
+function getContactByReceiver(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = yield contact_1.default.findById(id);
+        if (user !== null) {
+            return user;
+        }
+        throw new Error("Hubo un error al procesar sus datos.");
+    });
+}
+exports.getContactByReceiver = getContactByReceiver;

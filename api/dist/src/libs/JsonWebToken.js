@@ -18,10 +18,10 @@ const refresh_login_1 = __importDefault(require("./../models/refresh_login"));
 const TokenValidation = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const authToken = req.headers['auth-token'];
     const owner = req.headers['id'];
-    const refreshModel = yield refresh_login_1.default.findOne({ owner });
-    if (refreshModel === null)
+    const refreshInstance = yield refresh_login_1.default.findOne({ owner });
+    if (refreshInstance === null)
         return res.sendStatus(403);
-    const refreshToken = refreshModel.token;
+    const refreshToken = refreshInstance.token;
     if (!authToken)
         return res.sendStatus(401);
     const { payload: refresh } = verifyRefreshJWT(refreshToken);
@@ -70,6 +70,7 @@ function verifyRefreshJWT(token) {
         return { payload: decoded, expired: false };
     }
     catch (error) {
+        console.log(error);
         return { payload: null, expired: error.message.includes("jwt expired") };
     }
 }
