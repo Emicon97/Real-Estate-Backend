@@ -57,7 +57,7 @@ async function favs(id:string, favourites:string):Promise<User> {
    if (user === null) throw new Error ('No encontramos sus datos.');
    
    const properties:unknown[] = user?.favourites as unknown[];
-   if (properties.includes(favourites)) {
+   if (properties?.includes(favourites)) {
       await userModel.findByIdAndUpdate(id, { $pull: { favourites }});
    } else {
       await userModel.findByIdAndUpdate(id, { $push: { favourites }});

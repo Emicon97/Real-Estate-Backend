@@ -7,7 +7,7 @@ export const TokenValidation = async (req:Request, res:Response, next:NextFuncti
     const owner = req.headers['id'] as string;
     
     const refreshInstance:Login | null = await loginModel.findOne({ owner });
-
+    console.log(refreshInstance)
     if (refreshInstance === null) return res.sendStatus(403);
     const refreshToken = refreshInstance.token;
 

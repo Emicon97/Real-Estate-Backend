@@ -9,7 +9,7 @@ router.get('/', TokenValidation, getUsers);
 
 router.post('/', postUser);
 
-router.put('/addfavs/:id', TokenValidation, addFavs);
+router.put('/addfavs/:id', addFavs);
 router.put('/:id', TokenValidation, updateData);
 
 router.delete('/', TokenValidation, banUser);
