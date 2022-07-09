@@ -18,7 +18,7 @@ __decorate([
     __metadata("design:type", String)
 ], Login.prototype, "token", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true, unique: true }),
+    (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", String)
 ], Login.prototype, "owner", void 0);
 exports.Login = Login;
