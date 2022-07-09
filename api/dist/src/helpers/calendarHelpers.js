@@ -61,7 +61,7 @@ function getRefreshByOwner(id) {
 }
 function eventCreation(data) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { summary, location, description, startDateTime, endDateTime } = data;
+        const { summary, location, description, startDateTime, endDateTime, email } = data;
         const id = yield (0, propertyHelpers_1.getOwnersId)(location);
         const { address } = yield (0, propertyHelpers_1.getPropertyById)(location);
         yield getRefreshByOwner(id);
@@ -83,7 +83,7 @@ function eventCreation(data) {
                         dateTime: endDateTime,
                         timeZone: "America/Argentina/Buenos_Aires"
                     },
-                    attendees: [{ email: "prluisca@gmail.com" }]
+                    attendees: [{ email }]
                 },
             });
             return event;
