@@ -10,9 +10,9 @@ import { TokenValidation } from "../libs/JsonWebToken";
 const router = Router();
 
 router.get("/authorization/:id", authorization);
-router.get("/:id", TokenValidation, getCalendarEvents);
+router.get("/:id", getCalendarEvents);
 
+router.post("/event", createEvent);
 router.post("/:id", TokenValidation, calendarToken);
-router.post("/:id/event", TokenValidation, createEvent);
 
 export default router;

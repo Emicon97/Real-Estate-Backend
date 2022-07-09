@@ -39,10 +39,9 @@ async function calendarToken(req: Request, res: Response) {
 
 async function createEvent(req: Request, res: Response) {
   try {
-    const { id } = req.params;
     const data = req.body;
 
-    const event = await eventCreation(id, data);
+    const event = await eventCreation(data);
     res.json(event);
   } catch (error) {
     if (error instanceof Error) {

@@ -1,8 +1,7 @@
 import refreshModel, { Refresh } from "../models/refresh_token";
 const { google } = require("googleapis");
 import dotenv from "dotenv";
-import { getOwnersEmail } from "./propertyHelpers";
-import userModel from "./../models/users";
+import { getOwnersId, getPropertyById } from "./propertyHelpers";
 dotenv.config({ override: true });
 
 const oAuth2Client = new google.auth.OAuth2(
@@ -47,13 +46,13 @@ async function getRefreshByOwner(id: string): Promise<void> {
   throw new Error("No ha dado autorización para acceder al calendario.");
 }
 
-async function eventCreation(id: string, data: any) {
+async function eventCreation(data: any) {
+  const { summary, location, description, startDateTime, endDateTime } = data;
+  const id = await getOwnersId(location);
+  const { address } = await getPropertyById(location);
   await getRefreshByOwner(id);
-  const { summary, location, startDateTime, endDateTime } = data;
 
   const calendar = google.calendar("v3");
-
-  const attendee = await getOwnersEmail(location);
 
   try {
     const event = await calendar.events.insert({
@@ -61,15 +60,18 @@ async function eventCreation(id: string, data: any) {
       calendarId: "primary",
       requestBody: {
         summary,
-        location,
+        location: address,
+        description,
         colorId: summary === "Venta" ? 1 : 2,
         start: {
           dateTime: startDateTime,
+          timeZone: "America/Argentina/Buenos_Aires"
         },
         end: {
           dateTime: endDateTime,
+          timeZone: "America/Argentina/Buenos_Aires"
         },
-        attendees: [attendee],
+        attendees: [ { email: "prluisca@gmail.com" } ]
       },
     });
     return event;
@@ -89,7 +91,7 @@ async function getCalendar(id: string) {
   });
   const events = hola.data.items;
   for (let i = 0; i < events.length; i++) {
-    if (events[i].summary === "Ventas" || events[i].summary === "Alquiler") {
+    if (events[i].summary === "Venta" || events[i].summary === "Alquiler") {
       calendar.push(events[i]);
     }
   }

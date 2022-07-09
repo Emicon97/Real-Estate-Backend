@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-  getPropertyById,
+  getProperty,
   searchProperties,
   postProperty,
   getPropertyByOwner,
@@ -14,7 +14,7 @@ import { TokenValidation } from "./../libs/JsonWebToken";
 const router = Router();
 
 router.get("/getownersphone/:id", getOwnersTelephoneByProperty);
-router.get("/:id", getPropertyById);
+router.get("/:id", getProperty);
 
 router.post("/search", searchProperties);
 router.post("/:id", TokenValidation, postProperty);

@@ -3,7 +3,7 @@ import { Property } from "../models/properties";
 import { User } from "./../models/users";
 import {
   createProperty,
-  getPropById,
+  getPropertyById,
   deleteProperty,
   updateProperty,
   getPropertyManager,
@@ -81,10 +81,10 @@ async function postProperty(req: Request, res: Response) {
   }
 }
 
-async function getPropertyById(req: Request, res: Response) {
+async function getProperty(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    const propById = await getPropById(id);
+    const propById = await getPropertyById(id);
 
     res.json(propById);
   } catch (error: any) {
@@ -149,7 +149,7 @@ export {
   postProperty,
   searchProperties,
   getPropertyByOwner,
-  getPropertyById,
+  getProperty,
   updateProperties,
   deleteProperties,
   getOwnersTelephoneByProperty,

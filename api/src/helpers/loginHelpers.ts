@@ -15,9 +15,8 @@ async function dataBaseCheck(
   } else if (email) {
     let user: User | null = await userModel.findOne({ email });
 
-    if (user !== null && !name) {
-      return user;
-    } else if (!user && name) {
+    if (user) return user;
+    if (!user && name) {
       const user: UserType = await userModel.create({ name, lastName, email });
 
       const savedUser: User = await user.save();
