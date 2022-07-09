@@ -23,7 +23,7 @@ function getUsers(req, res) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -34,7 +34,7 @@ function postUser(req, res) {
         try {
             const data = req.body;
             const property = yield (0, userHelpers_1.createUser)(data);
-            res.status(201).send(property);
+            res.status(201).json(property);
         }
         catch (error) {
             if (error instanceof Error) {
@@ -42,7 +42,7 @@ function postUser(req, res) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -74,7 +74,7 @@ function getOwnerById(req, res, next) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -94,7 +94,7 @@ function addFavs(req, res) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -114,7 +114,7 @@ function updateData(req, res) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -125,7 +125,7 @@ function banUser(req, res) {
         try {
             const data = req.body.id;
             const message = yield (0, userHelpers_1.deleteUser)(data);
-            res.status(201).send(message);
+            res.status(201).json(message);
         }
         catch (error) {
             if (error instanceof Error) {
@@ -133,7 +133,7 @@ function banUser(req, res) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });

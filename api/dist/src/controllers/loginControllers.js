@@ -34,7 +34,7 @@ function standardLogIn(req, res, next) {
                 res.status(403);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -50,7 +50,7 @@ function googleLogIn(req, res, next) {
             const { tokenId } = req.body;
             const ticket = yield client.verifyIdToken({
                 idToken: tokenId,
-                audience: process.env.CLIENT_ID
+                audience: process.env.CLIENT_ID,
             });
             const email = (_a = ticket.getPayload()) === null || _a === void 0 ? void 0 : _a.email;
             if (email !== undefined) {
@@ -65,7 +65,7 @@ function googleLogIn(req, res, next) {
                 res.status(403);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -92,7 +92,7 @@ function tokenManagement(req, res) {
                 res.status(403);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
