@@ -47,7 +47,7 @@ async function getRefreshByOwner(id: string): Promise<void> {
 }
 
 async function eventCreation(data: any) {
-  const { summary, location, description, startDateTime, endDateTime } = data;
+  const { summary, location, description, startDateTime, endDateTime, email } = data;
   const id = await getOwnersId(location);
   const { address } = await getPropertyById(location);
   await getRefreshByOwner(id);
@@ -71,7 +71,7 @@ async function eventCreation(data: any) {
           dateTime: endDateTime,
           timeZone: "America/Argentina/Buenos_Aires"
         },
-        attendees: [ { email: "prluisca@gmail.com" } ]
+        attendees: [ { email } ]
       },
     });
     return event;
