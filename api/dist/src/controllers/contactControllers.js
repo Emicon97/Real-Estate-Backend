@@ -24,7 +24,7 @@ function getContact(req, res) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -43,7 +43,7 @@ function postContactForm(req, res) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOwnersTelephoneByProperty = exports.deleteProperties = exports.updateProperties = exports.getPropertyById = exports.getPropertyByOwner = exports.searchProperties = exports.postProperty = void 0;
+exports.getOwnersTelephoneByProperty = exports.deleteProperties = exports.updateProperties = exports.getProperty = exports.getPropertyByOwner = exports.searchProperties = exports.postProperty = void 0;
 const propertyHelpers_1 = require("../helpers/propertyHelpers");
 const filters_1 = require("../helpers/filters");
 function searchProperties(req, res, next) {
@@ -33,7 +33,7 @@ function searchProperties(req, res, next) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -54,7 +54,7 @@ function getPropertyByOwner(req, res) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -74,17 +74,17 @@ function postProperty(req, res) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
 }
 exports.postProperty = postProperty;
-function getPropertyById(req, res) {
+function getProperty(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
-            const propById = yield (0, propertyHelpers_1.getPropById)(id);
+            const propById = yield (0, propertyHelpers_1.getPropertyById)(id);
             res.json(propById);
         }
         catch (error) {
@@ -93,12 +93,12 @@ function getPropertyById(req, res) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
 }
-exports.getPropertyById = getPropertyById;
+exports.getProperty = getProperty;
 function updateProperties(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -113,7 +113,7 @@ function updateProperties(req, res) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -132,7 +132,7 @@ function deleteProperties(req, res) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -151,7 +151,7 @@ function getOwnersTelephoneByProperty(req, res) {
                 res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });

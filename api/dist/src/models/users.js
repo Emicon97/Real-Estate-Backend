@@ -19,7 +19,6 @@ var Range;
     Range["vip"] = "vip";
     Range["admin"] = "admin";
 })(Range || (Range = {}));
-;
 class User {
 }
 __decorate([
@@ -31,7 +30,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "lastName", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true, default: 'pending' }),
+    (0, typegoose_1.prop)({ required: true, default: "pending" }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
@@ -39,7 +38,7 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "birthday", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true, unique: true, default: 'pending' }),
+    (0, typegoose_1.prop)({ required: true, unique: true, default: "pending" }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
@@ -51,7 +50,7 @@ __decorate([
     __metadata("design:type", Number)
 ], User.prototype, "telephone", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true, enum: Range, default: 'free' }),
+    (0, typegoose_1.prop)({ required: true, enum: Range, default: "free" }),
     __metadata("design:type", String)
 ], User.prototype, "range", void 0);
 __decorate([

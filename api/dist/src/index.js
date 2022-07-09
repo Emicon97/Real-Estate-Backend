@@ -19,7 +19,7 @@ const port = Number(process.env.PORT || 3001);
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, index_1.default)();
     app_1.default.listen(port, () => {
-        console.info('Started on port: ' + port);
+        console.info("Started on port: " + port);
     });
 });
 main();

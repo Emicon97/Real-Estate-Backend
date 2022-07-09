@@ -20,22 +20,21 @@ function dataBaseCheck(email, password, name, lastName) {
             let user = yield users_1.default.findOne({ email, password });
             if (user !== null)
                 return user;
-            throw new Error('Los datos ingresados son incorrectos.');
+            throw new Error("Los datos ingresados son incorrectos.");
         }
         else if (email) {
             let user = yield users_1.default.findOne({ email });
-            if (user !== null && !name) {
+            if (user)
                 return user;
-            }
-            else if (!user && name) {
+            if (!user && name) {
                 const user = yield users_1.default.create({ name, lastName, email });
                 const savedUser = yield user.save();
                 return savedUser;
             }
-            throw new Error('No se encuentra registrado.');
+            throw new Error("No se encuentra registrado.");
         }
         else {
-            throw new Error('Complete los campos requeridos.');
+            throw new Error("Complete los campos requeridos.");
         }
     });
 }

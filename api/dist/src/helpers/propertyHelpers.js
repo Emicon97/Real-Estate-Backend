@@ -12,19 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOwnersEmail = exports.getOwnersTelephone = exports.deleteProperty = exports.updateProperty = exports.getPropById = exports.createProperty = exports.getPropertyManager = void 0;
+exports.getOwnersId = exports.getOwnersTelephone = exports.deleteProperty = exports.updateProperty = exports.getPropertyById = exports.createProperty = exports.getPropertyManager = void 0;
 const properties_1 = __importDefault(require("../models/properties"));
 const users_1 = __importDefault(require("./../models/users"));
 const filters_1 = require("./filters");
 function getPropertyManager(filters, location, max) {
     return __awaiter(this, void 0, void 0, function* () {
         const allProperties = yield getAllProperties();
-        if ((filters && Object.keys(filters).length) && location) {
+        if (filters && Object.keys(filters).length && location) {
             const filtered = yield (0, filters_1.searchByFilter)(filters, max);
             const searched = yield (0, filters_1.searchByLocation)(location, filtered);
             return searched;
         }
-        else if ((filters && Object.keys(filters).length)) {
+        else if (filters && Object.keys(filters).length) {
             const filtered = yield (0, filters_1.searchByFilter)(filters, max);
             return filtered;
         }
@@ -47,7 +47,7 @@ function getAllProperties() {
         throw new Error("No se encontraron propiedades.");
     });
 }
-function getPropById(id) {
+function getPropertyById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         const propById = yield properties_1.default.findById(id);
         if (propById !== null) {
@@ -56,7 +56,7 @@ function getPropById(id) {
         throw new Error("Esta propiedad no está disponible.");
     });
 }
-exports.getPropById = getPropById;
+exports.getPropertyById = getPropertyById;
 function createProperty(data, id) {
     return __awaiter(this, void 0, void 0, function* () {
         const properties = yield properties_1.default.create(data);
@@ -69,14 +69,14 @@ exports.createProperty = createProperty;
 function updateProperty(_id, data) {
     return __awaiter(this, void 0, void 0, function* () {
         yield properties_1.default.findOneAndUpdate({ _id }, data, { new: true });
-        return 'Propiedad actualizada con éxito.';
+        return "Propiedad actualizada con éxito.";
     });
 }
 exports.updateProperty = updateProperty;
 function deleteProperty(id) {
     return __awaiter(this, void 0, void 0, function* () {
         yield properties_1.default.findByIdAndDelete(id);
-        return 'Propiedad eliminada con éxito.';
+        return "Propiedad eliminada con éxito.";
     });
 }
 exports.deleteProperty = deleteProperty;
@@ -85,16 +85,16 @@ function getOwnersTelephone(id) {
         const owner = yield users_1.default.findOne({ properties: id });
         if (owner)
             return owner.telephone;
-        throw new Error('No fue posible encontrar datos sobre el dueño.');
+        throw new Error("No fue posible encontrar datos sobre el dueño.");
     });
 }
 exports.getOwnersTelephone = getOwnersTelephone;
-function getOwnersEmail(id) {
+function getOwnersId(id) {
     return __awaiter(this, void 0, void 0, function* () {
         const owner = yield users_1.default.findOne({ properties: id });
         if (owner)
-            return owner.email;
-        throw new Error('No fue posible encontrar datos sobre el dueño.');
+            return owner.id;
+        throw new Error("No fue posible encontrar datos sobre el dueño.");
     });
 }
-exports.getOwnersEmail = getOwnersEmail;
+exports.getOwnersId = getOwnersId;

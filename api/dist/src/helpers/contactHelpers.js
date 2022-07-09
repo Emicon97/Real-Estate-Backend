@@ -28,7 +28,7 @@ function getContactByProperty(property) {
         if (!contact.length) {
             return contact;
         }
-        throw new Error("No hay contactos para esta propiedad.");
+        throw new Error("No hay contactos para esta propiedTad.");
     });
 }
 exports.getContactByProperty = getContactByProperty;

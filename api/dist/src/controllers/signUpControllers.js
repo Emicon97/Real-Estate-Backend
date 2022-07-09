@@ -24,11 +24,11 @@ function googleSignUp(req, res, next) {
             const { tokenId } = req.body;
             const ticket = yield client.verifyIdToken({
                 idToken: tokenId,
-                audience: process.env.CLIENT_ID
+                audience: process.env.CLIENT_ID,
             });
             const payload = ticket.getPayload();
             if (!payload) {
-                throw new Error('Hubo un error al acceder a sus datos.');
+                throw new Error("Hubo un error al acceder a sus datos.");
             }
             const { email, given_name, family_name } = payload;
             if (email && given_name && family_name) {
@@ -43,7 +43,7 @@ function googleSignUp(req, res, next) {
                 res.status(403);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
