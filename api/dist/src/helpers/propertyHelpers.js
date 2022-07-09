@@ -57,11 +57,11 @@ function getPropertyById(id) {
     });
 }
 exports.getPropertyById = getPropertyById;
-function createProperty(data, id) {
+function createProperty(data, _id) {
     return __awaiter(this, void 0, void 0, function* () {
         const properties = yield properties_1.default.create(data);
         const savedProperty = yield properties.save();
-        yield users_1.default.findByIdAndUpdate(id, { $push: { properties } });
+        yield users_1.default.findByIdAndUpdate(_id, { $push: { properties } });
         return savedProperty;
     });
 }
