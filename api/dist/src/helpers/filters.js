@@ -17,8 +17,11 @@ const properties_1 = __importDefault(require("../models/properties"));
 function searchByFilter(filtered, max) {
     return __awaiter(this, void 0, void 0, function* () {
         if (max) {
-            const property = yield properties_1.default.find(filtered)
-                .where('price').gt(0).lt(max);
+            const property = yield properties_1.default
+                .find(filtered)
+                .where("price")
+                .gt(0)
+                .lt(max);
             return property;
         }
         else {
@@ -31,18 +34,17 @@ exports.searchByFilter = searchByFilter;
 function searchByLocation(location, properties) {
     return __awaiter(this, void 0, void 0, function* () {
         const toFilter = [];
-        const names = location.trim().split(' ');
+        const names = location.trim().split(" ");
         properties.forEach((property) => {
             names.forEach((word) => {
                 var _a;
                 if (word.length) {
-                    if (!toFilter.includes(property) &&
-                        property.city.includes(word)) {
+                    if (!toFilter.includes(property) && property.city.includes(word)) {
                         toFilter.push(property);
                     }
                     else if (!toFilter.includes(property) &&
                         ((_a = property.neighbourhood) === null || _a === void 0 ? void 0 : _a.includes(word)) &&
-                        property.neighbourhood !== 'No especificado') {
+                        property.neighbourhood !== "No especificado") {
                         toFilter.push(property);
                     }
                 }

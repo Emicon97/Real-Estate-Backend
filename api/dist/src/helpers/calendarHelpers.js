@@ -12,21 +12,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCalendar = exports.eventCreation = exports.createRefreshToken = void 0;
+exports.getCalendar = exports.eventCreation = exports.createRefreshToken = exports.checkIfAuthorized = void 0;
 const refresh_token_1 = __importDefault(require("../models/refresh_token"));
-const { google } = require('googleapis');
+const { google } = require("googleapis");
 const dotenv_1 = __importDefault(require("dotenv"));
+const propertyHelpers_1 = require("./propertyHelpers");
 dotenv_1.default.config({ override: true });
-const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, 'mikasa-nueva.vercel.app');
-function createRefreshToken(code, owner) {
+const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, "https://mikasa-nueva.vercel.app");
+function checkIfAuthorized(owner) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { tokens } = yield oAuth2Client.getToken(code);
-        if (tokens.refresh_token) {
-            const refresh = yield refresh_token_1.default.create({
-                token: tokens.refresh_token,
-                owner
-            });
-            yield refresh.save();
+        const refresh = yield refresh_token_1.default.findOne({ owner });
+        if (refresh !== null)
+            return true;
+        else
+            return false;
+    });
+}
+exports.checkIfAuthorized = checkIfAuthorized;
+function createRefreshToken(code, id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { tokens } = yield oAuth2Client.getToken(code);
+            if (tokens.refresh_token) {
+                const refresh = yield refresh_token_1.default.create({
+                    token: tokens.refresh_token,
+                    owner: id,
+                });
+                yield refresh.save();
+            }
+            return true;
+        }
+        catch (error) {
+            console.log(error);
+            return false;
         }
     });
 }
@@ -38,41 +56,40 @@ function getRefreshByOwner(id) {
             oAuth2Client.setCredentials({ refresh_token: refresh.token });
             return;
         }
-        throw new Error('No ha dado autorización para acceder al calendario.');
+        throw new Error("No ha dado autorización para acceder al calendario.");
     });
 }
-function eventCreation(id, data) {
+function eventCreation(data) {
     return __awaiter(this, void 0, void 0, function* () {
+        const { summary, location, description, startDateTime, endDateTime } = data;
+        const id = yield (0, propertyHelpers_1.getOwnersId)(location);
+        const { address } = yield (0, propertyHelpers_1.getPropertyById)(location);
         yield getRefreshByOwner(id);
-        const { summary, location, description, dateTime } = data;
-        const calendar = google.calendar('v3');
-        const eventStartTime = new Date();
-        eventStartTime.setDate(eventStartTime.getMonth());
-        eventStartTime.setDate(eventStartTime.getDay());
-        const eventEndTime = new Date();
-        eventEndTime.setDate(eventEndTime.getMonth());
-        eventEndTime.setDate(eventEndTime.getDay());
+        const calendar = google.calendar("v3");
         try {
-            yield calendar.events.insert({
+            const event = yield calendar.events.insert({
                 auth: oAuth2Client,
-                calendarId: 'primary',
+                calendarId: "primary",
                 requestBody: {
                     summary,
-                    location,
+                    location: address,
                     description,
-                    colorId: summary === 'Venta' ? 1 : 2,
+                    colorId: summary === "Venta" ? 1 : 2,
                     start: {
-                        dateTime: eventStartTime
+                        dateTime: startDateTime,
+                        timeZone: "America/Argentina/Buenos_Aires"
                     },
                     end: {
-                        dateTime: eventEndTime
+                        dateTime: endDateTime,
+                        timeZone: "America/Argentina/Buenos_Aires"
                     },
-                    attendees: ['derleuchtturm@gmail.com']
-                }
+                    attendees: [{ email: "prluisca@gmail.com" }]
+                },
             });
+            return event;
         }
         catch (error) {
-            console.log(error);
+            throw new Error(error);
         }
     });
 }
@@ -83,11 +100,11 @@ function getCalendar(id) {
         const service = google.calendar({ version: "v3", auth: oAuth2Client });
         var calendar = [];
         const hola = yield service.events.list({
-            calendarId: 'primary'
+            calendarId: "primary",
         });
         const events = hola.data.items;
         for (let i = 0; i < events.length; i++) {
-            if (events[i].summary === 'Ventas' || events[i].summary === 'Alquiler') {
+            if (events[i].summary === "Venta" || events[i].summary === "Alquiler") {
                 calendar.push(events[i]);
             }
         }

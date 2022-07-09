@@ -9,21 +9,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCalendarEvents = exports.createEvent = exports.calendarToken = void 0;
+exports.getCalendarEvents = exports.createEvent = exports.calendarToken = exports.authorization = void 0;
 const calendarHelpers_1 = require("../helpers/calendarHelpers");
+function authorization(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { id } = req.params;
+            const authorized = yield (0, calendarHelpers_1.checkIfAuthorized)(id);
+            res.json(authorized);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                res.status(404).json(error);
+            }
+            else {
+                console.log("Unexpected Error", error);
+            }
+        }
+    });
+}
+exports.authorization = authorization;
 function calendarToken(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
             const { code } = req.body;
-            yield (0, calendarHelpers_1.createRefreshToken)(code, id);
+            const authorized = yield (0, calendarHelpers_1.createRefreshToken)(code, id);
+            res.json(authorized);
         }
         catch (error) {
             if (error instanceof Error) {
-                res.status(403);
+                res.status(404).json(false);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -32,16 +51,16 @@ exports.calendarToken = calendarToken;
 function createEvent(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { id } = req.params;
             const data = req.body;
-            yield (0, calendarHelpers_1.eventCreation)(id, data);
+            const event = yield (0, calendarHelpers_1.eventCreation)(data);
+            res.json(event);
         }
         catch (error) {
             if (error instanceof Error) {
-                res.status(403);
+                res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });
@@ -56,10 +75,10 @@ function getCalendarEvents(req, res) {
         }
         catch (error) {
             if (error instanceof Error) {
-                res.status(403);
+                res.status(404).json(error);
             }
             else {
-                console.log('Unexpected Error', error);
+                console.log("Unexpected Error", error);
             }
         }
     });

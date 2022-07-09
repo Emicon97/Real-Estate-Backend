@@ -1,24 +1,21 @@
 import { Contact, ContactType } from "../models/contact";
-import contactModel from './../models/contact';
+import contactModel from "./../models/contact";
 
-async function createContactForm(data:Contact):Promise<Contact>{
-   const contact:ContactType = await contactModel.create(data);
+async function createContactForm(data: Contact): Promise<Contact> {
+  const contact: ContactType = await contactModel.create(data);
 
-   const savedContact:Contact = await contact.save();
-   return savedContact;    
+  const savedContact: Contact = await contact.save();
+  return savedContact;
 }
 
-async function getContactByReceiver(id:string):Promise<Contact>{
-   const user:Contact | null = await contactModel.findById(id);
+async function getContactByProperty(property: string): Promise<Contact[]> {
+  const contact: Contact[] = await contactModel.find({ property });
 
-   if (user !== null) {
-      return user;
-   }
+  if (!contact.length) {
+    return contact;
+  }
 
-   throw new Error("Hubo un error al procesar sus datos.");
+  throw new Error("No hay contactos para esta propiedTad.");
 }
 
-export {
-   createContactForm,
-   getContactByReceiver
-}
+export { createContactForm, getContactByProperty };

@@ -18,12 +18,10 @@ function getUserProperties(id, follower) {
     return __awaiter(this, void 0, void 0, function* () {
         var user;
         if (!follower) {
-            user = yield users_1.default.findById(id)
-                .populate({ path: 'properties' });
+            user = yield users_1.default.findById(id).populate({ path: "properties" });
         }
         else {
-            user = yield users_1.default.findById(id)
-                .populate({ path: 'favourites' });
+            user = yield users_1.default.findById(id).populate({ path: "favourites" });
         }
         if (user !== null) {
             return user;
@@ -63,7 +61,7 @@ exports.createUser = createUser;
 function updateUser(_id, data) {
     return __awaiter(this, void 0, void 0, function* () {
         yield users_1.default.findOneAndUpdate({ _id }, data, { new: true });
-        return 'Usuario actualizado con éxito.';
+        return "Usuario actualizado con éxito.";
     });
 }
 exports.updateUser = updateUser;
@@ -71,7 +69,7 @@ function favs(id, favourites) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield users_1.default.findById(id);
         if (user === null)
-            throw new Error('No encontramos sus datos.');
+            throw new Error("No encontramos sus datos.");
         const properties = user === null || user === void 0 ? void 0 : user.favourites;
         if (properties.includes(favourites)) {
             yield users_1.default.findByIdAndUpdate(id, { $pull: { favourites } });
@@ -86,7 +84,7 @@ exports.favs = favs;
 function deleteUser(id) {
     return __awaiter(this, void 0, void 0, function* () {
         yield users_1.default.findByIdAndDelete(id);
-        return 'Usuario eliminado con éxito.';
+        return "Usuario eliminado con éxito.";
     });
 }
 exports.deleteUser = deleteUser;

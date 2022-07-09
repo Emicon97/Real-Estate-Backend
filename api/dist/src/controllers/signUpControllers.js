@@ -12,14 +12,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = void 0;
-const refresh_login_1 = __importDefault(require("./../models/refresh_login"));
-function logout(req, res) {
+exports.googleSignUp = void 0;
+const google_auth_library_1 = require("google-auth-library");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config({ override: true });
+const loginHelpers_1 = require("../helpers/loginHelpers");
+const client = new google_auth_library_1.OAuth2Client(process.env.CLIENT_ID);
+function googleSignUp(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { owner } = req.params;
-            yield refresh_login_1.default.findOneAndDelete({ owner });
-            res.status(200).cookie("auth-token", "");
+            const { tokenId } = req.body;
+            const ticket = yield client.verifyIdToken({
+                idToken: tokenId,
+                audience: process.env.CLIENT_ID,
+            });
+            const payload = ticket.getPayload();
+            if (!payload) {
+                throw new Error("Hubo un error al acceder a sus datos.");
+            }
+            const { email, given_name, family_name } = payload;
+            if (email && given_name && family_name) {
+                let user = yield (0, loginHelpers_1.dataBaseCheck)(email, undefined, given_name, family_name);
+                req.user = user;
+                next();
+            }
         }
         catch (error) {
             if (error instanceof Error) {
@@ -32,4 +48,4 @@ function logout(req, res) {
         }
     });
 }
-exports.logout = logout;
+exports.googleSignUp = googleSignUp;
