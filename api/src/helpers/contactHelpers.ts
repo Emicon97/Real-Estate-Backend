@@ -11,11 +11,11 @@ async function createContactForm(data: Contact): Promise<Contact> {
 async function getContactByProperty(property: string): Promise<Contact[]> {
   const contact: Contact[] = await contactModel.find({ property });
 
-  if (!contact.length) {
+  if (contact.length) {
     return contact;
   }
 
-  throw new Error("No hay contactos para esta propiedTad.");
+  throw new Error("No hay contactos para esta propiedad.");
 }
 
 export { createContactForm, getContactByProperty };
