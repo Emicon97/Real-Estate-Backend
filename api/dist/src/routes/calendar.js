@@ -6,6 +6,6 @@ const JsonWebToken_1 = require("../libs/JsonWebToken");
 const router = (0, express_1.Router)();
 router.get("/authorization/:id", calendarControllers_1.authorization);
 router.get("/:id", calendarControllers_1.getCalendarEvents);
-router.post("/event", calendarControllers_1.createEvent);
+router.post("/event", JsonWebToken_1.TokenValidation, calendarControllers_1.createEvent);
 router.post("/:id", JsonWebToken_1.TokenValidation, calendarControllers_1.calendarToken);
 exports.default = router;

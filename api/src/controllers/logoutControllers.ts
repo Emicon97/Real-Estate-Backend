@@ -5,9 +5,10 @@ import loginModel from "./../models/refresh_login";
 async function logout(req: Request, res: Response) {
   try {
     const { owner } = req.params;
+    
     await loginModel.findOneAndDelete({ owner });
-
-    res.status(200).cookie("auth-token", "");
+    
+    res.status(200).send('¡Adiós!');
   } catch (error) {
     if (error instanceof Error) {
       console.log(error);

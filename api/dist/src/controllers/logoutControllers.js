@@ -19,7 +19,7 @@ function logout(req, res) {
         try {
             const { owner } = req.params;
             yield refresh_login_1.default.findOneAndDelete({ owner });
-            res.status(200).cookie("auth-token", "");
+            res.status(200).send('¡Adiós!');
         }
         catch (error) {
             if (error instanceof Error) {
