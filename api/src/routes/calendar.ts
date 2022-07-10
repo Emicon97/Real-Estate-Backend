@@ -12,7 +12,7 @@ const router = Router();
 router.get("/authorization/:id", authorization);
 router.get("/:id", getCalendarEvents);
 
-router.post("/event", createEvent);
+router.post("/event", TokenValidation, createEvent);
 router.post("/:id", TokenValidation, calendarToken);
 
 export default router;

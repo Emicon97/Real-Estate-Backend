@@ -47,10 +47,12 @@ async function createUser(data: User): Promise<User> {
   return savedUser;
 }
 
-async function updateUser(_id: string, data: User): Promise<string> {
-  await userModel.findOneAndUpdate({ _id }, data, { new: true });
+async function updateUser(_id: string, data:any): Promise<User> {
+  const user:User | null = await userModel.findOneAndUpdate({ _id }, data)
 
-  return "Usuario actualizado con éxito.";
+  if (user !== null) return user;
+
+  throw new Error ('No hay datos disponibles.');
 }
 
 async function favs(id: string, favourites: string): Promise<User> {
