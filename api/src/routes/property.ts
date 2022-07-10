@@ -17,7 +17,7 @@ router.get("/getownersphone/:id", getOwnersTelephoneByProperty);
 router.get("/:id", getProperty);
 
 router.post("/search", searchProperties);
-router.post("/:id", TokenValidation, postProperty);
+router.post("/:id", postProperty);
 
 router.post(
   "/:id/search",
