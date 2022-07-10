@@ -25,10 +25,10 @@ exports.createContactForm = createContactForm;
 function getContactByProperty(property) {
     return __awaiter(this, void 0, void 0, function* () {
         const contact = yield contact_1.default.find({ property });
-        if (!contact.length) {
+        if (contact.length) {
             return contact;
         }
-        throw new Error("No hay contactos para esta propiedTad.");
+        throw new Error("No hay contactos para esta propiedad.");
     });
 }
 exports.getContactByProperty = getContactByProperty;
