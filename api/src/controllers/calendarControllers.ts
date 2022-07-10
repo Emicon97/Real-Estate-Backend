@@ -5,6 +5,8 @@ import {
   eventCreation,
   getCalendar,
 } from "../helpers/calendarHelpers";
+import { updateUser } from "../helpers/userHelpers";
+import { User } from "../models/users";
 
 async function authorization(req: Request, res: Response) {
   try {
@@ -55,13 +57,15 @@ async function createEvent(req: Request, res: Response) {
 async function getCalendarEvents(req: Request, res: Response) {
   try {
     const { id } = req.params;
-
     const calendar = await getCalendar(id);
 
     res.json(calendar);
   } catch (error) {
     if (error instanceof Error) {
-      res.status(404).json(error);
+      const { id } = req.params
+      console.log(error);
+      const user:User = await updateUser(id, { authorized: false });
+      res.status(404).json(user);
     } else {
       console.log("Unexpected Error", error);
     }

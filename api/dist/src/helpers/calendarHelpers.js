@@ -17,8 +17,11 @@ const refresh_token_1 = __importDefault(require("../models/refresh_token"));
 const { google } = require("googleapis");
 const dotenv_1 = __importDefault(require("dotenv"));
 const propertyHelpers_1 = require("./propertyHelpers");
+const userHelpers_1 = require("./userHelpers");
 dotenv_1.default.config({ override: true });
-const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, "https://mikasa-nueva.vercel.app");
+const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, 
+// "https://mikasa-nueva.vercel.app"
+"http://localhost:3000");
 function checkIfAuthorized(owner) {
     return __awaiter(this, void 0, void 0, function* () {
         const refresh = yield refresh_token_1.default.findOne({ owner });
@@ -39,8 +42,14 @@ function createRefreshToken(code, id) {
                     owner: id,
                 });
                 yield refresh.save();
+                try {
+                    const user = yield (0, userHelpers_1.updateUser)(id, { authorized: true });
+                    return user;
+                }
+                catch (error) {
+                    console.log(error);
+                }
             }
-            return true;
         }
         catch (error) {
             console.log(error);

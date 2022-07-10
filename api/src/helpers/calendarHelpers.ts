@@ -2,12 +2,15 @@ import refreshModel, { Refresh } from "../models/refresh_token";
 const { google } = require("googleapis");
 import dotenv from "dotenv";
 import { getOwnersId, getPropertyById } from "./propertyHelpers";
+import { User } from "../models/users";
+import { updateUser } from "./userHelpers";
 dotenv.config({ override: true });
 
 const oAuth2Client = new google.auth.OAuth2(
   process.env.CLIENT_ID,
   process.env.CLIENT_SECRET,
-  "https://mikasa-nueva.vercel.app"
+  // "https://mikasa-nueva.vercel.app"
+  "http://localhost:3000"
 );
 
 async function checkIfAuthorized(owner: string) {
@@ -27,8 +30,13 @@ async function createRefreshToken(code: string, id: string) {
         owner: id,
       });
       await refresh.save();
+      try {
+        const user:User = await updateUser(id, { authorized: true });
+        return user;
+      } catch (error) {
+        console.log(error);
+      }
     }
-    return true;
   } catch (error: any) {
     console.log(error);
     return false;
