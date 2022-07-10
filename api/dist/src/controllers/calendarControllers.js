@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCalendarEvents = exports.createEvent = exports.calendarToken = exports.authorization = void 0;
 const calendarHelpers_1 = require("../helpers/calendarHelpers");
+const userHelpers_1 = require("../helpers/userHelpers");
 function authorization(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -75,7 +76,10 @@ function getCalendarEvents(req, res) {
         }
         catch (error) {
             if (error instanceof Error) {
-                res.status(404).json(error);
+                const { id } = req.params;
+                console.log(error);
+                const user = yield (0, userHelpers_1.updateUser)(id, { authorized: false });
+                res.status(404).json(user);
             }
             else {
                 console.log("Unexpected Error", error);

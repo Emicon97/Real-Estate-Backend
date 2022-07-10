@@ -60,8 +60,10 @@ function createUser(data) {
 exports.createUser = createUser;
 function updateUser(_id, data) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield users_1.default.findOneAndUpdate({ _id }, data, { new: true });
-        return "Usuario actualizado con éxito.";
+        const user = yield users_1.default.findOneAndUpdate({ _id }, data);
+        if (user !== null)
+            return user;
+        throw new Error('No hay datos disponibles.');
     });
 }
 exports.updateUser = updateUser;
