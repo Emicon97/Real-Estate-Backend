@@ -16,25 +16,30 @@ exports.RefreshToken = exports.TokenCreation = exports.TokenValidation = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const refresh_login_1 = __importDefault(require("./../models/refresh_login"));
 const TokenValidation = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const authToken = req.headers['auth-token'];
-    const owner = req.headers['id'];
-    const refreshInstance = yield refresh_login_1.default.findOne({ owner });
-    if (refreshInstance === null)
-        return res.sendStatus(403);
-    const refreshToken = refreshInstance.token;
-    if (!authToken)
-        return res.sendStatus(401);
-    const { payload: refresh } = verifyRefreshJWT(refreshToken);
-    if (!refresh) {
-        return res.sendStatus(403);
+    try {
+        const authToken = req.headers['auth-token'];
+        const owner = req.headers['id'];
+        const refreshInstance = yield refresh_login_1.default.findOne({ owner });
+        if (refreshInstance === null)
+            return res.sendStatus(403);
+        const refreshToken = refreshInstance.token;
+        if (!authToken)
+            return res.sendStatus(401);
+        const { payload: refresh } = verifyRefreshJWT(refreshToken);
+        if (!refresh) {
+            return res.sendStatus(403);
+        }
+        const { payload } = verifyJWT(authToken);
+        if (payload)
+            return next();
+        const id = req.headers['id'];
+        const token = (0, exports.TokenCreation)(id);
+        res.cookie('auth-token', token);
+        next();
     }
-    const { payload } = verifyJWT(authToken);
-    if (payload)
-        return next();
-    const id = req.headers['id'];
-    const token = (0, exports.TokenCreation)(id);
-    res.cookie('auth-token', token);
-    next();
+    catch (error) {
+        console.log(error);
+    }
 });
 exports.TokenValidation = TokenValidation;
 const TokenCreation = (email) => {

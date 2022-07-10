@@ -19,9 +19,9 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const propertyHelpers_1 = require("./propertyHelpers");
 const userHelpers_1 = require("./userHelpers");
 dotenv_1.default.config({ override: true });
-const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, 
-// "https://mikasa-nueva.vercel.app"
-"http://localhost:3000");
+const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, "https://mikasa-nueva.vercel.app"
+// "http://localhost:3000"
+);
 function checkIfAuthorized(owner) {
     return __awaiter(this, void 0, void 0, function* () {
         const refresh = yield refresh_token_1.default.findOne({ owner });
@@ -98,7 +98,7 @@ function eventCreation(data) {
             return event;
         }
         catch (error) {
-            throw new Error(error);
+            throw new Error(`Error al añadir eventos al calendario, ${error}`);
         }
     });
 }
