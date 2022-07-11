@@ -43,7 +43,7 @@ app.use("/uploadimages", upload.array('image'), async (req, res) => {
     const files = req.files
 
     for (const file of files) {
-      const { path }= file
+      const { path } = file
       try {
         const newPath = await uploader(path)
         urls.push(newPath)
