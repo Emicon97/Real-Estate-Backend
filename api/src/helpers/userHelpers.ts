@@ -1,6 +1,7 @@
 import userModel from "../models/users";
 import { User, UserType } from "../models/users";
-import { Cart } from './../models/users';
+import { Cart } from "./../models/users";
+import { propertyStatusManager } from "./subscriptionHelpers";
 
 async function getUserProperties(
   id: string,
@@ -21,7 +22,9 @@ async function getUserProperties(
 }
 
 async function getUserById(id: string): Promise<User | null> {
-  const user: User | null = await userModel.findById(id);
+  const user: User | null = await userModel
+    .findById(id)
+    .populate({ path: "properties" });
 
   if (user !== null) {
     return user;
@@ -47,12 +50,12 @@ async function createUser(data: User): Promise<User> {
   return savedUser;
 }
 
-async function updateUser(_id: string, data:any): Promise<User> {
-  const user:User | null = await userModel.findOneAndUpdate({ _id }, data)
+async function updateUser(_id: string, data: any): Promise<User> {
+  const user: User | null = await userModel.findOneAndUpdate({ _id }, data);
 
   if (user !== null) return user;
 
-  throw new Error ('No hay datos disponibles.');
+  throw new Error("No hay datos disponibles.");
 }
 
 async function favs(id: string, favourites: string): Promise<User> {
@@ -83,9 +86,15 @@ async function cart(id: string, title: string): Promise<User> {
   return user;
 }
 
-async function deleteUser(id: string): Promise<string> {
-  await userModel.findByIdAndDelete(id);
-  return "Usuario eliminado con éxito.";
+async function deleteUser(id: string): Promise<User[]> {
+  const user: User | null = await userModel
+    .findByIdAndUpdate(id, { range: "banned" })
+    .populate({ path: "properties" });
+
+  if (user) await propertyStatusManager(user, "banned");
+
+  const users = await getAllUsers();
+  return users;
 }
 
 export {

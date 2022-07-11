@@ -143,8 +143,8 @@ exports.updateData = updateData;
 function banUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const data = req.body.id;
-            const message = yield (0, userHelpers_1.deleteUser)(data);
+            const { id } = req.params;
+            const message = yield (0, userHelpers_1.deleteUser)(id);
             res.status(201).json(message);
         }
         catch (error) {

@@ -67,6 +67,13 @@ async function propertyStatusManager(user: User, status: string) {
         await propertyModel.findByIdAndUpdate(prop?._id, { status: "vipHot" });
       }
     }
+  } else if (status === "banned") {
+    for (let property of user.properties) {
+      const prop = property as any;
+      await propertyModel.findByIdAndUpdate(prop?._id, {
+        status: "invisible",
+      });
+    }
   }
 }
 
@@ -174,4 +181,9 @@ async function updateSubscriptionById(
   }
 }
 
-export { getUserBySubscription, createSubscription, updateSubscriptionById };
+export {
+  getUserBySubscription,
+  propertyStatusManager,
+  createSubscription,
+  updateSubscriptionById,
+};

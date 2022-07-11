@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.cart = exports.favs = exports.updateUser = exports.getUserById = exports.getAllUsers = exports.createUser = exports.getUserProperties = void 0;
 const users_1 = __importDefault(require("../models/users"));
+const subscriptionHelpers_1 = require("./subscriptionHelpers");
 function getUserProperties(id, follower) {
     return __awaiter(this, void 0, void 0, function* () {
         var user;
@@ -32,7 +33,9 @@ function getUserProperties(id, follower) {
 exports.getUserProperties = getUserProperties;
 function getUserById(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const user = yield users_1.default.findById(id);
+        const user = yield users_1.default
+            .findById(id)
+            .populate({ path: "properties" });
         if (user !== null) {
             return user;
         }
@@ -63,7 +66,7 @@ function updateUser(_id, data) {
         const user = yield users_1.default.findOneAndUpdate({ _id }, data);
         if (user !== null)
             return user;
-        throw new Error('No hay datos disponibles.');
+        throw new Error("No hay datos disponibles.");
     });
 }
 exports.updateUser = updateUser;
@@ -103,8 +106,13 @@ function cart(id, title) {
 exports.cart = cart;
 function deleteUser(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield users_1.default.findByIdAndDelete(id);
-        return "Usuario eliminado con éxito.";
+        const user = yield users_1.default
+            .findByIdAndUpdate(id, { range: "banned" })
+            .populate({ path: "properties" });
+        if (user)
+            yield (0, subscriptionHelpers_1.propertyStatusManager)(user, "banned");
+        const users = yield getAllUsers();
+        return users;
     });
 }
 exports.deleteUser = deleteUser;

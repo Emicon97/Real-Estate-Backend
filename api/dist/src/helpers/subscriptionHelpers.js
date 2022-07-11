@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateSubscriptionById = exports.createSubscription = exports.getUserBySubscription = void 0;
+exports.updateSubscriptionById = exports.createSubscription = exports.propertyStatusManager = exports.getUserBySubscription = void 0;
 const axios = require("axios");
 const dotenv_1 = __importDefault(require("dotenv"));
 const properties_1 = __importDefault(require("../models/properties"));
@@ -78,8 +78,17 @@ function propertyStatusManager(user, status) {
                 }
             }
         }
+        else if (status === "banned") {
+            for (let property of user.properties) {
+                const prop = property;
+                yield properties_1.default.findByIdAndUpdate(prop === null || prop === void 0 ? void 0 : prop._id, {
+                    status: "invisible",
+                });
+            }
+        }
     });
 }
+exports.propertyStatusManager = propertyStatusManager;
 function getUserBySubscription(subscription) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield users_1.default.findOne({ subscription });
