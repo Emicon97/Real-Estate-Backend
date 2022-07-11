@@ -76,6 +76,9 @@ function verifyRefreshJWT(token) {
     }
     catch (error) {
         console.log(error);
+        if (error.message.includes("jwt expired")) {
+            refresh_login_1.default.findOneAndDelete({ token });
+        }
         return { payload: null, expired: error.message.includes("jwt expired") };
     }
 }

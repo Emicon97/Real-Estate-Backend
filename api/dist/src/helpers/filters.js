@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchByUser = exports.searchByLocation = exports.searchByFilter = void 0;
+exports.visibilityFilterAndSort = exports.searchByUser = exports.searchByLocation = exports.searchByFilter = void 0;
 const properties_1 = __importDefault(require("../models/properties"));
 function searchByFilter(filtered, max) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -65,7 +65,31 @@ function searchByUser(user, properties, follower) {
                 }
             });
         });
-        return userProperties;
+        if (follower)
+            return visibilityFilterAndSort(userProperties);
+        else
+            return userProperties;
     });
 }
 exports.searchByUser = searchByUser;
+function visibilityFilterAndSort(properties) {
+    const filtered = [];
+    for (let property of properties) {
+        if (property.status === "available" ||
+            property.status === "hot" ||
+            property.status === "vipHot") {
+            filtered.push(property);
+        }
+    }
+    filtered.sort((a, b) => {
+        if (a.status === 'available' && b.status !== 'available') {
+            return 1;
+        }
+        if (a.status !== 'available' && b.status === 'available') {
+            return -1;
+        }
+        return 0;
+    });
+    return filtered;
+}
+exports.visibilityFilterAndSort = visibilityFilterAndSort;

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { createPayment, getPaymentById } from "../helpers/paymentHelpers";
+import { createSubscription, getSubscriptionById, updateSubscriptionById } from "../helpers/subscriptionHelpers";
 
-async function getPayment (req:Request, res:Response) {
+async function getSubscription (req:Request, res:Response) {
    try {
       let { id } = req.params;
-      const payment = await getPaymentById(id);
+      const payment = await getSubscriptionById(id);
   
       return res.json(payment);
    } catch (error) {
@@ -13,10 +13,10 @@ async function getPayment (req:Request, res:Response) {
    }
 }
 
-async function postPayment (req:Request, res:Response) {
+async function postSubscription (req:Request, res:Response) {
    try {
       const data = req.body;
-      const payment = await createPayment(data);
+      const payment = await createSubscription(data);
   
       return res.json(payment);
    } catch (error) {
@@ -25,10 +25,11 @@ async function postPayment (req:Request, res:Response) {
    }
 }
 
-async function updatePayment (req:Request, res:Response) {
+async function updateSubscription (req:Request, res:Response) {
    try {
+      const { id } = req.params;
       let data=req.body;
-      const payment = await createPayment(data);
+      const payment = await updateSubscriptionById(id, data);
   
       return res.json(payment);
    } catch (error) {
@@ -38,7 +39,7 @@ async function updatePayment (req:Request, res:Response) {
 }
 
 export {
-   getPayment,
-   postPayment,
-   updatePayment
+   getSubscription,
+   postSubscription,
+   updateSubscription
 }

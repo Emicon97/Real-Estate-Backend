@@ -9,7 +9,7 @@ import {
   getPropertyManager,
   getOwnersTelephone,
 } from "../helpers/propertyHelpers";
-import { searchByUser } from "../helpers/filters";
+import { searchByUser, visibilityFilterAndSort } from "../helpers/filters";
 
 async function searchProperties(
   req: Request,
@@ -30,7 +30,8 @@ async function searchProperties(
       req.properties = allProperties;
       return next();
     } else {
-      res.json(allProperties);
+      const sortProperties = visibilityFilterAndSort(allProperties);
+      res.json(sortProperties);
     }
   } catch (error: any) {
     if (error instanceof Error) {
