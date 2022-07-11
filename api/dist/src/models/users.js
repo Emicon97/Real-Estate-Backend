@@ -19,9 +19,8 @@ var Range;
     Range["vip"] = "vip";
     Range["admin"] = "admin";
 })(Range || (Range = {}));
-;
-class User {
-}
+let User = class User {
+};
 __decorate([
     (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", String)
@@ -31,27 +30,27 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "lastName", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true }),
+    (0, typegoose_1.prop)({ required: true, default: "pending" }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true }),
+    (0, typegoose_1.prop)(),
     __metadata("design:type", Date)
 ], User.prototype, "birthday", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true }),
+    (0, typegoose_1.prop)({ required: true, unique: true, default: "pending" }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true }),
+    (0, typegoose_1.prop)({ required: true, default: 0 }),
     __metadata("design:type", Number)
 ], User.prototype, "dni", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true }),
+    (0, typegoose_1.prop)({ required: true, default: 0 }),
     __metadata("design:type", Number)
 ], User.prototype, "telephone", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true, enum: Range, default: 'free' }),
+    (0, typegoose_1.prop)({ required: true, enum: Range, default: "free" }),
     __metadata("design:type", String)
 ], User.prototype, "range", void 0);
 __decorate([
@@ -67,9 +66,20 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "properties", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ ref: () => User }),
+    (0, typegoose_1.prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "authorized", void 0);
+__decorate([
+    (0, typegoose_1.prop)(),
+    __metadata("design:type", String)
+], User.prototype, "subscription", void 0);
+__decorate([
+    (0, typegoose_1.prop)(),
     __metadata("design:type", Array)
-], User.prototype, "user", void 0);
+], User.prototype, "cart", void 0);
+User = __decorate([
+    (0, typegoose_1.modelOptions)({ options: { allowMixed: typegoose_1.Severity.ALLOW } })
+], User);
 exports.User = User;
 const userModel = (0, typegoose_1.getModelForClass)(User);
 exports.default = userModel;

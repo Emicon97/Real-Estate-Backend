@@ -1,37 +1,139 @@
-import userModel from "../models/users";
-import { User, UserType } from '../models/users';
+import { NextFunction, Request, Response } from "express";
+import {
+  getUserProperties,
+  getUserById,
+  getAllUsers,
+  createUser,
+  updateUser,
+  deleteUser,
+  favs,
+  cart,
+} from "../helpers/userHelpers";
 
-async function getAllUsers():Promise<User[]>{
-    const allUsers:User[] = await userModel.find();
-    
-    if(allUsers.length){
-     return allUsers; 
+async function getUsers(req: Request, res: Response) {
+  try {
+    const data = await getAllUsers();
+    res.json(data);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
     }
-    
-    throw new Error("No se encontraron usuarios.");
- }
-
-async function createUser(data:User):Promise<User>{
-    const user:UserType = await userModel.create(data);
-
-    const savedUser:User = await user.save();
-    return savedUser;    
+  }
 }
 
-async function updateUser(_id:string, data:User):Promise<string>{
-    await userModel.findOneAndUpdate({ _id }, data, {new:true});
-
-    return 'Usuario actualizado con éxito.';
+async function postUser(req: Request, res: Response) {
+  try {
+    const data = req.body;
+    const property = await createUser(data);
+    res.status(201).json(property);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
+    }
+  }
 }
 
-async function deleteUser(id:string):Promise<string> {
-   
-    await userModel.findByIdAndDelete(id);
-    return 'Usuario eliminado con éxito.';
+async function getOwnerById(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { id, follower } = req.params;
+    const properties = req.properties;
+    if (properties && !follower) {
+      const owner = await getUserProperties(id);
+      req.user = owner;
+      return next();
+    } else if (properties) {
+      const followed = await getUserProperties(follower, true);
+      req.user = followed;
+      return next();
+    } else {
+      const user = await getUserById(id);
+      res.json(user);
+    }
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
+    }
+  }
 }
 
-export {createUser,
-        getAllUsers,
-        updateUser,
-        deleteUser            
+async function addFavs(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const { property } = req.body;
+    const message = await favs(id, property);
+    res.status(201).json(message);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
+    }
+  }
 }
+
+async function addCart(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const { property } = req.body;
+    const message = await cart(id, property);
+    res.status(201).json(message);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
+    }
+  }
+}
+
+async function updateData(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const message = await updateUser(id, data);
+    res.status(201).json(message);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
+    }
+  }
+}
+
+async function banUser(req: Request, res: Response) {
+  try {
+    const data = req.body.id;
+    const message = await deleteUser(data);
+    res.status(201).json(message);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
+    }
+  }
+}
+
+export {
+  getUsers,
+  postUser,
+  getOwnerById,
+  addFavs,
+  addCart,
+  updateData,
+  banUser,
+};

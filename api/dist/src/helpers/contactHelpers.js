@@ -12,18 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose = require('mongoose');
-const config_1 = __importDefault(require("../config/config"));
-const dbConnection = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield mongoose.connect(`${config_1.default.MONGO_DATABASE}://${config_1.default.MONGO_USER}:${config_1.default.MONGO_PASSWORD}@${config_1.default.MONGO_HOST}/${config_1.default.MONGO_CONFIGURATION}`, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-        .then(() => {
-        console.log('DB Online');
-    })
-        .catch((err) => {
-        console.log(err);
+exports.getContactByProperty = exports.createContactForm = void 0;
+const contact_1 = __importDefault(require("./../models/contact"));
+function createContactForm(data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const contact = yield contact_1.default.create(data);
+        const savedContact = yield contact.save();
+        return savedContact;
     });
-});
-exports.default = dbConnection;
+}
+exports.createContactForm = createContactForm;
+function getContactByProperty(property) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const contact = yield contact_1.default.find({ property });
+        if (contact.length) {
+            return contact;
+        }
+        throw new Error("No hay contactos para esta propiedad.");
+    });
+}
+exports.getContactByProperty = getContactByProperty;

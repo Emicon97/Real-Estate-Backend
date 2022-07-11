@@ -17,15 +17,15 @@ const JsonWebToken_1 = require("../libs/JsonWebToken");
 const google_auth_library_1 = require("google-auth-library");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ override: true });
-const users_1 = __importDefault(require("../models/users"));
+const loginHelpers_1 = require("../helpers/loginHelpers");
 const client = new google_auth_library_1.OAuth2Client(process.env.CLIENT_ID);
 function standardLogIn(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let { email, password } = req.body;
             if (!password)
-                next();
-            let user = yield dataBaseCheck(email, password);
+                return next();
+            let user = yield (0, loginHelpers_1.dataBaseCheck)(email, password);
             req.user = user;
             next();
         }
@@ -43,8 +43,9 @@ exports.standardLogIn = standardLogIn;
 function googleLogIn(req, res, next) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        if (req.user)
-            next();
+        const user = req.user;
+        if (user)
+            return next();
         try {
             const { tokenId } = req.body;
             const ticket = yield client.verifyIdToken({
@@ -53,7 +54,7 @@ function googleLogIn(req, res, next) {
             });
             const email = (_a = ticket.getPayload()) === null || _a === void 0 ? void 0 : _a.email;
             if (email !== undefined) {
-                let user = yield dataBaseCheck(email);
+                let user = yield (0, loginHelpers_1.dataBaseCheck)(email);
                 req.user = user;
                 next();
             }
@@ -70,25 +71,6 @@ function googleLogIn(req, res, next) {
     });
 }
 exports.googleLogIn = googleLogIn;
-function dataBaseCheck(email, password) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (email && password) {
-            let user = yield users_1.default.findOne({ email, password });
-            if (user !== null)
-                return user;
-            throw new Error('Los datos ingresados son incorrectos.');
-        }
-        else if (email) {
-            let user = yield users_1.default.findOne({ email });
-            if (user !== null)
-                return user;
-            throw new Error('No se encuentra registrado.');
-        }
-        else {
-            throw new Error('Complete los campos requeridos.');
-        }
-    });
-}
 function tokenManagement(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

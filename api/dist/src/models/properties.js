@@ -14,10 +14,11 @@ const typegoose_1 = require("@typegoose/typegoose");
 var Status;
 (function (Status) {
     Status["available"] = "available";
-    Status["reserveed"] = "reserved";
-    Status["negotiotion"] = "negotiation";
+    Status["hot"] = "hot";
+    Status["vipHot"] = "vipHot";
+    Status["invisible"] = "invisible";
+    Status["reserved"] = "reserved";
 })(Status || (Status = {}));
-;
 var Operation;
 (function (Operation) {
     Operation["sell"] = "sell";
@@ -58,7 +59,7 @@ __decorate([
     __metadata("design:type", String)
 ], Property.prototype, "city", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ default: 'No especificado' }),
+    (0, typegoose_1.prop)({ default: "No especificado" }),
     __metadata("design:type", String)
 ], Property.prototype, "neighbourhood", void 0);
 __decorate([
@@ -74,7 +75,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Property.prototype, "parkingSlot", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ required: true, enum: Status, default: 'available' }),
+    (0, typegoose_1.prop)({ required: true, enum: Status, default: "available" }),
     __metadata("design:type", String)
 ], Property.prototype, "status", void 0);
 __decorate([

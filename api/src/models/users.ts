@@ -1,92 +1,74 @@
 import {
-   prop,
-   Ref,
-   getModelForClass,
-   ReturnModelType,
-   DocumentType
+  prop,
+  Ref,
+  getModelForClass,
+  ReturnModelType,
+  DocumentType,
+  modelOptions,
+  Severity,
 } from "@typegoose/typegoose";
 import { Property } from "./properties";
 
 enum Range {
-   free = 'free',
-   premium = 'premium',
-   vip = 'vip',
-   admin = 'admin'
-};
-
-export class User {
-
-   @prop({ required: true })
-   public name: string;
-
-   @prop({ required: true })
-   public lastName: string;
-
-   @prop({ required: true })
-   public password: string;
-
-   @prop({ required: true })
-   public birthday: Date;
-
-   @prop({ required: true })
-   public email: string;
-
-   @prop({ required: true })
-   public dni: number;
-
-   @prop({ required: true })
-   public telephone: number;
-
-   @prop({ required: true, enum: Range, default: 'free' })
-   public range: Range;
-
-   @prop()
-   public avatar: string;
-
-   @prop({ ref: () => Property })
-   favourites: Ref<Property>[];
-
-   @prop({ ref: () => Property })
-   properties: Ref<Property>[];
-
-   @prop({ ref: () => User})
-   public user: Ref< User >[];
-
+  free = "free",
+  premium = "premium",
+  vip = "vip",
+  admin = "admin",
 }
 
-// export class Free extends User {
+export interface Cart {
+  title: string;
+  quantity: number;
+  unit_price: number;
+}
 
-//    @prop({ ref: () => Property })
-//    favourites: Ref<Property>[];
+@modelOptions({options: { allowMixed: Severity.ALLOW }})
+export class User {
+  @prop({ required: true })
+  public name: string;
 
-// }
+  @prop({ required: true })
+  public lastName: string;
 
-// export class Premium extends User {
+  @prop({ required: true, default: "pending" })
+  public password: string;
 
-//    @prop({ ref: () => Property })
-//    properties: Ref<Property>[];
+  @prop()
+  public birthday: Date;
 
-// }
+  @prop({ required: true, unique: true, default: "pending" })
+  public email: string;
 
-// export class Vip extends User {
+  @prop({ required: true, default: 0 })
+  public dni: number;
 
-//    @prop({ ref: () => Property })
-//    properties: Ref<Property>[];
+  @prop({ required: true, default: 0 })
+  public telephone: number;
 
-// }
+  @prop({ required: true, enum: Range, default: "free" })
+  public range: Range;
 
-// export class Admin extends User {
+  @prop()
+  public avatar: string;
 
-//    @prop({ enum: Range })
-//    public userType: string;
+  @prop({ ref: () => Property })
+  public favourites: Ref<Property>[];
 
-//    @prop({ ref: () => User})
-//    public user: Ref< User >[];
+  @prop({ ref: () => Property })
+  public properties: Ref<Property>[];
 
-// }
+  @prop({ default: false })
+  public authorized: boolean;
+
+  @prop()
+  public subscription: string;
+
+  @prop()
+  public cart:Cart[];
+}
 
 type TUserType = ReturnModelType<typeof User>;
 export type UserType = DocumentType<User>;
 
-const userModel:TUserType = getModelForClass(User);
+const userModel: TUserType = getModelForClass(User);
 export default userModel;

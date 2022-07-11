@@ -1,66 +1,26 @@
-import { Router } from 'express';
-import { getAllUsers, createUser, updateUser, deleteUser } from '../controllers/userControllers';
+import { Router } from "express";
+import {
+  getUsers,
+  postUser,
+  updateData,
+  addFavs,
+  addCart,
+  banUser,
+  getOwnerById,
+} from "../controllers/userControllers";
+import { TokenValidation } from "../libs/JsonWebToken";
 
 const router = Router();
 
-router.get('/', async(req, res) => {
-   try{      
-      const data = await getAllUsers();
-      res.json(data);
-   }catch(error:any){
-      if (error instanceof Error) {
-         console.log(error.message);
-         res.status(404).json(error);
-      } else {
-         console.log('Unexpected Error', error);
-      }
-   }
-})
+router.get("/:id", getOwnerById);
+router.get("/", TokenValidation, getUsers);
 
-router.post('/', async(req, res) => {
-   try{
-      const data = req.body;
-      const property = await createUser(data);
-      res.status(201).send(property)  
-   }catch(error:any){
-      if (error instanceof Error) {
-         console.log(error.message);
-         res.status(404).json(error);
-      } else {
-         console.log('Unexpected Error', error);
-      }
-   }
-})
+router.post("/", postUser);
 
-router.put('/:id', async(req,res) => {
-   try {
-      const { id } = req.params;
-      const data = req.body;
-      const message = await updateUser(id, data);
-      res.status(201).send(message)
-   } catch (error:any) {
-      if (error instanceof Error) {
-         console.log(error.message);
-         res.status(404).json(error);
-      } else {
-         console.log('Unexpected Error', error);
-      }
-   }
-})
+router.put("/addfavs/:id", TokenValidation, addFavs);
+router.put("/addcart/:id", TokenValidation, addCart);
+router.put("/:id", TokenValidation, updateData);
 
-router.delete('/',async(req,res) => {
-   try {
-      const data = req.body.id;
-      const message = await deleteUser(data);
-      res.status(201).send(message)
-   } catch (error:any) {
-      if (error instanceof Error) {
-         console.log(error.message);
-         res.status(404).json(error);
-      } else {
-         console.log('Unexpected Error', error);
-      }
-   }
-})
+router.delete("/", TokenValidation, banUser);
 
 export default router;

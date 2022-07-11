@@ -12,22 +12,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProperty = exports.deleteProperty = exports.getPropById = exports.getPropertyManager = exports.createProperty = void 0;
+exports.getOwnersId = exports.getOwnersTelephone = exports.deleteProperty = exports.updateProperty = exports.getPropertyById = exports.createProperty = exports.getPropertyManager = void 0;
 const properties_1 = __importDefault(require("../models/properties"));
+const users_1 = __importDefault(require("./../models/users"));
+const filters_1 = require("./filters");
 function getPropertyManager(filters, location, max) {
     return __awaiter(this, void 0, void 0, function* () {
         const allProperties = yield getAllProperties();
-        if ((filters && Object.keys(filters).length) && location) {
-            const filtered = yield searchByFilter(filters, max);
-            const searched = yield searchByLocation(location, filtered);
+        if (filters && Object.keys(filters).length && location) {
+            const filtered = yield (0, filters_1.searchByFilter)(filters, max);
+            const searched = yield (0, filters_1.searchByLocation)(location, filtered);
             return searched;
         }
-        else if ((filters && Object.keys(filters).length)) {
-            const filtered = yield searchByFilter(filters, max);
+        else if (filters && Object.keys(filters).length) {
+            const filtered = yield (0, filters_1.searchByFilter)(filters, max);
             return filtered;
         }
         else if (location) {
-            const searched = yield searchByLocation(location, allProperties);
+            const searched = yield (0, filters_1.searchByLocation)(location, allProperties);
             return searched;
         }
         else {
@@ -45,43 +47,7 @@ function getAllProperties() {
         throw new Error("No se encontraron propiedades.");
     });
 }
-function searchByFilter(filtered, max) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (max) {
-            const property = yield properties_1.default.find(filtered)
-                .where('price').gt(0).lt(max);
-            return property;
-        }
-        else {
-            const property = yield properties_1.default.find(filtered);
-            return property;
-        }
-    });
-}
-function searchByLocation(location, properties) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const toFilter = [];
-        const names = location.trim().split(' ');
-        properties.forEach((property) => {
-            names.forEach((word) => {
-                var _a;
-                if (word.length) {
-                    if (!toFilter.includes(property) &&
-                        property.city.includes(word)) {
-                        toFilter.push(property);
-                    }
-                    else if (!toFilter.includes(property) &&
-                        ((_a = property.neighbourhood) === null || _a === void 0 ? void 0 : _a.includes(word)) &&
-                        property.neighbourhood !== 'No especificado') {
-                        toFilter.push(property);
-                    }
-                }
-            });
-        });
-        return toFilter;
-    });
-}
-function getPropById(id) {
+function getPropertyById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         const propById = yield properties_1.default.findById(id);
         if (propById !== null) {
@@ -90,11 +56,12 @@ function getPropById(id) {
         throw new Error("Esta propiedad no está disponible.");
     });
 }
-exports.getPropById = getPropById;
-function createProperty(data) {
+exports.getPropertyById = getPropertyById;
+function createProperty(data, _id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const property = yield properties_1.default.create(data);
-        const savedProperty = yield property.save();
+        const properties = yield properties_1.default.create(data);
+        const savedProperty = yield properties.save();
+        yield users_1.default.findByIdAndUpdate(_id, { $push: { properties } });
         return savedProperty;
     });
 }
@@ -102,14 +69,32 @@ exports.createProperty = createProperty;
 function updateProperty(_id, data) {
     return __awaiter(this, void 0, void 0, function* () {
         yield properties_1.default.findOneAndUpdate({ _id }, data, { new: true });
-        return 'Propiedad actualizada con éxito.';
+        return "Propiedad actualizada con éxito.";
     });
 }
 exports.updateProperty = updateProperty;
 function deleteProperty(id) {
     return __awaiter(this, void 0, void 0, function* () {
         yield properties_1.default.findByIdAndDelete(id);
-        return 'Propiedad eliminada con éxito.';
+        return "Propiedad eliminada con éxito.";
     });
 }
 exports.deleteProperty = deleteProperty;
+function getOwnersTelephone(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const owner = yield users_1.default.findOne({ properties: id });
+        if (owner)
+            return owner.telephone;
+        throw new Error("No fue posible encontrar datos sobre el dueño.");
+    });
+}
+exports.getOwnersTelephone = getOwnersTelephone;
+function getOwnersId(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const owner = yield users_1.default.findOne({ properties: id });
+        if (owner)
+            return owner.id;
+        throw new Error("No fue posible encontrar datos sobre el dueño.");
+    });
+}
+exports.getOwnersId = getOwnersId;

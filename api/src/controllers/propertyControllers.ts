@@ -1,116 +1,157 @@
-import propertyModel from "../models/properties";
-import { Property, PropertyType } from "../models/properties";
+import { NextFunction, Request, Response } from "express";
+import { Property } from "../models/properties";
+import { User } from "./../models/users";
+import {
+  createProperty,
+  getPropertyById,
+  deleteProperty,
+  updateProperty,
+  getPropertyManager,
+  getOwnersTelephone,
+} from "../helpers/propertyHelpers";
+import { searchByUser, visibilityFilterAndSort } from "../helpers/filters";
 
-async function getPropertyManager(
-    filters?:Property,
-    location?:string,   
-    max?:number, 
-    ):Promise<Property[]>{
-    const allProperties:Property[] = await getAllProperties();
-    if ((filters && Object.keys(filters).length) && location) {
-        const filtered:Property[] = await searchByFilter(filters, max);
-        const searched:Property[] = await searchByLocation(location, filtered);
-        return searched;
-    } else if ((filters && Object.keys(filters).length)) {
-        const filtered:Property[] = await searchByFilter(filters, max);
-        return filtered;
-    } else if (location) {
-        const searched:Property[] = await searchByLocation(location, allProperties);
-        return searched;
+async function searchProperties(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const filter = req.body;
+    const { location, max }: any = req.query;
+    const allProperties = await getPropertyManager(
+      filter,
+      location as string,
+      max as number
+    );
+
+    const { id: owner, follower } = req.params;
+    if (owner !== undefined || follower !== undefined) {
+      req.properties = allProperties;
+      return next();
     } else {
-        return allProperties;
+      const sortProperties = visibilityFilterAndSort(allProperties);
+      res.json(sortProperties);
     }
-}
-
-async function getAllProperties():Promise<Property[]>{
-    const allProperties:Property[] = await propertyModel.find();
-    
-    if(allProperties.length){
-     return allProperties; 
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
     }
-    
-    throw new Error("No se encontraron propiedades.");
- }
+  }
+}
 
-async function searchByFilter(
-    filtered:Property,
-    max?:number
-):Promise<Property[]>{
-    if (max) {
-        const property:Property[] = await propertyModel.find(filtered)
-            .where('price').gt(0).lt(max);
-        return property;
-    }else {
-        const property:Property[] = await propertyModel.find(filtered);
-        return property;
+async function getPropertyByOwner(req: Request, res: Response) {
+  try {
+    const user: User = req.user;
+    const properties: Property[] = req.properties;
+    const { follower } = req.params;
+
+    const userProperties = await searchByUser(
+      user,
+      properties,
+      follower as string
+    );
+
+    res.json(userProperties);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
     }
+  }
 }
 
-async function searchByLocation(
-    location:string,
-    properties:Property[]
-):Promise<Property[]>{
-    const toFilter:Property[] = [];
-    const names:string[] = location.trim().split(' ');
-
-    properties.forEach((property:Property) => {
-        names.forEach((word:string) => {
-            if (word.length) {
-                if (
-                    !toFilter.includes(property) &&
-                    property.city.includes(word)
-                ) {
-                    toFilter.push(property);
-                } else if (
-                    !toFilter.includes(property) &&
-                    property.neighbourhood?.includes(word) &&
-                    property.neighbourhood !== 'No especificado'
-                ) {
-                    toFilter.push(property);
-                }
-            }
-        })
-    })
-
-    return toFilter;
-}
-
-async function getPropById(id:string):Promise<Property> {
-    console.log(id)
-    const propById:Property | null = await propertyModel.findById(id);
-    console.log(propById)
-    if(propById !== null){
-        return propById;
+async function postProperty(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const property = await createProperty(data, id);
+    res.status(201).json(property);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
     }
-
-   throw new Error("Esta propiedad no está disponible."); 
+  }
 }
 
-async function createProperty(data:Property):Promise<Property>{
-    const property:PropertyType = await propertyModel.create(data);
+async function getProperty(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const propById = await getPropertyById(id);
 
-    const savedProperty:Property = await property.save();
-    return savedProperty;    
+    res.json(propById);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
+    }
+  }
 }
 
-async function updateProperty(_id:string, data:Property):Promise<string>{
-    await propertyModel.findOneAndUpdate({ _id }, data, {new:true});
-
-    return 'Propiedad actualizada con éxito.';
+async function updateProperties(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const message = await updateProperty(id, data);
+    res.status(201).json(message);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
+    }
+  }
 }
 
-async function deleteProperty(id:string):Promise<string> {
-   
-    await propertyModel.findByIdAndDelete(id);
-    return 'Propiedad eliminada con éxito.';
+async function deleteProperties(req: Request, res: Response) {
+  try {
+    const { id } = req.body;
+    const message = await deleteProperty(id);
+    res.status(201).json(message);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
+    }
+  }
 }
 
+async function getOwnersTelephoneByProperty(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
 
+    const owner = await getOwnersTelephone(id);
 
-export{
-    createProperty,
-    getPropertyManager,
-    getPropById,
-    deleteProperty,
-    updateProperty
+    res.json(owner);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
+    }
+  }
 }
+
+export {
+  postProperty,
+  searchProperties,
+  getPropertyByOwner,
+  getProperty,
+  updateProperties,
+  deleteProperties,
+  getOwnersTelephoneByProperty,
+};
