@@ -1,6 +1,6 @@
 import userModel from "../models/users";
 import { User, UserType } from "../models/users";
-import { rangeManager } from "./subscriptionHelpers";
+import { Cart } from './../models/users';
 
 async function getUserProperties(
   id: string,
@@ -24,9 +24,7 @@ async function getUserById(id: string): Promise<User | null> {
   const user: User | null = await userModel.findById(id);
 
   if (user !== null) {
-    const updated:User | null = await rangeManager(id);
-
-    return updated;
+    return user;
   }
 
   throw new Error("Hubo un error al procesar sus datos.");
@@ -70,6 +68,21 @@ async function favs(id: string, favourites: string): Promise<User> {
   return user;
 }
 
+async function cart(id: string, title: string): Promise<User> {
+  const user: User | null = await userModel.findById(id);
+  if (user === null) throw new Error("No encontramos sus datos.");
+  const cart = { title, quantity: 1, unit_price: 10000 };
+  const cartItems: Cart[] = user?.cart as Cart[];
+  for (let property of cartItems) {
+    if (property.title === title) {
+      await userModel.findByIdAndUpdate(id, { $pull: { cart } });
+      return user;
+    }
+  }
+  await userModel.findByIdAndUpdate(id, { $push: { cart } });
+  return user;
+}
+
 async function deleteUser(id: string): Promise<string> {
   await userModel.findByIdAndDelete(id);
   return "Usuario eliminado con éxito.";
@@ -82,5 +95,6 @@ export {
   getUserById,
   updateUser,
   favs,
+  cart,
   deleteUser,
 };
