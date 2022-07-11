@@ -1,5 +1,5 @@
 import propertyModel from "../models/properties";
-import { Property, PropertyType } from "../models/properties";
+import { Status, Property, PropertyType } from "../models/properties";
 import userModel, { User, UserType } from "./../models/users";
 import { searchByFilter, searchByLocation } from "./filters";
 
@@ -46,12 +46,35 @@ async function getPropertyById(id: string): Promise<Property> {
   throw new Error("Esta propiedad no está disponible.");
 }
 
-async function createProperty(data: Property, _id: string): Promise<Property> {
+async function createProperty(data: Property, _id: string) {
+  const status = await visiblePropertyChecker(_id);
+  data.status = status;
+
   const properties: PropertyType = await propertyModel.create(data);
 
   const savedProperty: Property = await properties.save();
   await userModel.findByIdAndUpdate(_id, { $push: { properties } });
   return savedProperty;
+}
+
+async function visiblePropertyChecker(id:string) {
+  const user: User | null = await userModel
+    .findById(id)
+    .populate({ path: "properties" });
+
+  var available:number = 0;
+  if (!user) throw new Error ('No hemos podido acceder a sus datos.');
+  
+  if (user.range === 'vip') return Status.vipHot;
+  
+  for (let property of user?.properties) {
+    const prop = property as Property;
+    if (prop && prop.status === 'available') {
+      available++;
+    }
+  }
+  if (available >= 3) return Status.invisible;
+  else return Status.available;
 }
 
 async function updateProperty(_id: string, data: Property): Promise<string> {
