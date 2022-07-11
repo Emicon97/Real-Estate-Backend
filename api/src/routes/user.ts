@@ -4,6 +4,7 @@ import {
   postUser,
   updateData,
   addFavs,
+  addCart,
   banUser,
   getOwnerById,
 } from "../controllers/userControllers";
@@ -17,6 +18,7 @@ router.get("/", TokenValidation, getUsers);
 router.post("/", postUser);
 
 router.put("/addfavs/:id", TokenValidation, addFavs);
+router.put("/addcart/:id", TokenValidation, addCart);
 router.put("/:id", TokenValidation, updateData);
 
 router.delete("/", TokenValidation, banUser);

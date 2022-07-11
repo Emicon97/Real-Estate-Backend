@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.favs = exports.updateUser = exports.getUserById = exports.getAllUsers = exports.createUser = exports.getUserProperties = void 0;
+exports.deleteUser = exports.cart = exports.favs = exports.updateUser = exports.getUserById = exports.getAllUsers = exports.createUser = exports.getUserProperties = void 0;
 const users_1 = __importDefault(require("../models/users"));
 function getUserProperties(id, follower) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -83,6 +83,24 @@ function favs(id, favourites) {
     });
 }
 exports.favs = favs;
+function cart(id, title) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = yield users_1.default.findById(id);
+        if (user === null)
+            throw new Error("No encontramos sus datos.");
+        const cart = { title, quantity: 1, unit_price: 10000 };
+        const cartItems = user === null || user === void 0 ? void 0 : user.cart;
+        for (let property of cartItems) {
+            if (property.title === title) {
+                yield users_1.default.findByIdAndUpdate(id, { $pull: { cart } });
+                return user;
+            }
+        }
+        yield users_1.default.findByIdAndUpdate(id, { $push: { cart } });
+        return user;
+    });
+}
+exports.cart = cart;
 function deleteUser(id) {
     return __awaiter(this, void 0, void 0, function* () {
         yield users_1.default.findByIdAndDelete(id);
