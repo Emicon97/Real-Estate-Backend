@@ -71,7 +71,7 @@ async function propertyStatusManager(user: User, status: string) {
     for (let property of user.properties) {
       const prop = property as any;
       await propertyModel.findByIdAndUpdate(prop?._id, {
-        status: "invisible ",
+        status: "invisible",
       });
     }
   }

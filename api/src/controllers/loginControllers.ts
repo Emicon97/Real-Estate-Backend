@@ -59,7 +59,8 @@ async function googleLogIn(req: Request, res: Response, next: NextFunction) {
 async function tokenManagement(req: Request, res: Response) {
   try {
     const user = req.user;
-    if (user.status === 'banned') return res.send('Usuario banneado.');
+    if (user.range === 'banned') checkIfBanned();
+
     const token: string = TokenCreation(user.email);
     await RefreshToken(user._id);
     // const cookieConfig:CookieOptions = {
@@ -78,6 +79,10 @@ async function tokenManagement(req: Request, res: Response) {
       console.log("Unexpected Error", error);
     }
   }
+}
+
+function checkIfBanned():never {
+  throw new Error ('Usuario eliminado.');
 }
 
 export { standardLogIn, googleLogIn, tokenManagement };

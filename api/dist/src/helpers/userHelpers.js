@@ -33,7 +33,9 @@ function getUserProperties(id, follower) {
 exports.getUserProperties = getUserProperties;
 function getUserById(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const user = yield users_1.default.findById(id);
+        const user = yield users_1.default
+            .findById(id)
+            .populate({ path: "properties" });
         if (user !== null) {
             return user;
         }

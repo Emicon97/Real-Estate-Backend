@@ -22,7 +22,9 @@ async function getUserProperties(
 }
 
 async function getUserById(id: string): Promise<User | null> {
-  const user: User | null = await userModel.findById(id);
+  const user: User | null = await userModel
+    .findById(id)
+    .populate({ path: "properties" });
 
   if (user !== null) {
     return user;
@@ -85,10 +87,10 @@ async function cart(id: string, title: string): Promise<User> {
 }
 
 async function deleteUser(id: string): Promise<User[]> {
-  const user:User | null = await userModel
+  const user: User | null = await userModel
     .findByIdAndUpdate(id, { range: "banned" })
     .populate({ path: "properties" });
-  
+
   if (user) await propertyStatusManager(user, "banned");
 
   const users = await getAllUsers();
