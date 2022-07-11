@@ -7,6 +7,7 @@ import {
   updateUser,
   deleteUser,
   favs,
+  cart,
 } from "../helpers/userHelpers";
 
 async function getUsers(req: Request, res: Response) {
@@ -80,6 +81,22 @@ async function addFavs(req: Request, res: Response) {
   }
 }
 
+async function addCart(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const { property } = req.body;
+    const message = await cart(id, property);
+    res.status(201).json(message);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
+    }
+  }
+}
+
 async function updateData(req: Request, res: Response) {
   try {
     const { id } = req.params;
@@ -111,4 +128,12 @@ async function banUser(req: Request, res: Response) {
   }
 }
 
-export { getUsers, postUser, getOwnerById, addFavs, updateData, banUser };
+export {
+  getUsers,
+  postUser,
+  getOwnerById,
+  addFavs,
+  addCart,
+  updateData,
+  banUser,
+};

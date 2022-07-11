@@ -5,8 +5,8 @@ const { CORS_URL } = process.env;
 const routes = require("./routes/index");
 
 //Para subir múltiples imágenes a cloudinary:
-const upload =require('./helpers/multer')
-const cloudinary = require('./helpers/cloudinary')
+const upload =require('./libs/multer')
+const cloudinary = require('./libs/cloudinary')
 const fs = require('fs')
 
 const app = express();
@@ -52,9 +52,9 @@ app.use("/uploadimages", upload.array('image'), async (req, res) => {
         console.log(error)        
       }
     }
-    res.status(200).json({ message: 'Imágenes suubidas correctamente.', data: urls })
+    res.status(200).json({ message: 'Imágenes subidas correctamente.', data: urls })
   } else {
-    res.status(405).json({ err: "Images not uploaded succesfully." })
+    res.status(405).json({ err: "No se pudo subir las imágenes." })
   }
 })
 

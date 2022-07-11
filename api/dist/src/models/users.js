@@ -19,8 +19,8 @@ var Range;
     Range["vip"] = "vip";
     Range["admin"] = "admin";
 })(Range || (Range = {}));
-class User {
-}
+let User = class User {
+};
 __decorate([
     (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", String)
@@ -69,6 +69,17 @@ __decorate([
     (0, typegoose_1.prop)({ default: false }),
     __metadata("design:type", Boolean)
 ], User.prototype, "authorized", void 0);
+__decorate([
+    (0, typegoose_1.prop)(),
+    __metadata("design:type", String)
+], User.prototype, "subscription", void 0);
+__decorate([
+    (0, typegoose_1.prop)(),
+    __metadata("design:type", Array)
+], User.prototype, "cart", void 0);
+User = __decorate([
+    (0, typegoose_1.modelOptions)({ options: { allowMixed: typegoose_1.Severity.ALLOW } })
+], User);
 exports.User = User;
 const userModel = (0, typegoose_1.getModelForClass)(User);
 exports.default = userModel;

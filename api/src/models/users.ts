@@ -4,6 +4,8 @@ import {
   getModelForClass,
   ReturnModelType,
   DocumentType,
+  modelOptions,
+  Severity,
 } from "@typegoose/typegoose";
 import { Property } from "./properties";
 
@@ -14,6 +16,13 @@ enum Range {
   admin = "admin",
 }
 
+export interface Cart {
+  title: string;
+  quantity: number;
+  unit_price: number;
+}
+
+@modelOptions({options: { allowMixed: Severity.ALLOW }})
 export class User {
   @prop({ required: true })
   public name: string;
@@ -54,8 +63,8 @@ export class User {
   @prop()
   public subscription: string;
 
-  @prop({ ref: () => Property })
-  public cart: Ref<Property>[];
+  @prop()
+  public cart:Cart[];
 }
 
 type TUserType = ReturnModelType<typeof User>;

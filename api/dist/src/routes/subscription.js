@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const { Router } = require("express");
+const subscriptionControllers_1 = require("../controllers/subscriptionControllers");
+const JsonWebToken_1 = require("./../libs/JsonWebToken");
+const router = Router();
+router.get("/:id", subscriptionControllers_1.getSubscription);
+router.post("/", JsonWebToken_1.TokenValidation, subscriptionControllers_1.postSubscription);
+router.put("/:id", JsonWebToken_1.TokenValidation, subscriptionControllers_1.updateSubscription);
+exports.default = router;

@@ -8,7 +8,7 @@ import userRoutes from "./user";
 import contactRoutes from "./contact";
 import calendarRoutes from "./calendar";
 import subscriptionRoutes from "./subscription";
-// import paymentRoutes from "./payment";
+import paymentRoutes from "./payment";
 
 const router = Router();
 
@@ -20,7 +20,6 @@ router.use("/user", userRoutes);
 router.use("/contact", contactRoutes);
 router.use("/subscription", subscriptionRoutes);
 router.use("/calendar", calendarRoutes);
-
-// router.use("/payment", paymentRoutes);
+router.use("/payment", paymentRoutes);
 
 export = router;

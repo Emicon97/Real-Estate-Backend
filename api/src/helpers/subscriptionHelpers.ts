@@ -10,7 +10,7 @@ async function rangeManager(id: string): Promise<User | null> {
     .findById(id)
     .populate({ path: "properties" });
   if (user?.subscription) {
-    const updated: User | null = await getSubscriptionById(
+    const updated: Promise<User | null> = getSubscriptionById(
       user.subscription
     ).then(async (response) => {
       if (response.status === "pending" || response.status === "cancelled") {
@@ -53,6 +53,11 @@ async function propertyStatusManager(user: User, status: string) {
           { status: "available" }
         );
         if (vis) visible.push(vis);
+      } else if (prop.status === "vipHot") {
+        const vis: Property | null = await propertyModel.findByIdAndUpdate(
+          prop?._id,
+          { status: "invisible" }
+        );
       }
     }
   } else if (status === "vip") {
@@ -62,6 +67,14 @@ async function propertyStatusManager(user: User, status: string) {
         await propertyModel.findByIdAndUpdate(prop?._id, { status: "vipHot" });
       }
     }
+  }
+}
+
+async function getUserBySubscription(subscription: string) {
+  const user: any = await userModel.findOne({ subscription });
+  if (user) {
+    const updated: User | null = await rangeManager(user._id);
+    return updated;
   }
 }
 
@@ -97,13 +110,6 @@ async function createSubscription({
     },
     back_url: "https://mikasa-nueva.vercel.app/success",
     payer_email: email,
-    // payer_email: email,
-    // items,
-    // back_urls: {
-    //   failure: "/failure",
-    //   pending: "/pending",
-    //   success: "https://mikasa-nueva.vercel.app/success"
-    // }
   };
 
   const subscription = await axios.post(url, body, {
@@ -112,7 +118,6 @@ async function createSubscription({
       Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
     },
   });
-  console.log(subscription.data);
   return subscription.data.init_point;
 }
 
@@ -156,7 +161,7 @@ async function updateSubscriptionById(
         transaction_amount: 0,
         currency_id: "ARS",
       },
-      back_url: "https://mikasa-nueva.vercel.app/goodbye",
+      back_url: `https://mikasa-nueva.vercel.app/goodbye/${id}`,
       status,
     };
     const subscription = await axios.put(`${url}/${id}`, body, {
@@ -169,9 +174,4 @@ async function updateSubscriptionById(
   }
 }
 
-export {
-  rangeManager,
-  getSubscriptionById,
-  createSubscription,
-  updateSubscriptionById,
-};
+export { getUserBySubscription, createSubscription, updateSubscriptionById };
