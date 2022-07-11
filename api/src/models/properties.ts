@@ -5,7 +5,7 @@ import {
   DocumentType,
 } from "@typegoose/typegoose";
 
-enum Status {
+export enum Status {
   available = "available",
   hot = "hot",
   vipHot = "vipHot",
