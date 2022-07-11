@@ -46,8 +46,8 @@ async function getPropertyById(id: string): Promise<Property> {
   throw new Error("Esta propiedad no está disponible.");
 }
 
-async function createProperty(data: Property, _id: string) {
-  const status = await visiblePropertyChecker(_id);
+async function createProperty(data: Property, _id: string):Promise<Property> {
+  const status:Status = await visiblePropertyChecker(_id);
   data.status = status;
 
   const properties: PropertyType = await propertyModel.create(data);
@@ -57,7 +57,7 @@ async function createProperty(data: Property, _id: string) {
   return savedProperty;
 }
 
-async function visiblePropertyChecker(id:string) {
+async function visiblePropertyChecker(id:string):Promise<Status> {
   const user: User | null = await userModel
     .findById(id)
     .populate({ path: "properties" });

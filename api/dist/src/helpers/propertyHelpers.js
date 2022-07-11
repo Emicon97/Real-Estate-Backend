@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getOwnersId = exports.getOwnersTelephone = exports.deleteProperty = exports.updateProperty = exports.getPropertyById = exports.createProperty = exports.getPropertyManager = void 0;
 const properties_1 = __importDefault(require("../models/properties"));
+const properties_2 = require("../models/properties");
 const users_1 = __importDefault(require("./../models/users"));
 const filters_1 = require("./filters");
 function getPropertyManager(filters, location, max) {
@@ -59,11 +60,12 @@ function getPropertyById(id) {
 exports.getPropertyById = getPropertyById;
 function createProperty(data, _id) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield visiblePropertyChecker(_id);
-        // const properties: PropertyType = await propertyModel.create(data);
-        // const savedProperty: Property = await properties.save();
-        // await userModel.findByIdAndUpdate(_id, { $push: { properties } });
-        // return savedProperty;
+        const status = yield visiblePropertyChecker(_id);
+        data.status = status;
+        const properties = yield properties_1.default.create(data);
+        const savedProperty = yield properties.save();
+        yield users_1.default.findByIdAndUpdate(_id, { $push: { properties } });
+        return savedProperty;
     });
 }
 exports.createProperty = createProperty;
@@ -75,6 +77,8 @@ function visiblePropertyChecker(id) {
         var available = 0;
         if (!user)
             throw new Error('No hemos podido acceder a sus datos.');
+        if (user.range === 'vip')
+            return properties_2.Status.vipHot;
         for (let property of user === null || user === void 0 ? void 0 : user.properties) {
             const prop = property;
             if (prop && prop.status === 'available') {
@@ -82,7 +86,9 @@ function visiblePropertyChecker(id) {
             }
         }
         if (available >= 3)
-            console.log('hola');
+            return properties_2.Status.invisible;
+        else
+            return properties_2.Status.available;
     });
 }
 function updateProperty(_id, data) {
