@@ -50,6 +50,12 @@ export class User {
 
   @prop({ default: false })
   public authorized: boolean;
+
+  @prop()
+  public subscription: string;
+
+  @prop({ ref: () => Property })
+  public cart: Ref<Property>[];
 }
 
 type TUserType = ReturnModelType<typeof User>;
