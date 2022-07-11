@@ -18,70 +18,37 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ override: true });
 function getPaymentById(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const url = "https://api.mercadopago.com/preapproval";
-        const subscription = yield axios.get(`${url}/${id}`, {
+        const url = "https://api.mercadopago.com/checkout/preferences";
+        console.log('holaaa');
+        const payment = yield axios.get(`${url}/${id}`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
             },
         });
-        return subscription.data.init_point;
+        return payment.data;
     });
 }
 exports.getPaymentById = getPaymentById;
-function createPayment({ email, reason, }) {
+function createPayment({ email, items, }) {
     return __awaiter(this, void 0, void 0, function* () {
-        const url = "https://api.mercadopago.com/preapproval";
+        const url = "https://api.mercadopago.com/checkout/preferences";
         const body = {
-            reason,
-            auto_recurring: {
-                frequency: 1,
-                frequency_type: "months",
-                transaction_amount: reason === "Mikasa Nueva Premium" ? 100 : 200,
-                currency_id: "ARS",
-            },
-            back_url: "https://mikasa-nueva.vercel.app/success",
             payer_email: email,
-            // payer_email: email,
-            // items,
-            // back_urls: {
-            //   failure: "/failure",
-            //   pending: "/pending",
-            //   success: "https://mikasa-nueva.vercel.app/success"
-            // }
+            items,
+            back_urls: {
+                failure: "/failure",
+                pending: "/pending",
+                success: "https://mikasa-nueva.vercel.app/success"
+            }
         };
-        const subscription = yield axios.post(url, body, {
+        const payment = yield axios.post(url, body, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
             },
         });
-        console.log(subscription.data);
-        return subscription.data.init_point;
+        return payment.data.init_point;
     });
 }
 exports.createPayment = createPayment;
-function updateSubscription(id, { status, reason, }) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const url = "https://api.mercadopago.com/preapproval";
-        const body = {
-            reason,
-            auto_recurring: {
-                frequency: 1,
-                frequency_type: "months",
-                transaction_amount: 10,
-                currency_id: "ARS",
-            },
-            back_url: "https://mikasa-nueva.vercel.app/success",
-            status,
-        };
-        const subscription = yield axios.put(`${url}/${id}`, body, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
-            },
-        });
-        console.log(subscription.data);
-        return subscription.data.init_point;
-    });
-}
