@@ -5,5 +5,6 @@ declare namespace Express {
    export interface Request {
       user: User;
       properties: Property[];
+      files: any;
    }
 }

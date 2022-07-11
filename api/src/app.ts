@@ -4,6 +4,11 @@ import morgan from "morgan";
 const { CORS_URL } = process.env;
 const routes = require("./routes/index");
 
+//Para subir múltiples imágenes a cloudinary:
+const upload =require('./helpers/multer')
+const cloudinary = require('./helpers/cloudinary')
+const fs = require('fs')
+
 const app = express();
 
 app.use(morgan("dev"));
@@ -22,8 +27,35 @@ app.use((req, res, next) => {
 //   next()
 // }, cors({ maxAge: 84600 }))
 app.use(express.json());
+
+//upload post request:
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/", routes);
+
+//ruta upload: 
+app.use("/uploadimages", upload.array('image'), async (req, res) => {
+
+  const uploader = async (path: string) => await cloudinary.uploads(path, 'Images')
+
+  if (req.method === 'POST') {
+    const urls = []
+    const files = req.files
+
+    for (const file of files) {
+      const { path }= file
+      try {
+        const newPath = await uploader(path)
+        urls.push(newPath)
+        fs.unlinkSync(path)
+      } catch (error) {
+        console.log(error)        
+      }
+    }
+    res.status(200).json({ message: 'Imágenes suubidas correctamente.', data: urls })
+  } else {
+    res.status(405).json({ err: "Images not uploaded succesfully." })
+  }
+})
 
 export default app;
