@@ -3,21 +3,7 @@ import jwt from 'jsonwebtoken';
 import loginModel, { Login } from './../models/refresh_login';
 
 export const TokenValidation = async (req:Request, res:Response, next:NextFunction) => {
-<<<<<<< HEAD
-    const authToken = req.headers['auth-token'] as string;
-    const owner = req.headers['id'] as string;
-    
-    const refreshInstance:Login | null = await loginModel.findOne({ owner });
-    console.log(refreshInstance)
-    if (refreshInstance === null) return res.sendStatus(403);
-    const refreshToken = refreshInstance.token;
-
-    if (!authToken) return res.sendStatus(401);
-    
-    const { payload: refresh } = verifyRefreshJWT(refreshToken);
-=======
     try {
->>>>>>> ab45700021b78ceadbb2853b4bb86ac37c00592d
 
         const authToken = req.headers['auth-token'] as string;
         const owner = req.headers['id'] as string;
