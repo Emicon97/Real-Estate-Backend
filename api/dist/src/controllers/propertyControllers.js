@@ -24,7 +24,8 @@ function searchProperties(req, res, next) {
                 return next();
             }
             else {
-                res.json(allProperties);
+                const sortProperties = (0, filters_1.visibilityFilterAndSort)(allProperties);
+                res.json(sortProperties);
             }
         }
         catch (error) {

@@ -70,6 +70,10 @@ function verifyRefreshJWT (token:string) {
         return { payload: decoded, expired: false };
     } catch (error:any) {
         console.log(error);
+        if (error.message.includes("jwt expired")) {
+            loginModel.findOneAndDelete({ token });
+        }
+
         return { payload: null, expired: error.message.includes("jwt expired") };
-      }
+    }
 }

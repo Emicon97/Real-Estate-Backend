@@ -61,7 +61,39 @@ async function searchByUser(
       }
     });
   });
-  return userProperties;
+
+  if (follower) return visibilityFilterAndSort(userProperties);
+  else return userProperties;
 }
 
-export { searchByFilter, searchByLocation, searchByUser };
+function visibilityFilterAndSort(properties: Property[]): Property[] {
+  const filtered: Property[] = [];
+  for (let property of properties) {
+    if (
+      property.status === "available" ||
+      property.status === "hot" ||
+      property.status === "vipHot"
+    ) {
+      filtered.push(property);
+    }
+  }
+
+  filtered.sort((a, b) => {
+    if (a.status === 'available' && b.status !== 'available') {
+      return 1;
+    }
+    if (a.status !== 'available' && b.status === 'available') {
+      return -1;
+    }
+    return 0;
+  })
+
+  return filtered;
+}
+
+export {
+  searchByFilter,
+  searchByLocation,
+  searchByUser,
+  visibilityFilterAndSort,
+};
