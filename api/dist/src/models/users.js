@@ -18,6 +18,7 @@ var Range;
     Range["premium"] = "premium";
     Range["vip"] = "vip";
     Range["admin"] = "admin";
+    Range["banned"] = "banned";
 })(Range || (Range = {}));
 let User = class User {
 };
