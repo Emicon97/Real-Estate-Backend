@@ -59,7 +59,7 @@ async function googleLogIn(req: Request, res: Response, next: NextFunction) {
 async function tokenManagement(req: Request, res: Response) {
   try {
     const user = req.user;
-    if (user.status === 'banned') throw new Error ('Usuario banneado.');
+    if (user.status === 'banned') return res.send('Usuario banneado.');
     const token: string = TokenCreation(user.email);
     await RefreshToken(user._id);
     // const cookieConfig:CookieOptions = {
