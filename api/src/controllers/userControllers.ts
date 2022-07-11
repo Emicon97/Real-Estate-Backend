@@ -115,8 +115,9 @@ async function updateData(req: Request, res: Response) {
 
 async function banUser(req: Request, res: Response) {
   try {
-    const data = req.body.id;
-    const message = await deleteUser(data);
+    const { id } = req.params;
+    
+    const message = await deleteUser(id);
     res.status(201).json(message);
   } catch (error: any) {
     if (error instanceof Error) {

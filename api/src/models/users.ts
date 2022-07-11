@@ -14,6 +14,7 @@ enum Range {
   premium = "premium",
   vip = "vip",
   admin = "admin",
+  banned = "banned"
 }
 
 export interface Cart {
