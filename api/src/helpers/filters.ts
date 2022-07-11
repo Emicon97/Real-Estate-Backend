@@ -51,7 +51,7 @@ async function searchByUser(
   follower?: string
 ): Promise<Property[]> {
   const userProperties: Property[] = [];
-
+  
   const search = follower ? user.favourites : user.properties;
 
   search.forEach((property: any) => {
@@ -61,7 +61,7 @@ async function searchByUser(
       }
     });
   });
-
+  
   if (follower) return visibilityFilterAndSort(userProperties);
   else return userProperties;
 }

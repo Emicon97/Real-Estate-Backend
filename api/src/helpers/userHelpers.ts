@@ -1,6 +1,6 @@
 import userModel from "../models/users";
 import { User, UserType } from "../models/users";
-import propertyModel, { PropertyType } from "./../models/properties";
+import { rangeManager } from "./subscriptionHelpers";
 
 async function getUserProperties(
   id: string,
@@ -20,11 +20,13 @@ async function getUserProperties(
   throw new Error("No hemos encontrado ninguna propiedad.");
 }
 
-async function getUserById(id: string): Promise<User> {
+async function getUserById(id: string): Promise<User | null> {
   const user: User | null = await userModel.findById(id);
 
   if (user !== null) {
-    return user;
+    const updated:User | null = await rangeManager(id);
+
+    return updated;
   }
 
   throw new Error("Hubo un error al procesar sus datos.");
