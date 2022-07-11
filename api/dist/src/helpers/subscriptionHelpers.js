@@ -82,7 +82,7 @@ function propertyStatusManager(user, status) {
             for (let property of user.properties) {
                 const prop = property;
                 yield properties_1.default.findByIdAndUpdate(prop === null || prop === void 0 ? void 0 : prop._id, {
-                    status: "invisible ",
+                    status: "invisible",
                 });
             }
         }

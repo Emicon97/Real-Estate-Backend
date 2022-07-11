@@ -75,8 +75,8 @@ function tokenManagement(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const user = req.user;
-            if (user.status === 'banned')
-                return res.send('Usuario banneado.');
+            if (user.range === 'banned')
+                checkIfBanned();
             const token = (0, JsonWebToken_1.TokenCreation)(user.email);
             yield (0, JsonWebToken_1.RefreshToken)(user._id);
             // const cookieConfig:CookieOptions = {
@@ -100,3 +100,6 @@ function tokenManagement(req, res) {
     });
 }
 exports.tokenManagement = tokenManagement;
+function checkIfBanned() {
+    throw new Error('Usuario eliminado.');
+}
