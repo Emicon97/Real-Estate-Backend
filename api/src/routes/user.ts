@@ -18,7 +18,7 @@ router.get("/", getUsers);
 router.post("/", postUser);
 
 router.put("/addfavs/:id", TokenValidation, addFavs);
-router.put("/addcart/:id", TokenValidation, addCart);
+router.put("/addcart/:id", addCart);
 router.put("/:id", TokenValidation, updateData);
 
 router.delete("/:id", TokenValidation, banUser);

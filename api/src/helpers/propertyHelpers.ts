@@ -1,6 +1,6 @@
 import propertyModel from "../models/properties";
 import { Status, Property, PropertyType } from "../models/properties";
-import userModel, { User, UserType } from "./../models/users";
+import userModel, { Cart, User, UserType } from "./../models/users";
 import { searchByFilter, searchByLocation } from "./filters";
 
 async function getPropertyManager(
@@ -46,8 +46,8 @@ async function getPropertyById(id: string): Promise<Property> {
   throw new Error("Esta propiedad no está disponible.");
 }
 
-async function createProperty(data: Property, _id: string):Promise<Property> {
-  const status:Status = await visiblePropertyChecker(_id);
+async function createProperty(data: Property, _id: string): Promise<Property> {
+  const status: Status = await visiblePropertyChecker(_id);
   data.status = status;
 
   const properties: PropertyType = await propertyModel.create(data);
@@ -57,19 +57,19 @@ async function createProperty(data: Property, _id: string):Promise<Property> {
   return savedProperty;
 }
 
-async function visiblePropertyChecker(id:string):Promise<Status> {
+async function visiblePropertyChecker(id: string): Promise<Status> {
   const user: User | null = await userModel
     .findById(id)
     .populate({ path: "properties" });
 
-  var available:number = 0;
-  if (!user) throw new Error ('No hemos podido acceder a sus datos.');
-  
-  if (user.range === 'vip') return Status.vipHot;
-  
+  var available: number = 0;
+  if (!user) throw new Error("No hemos podido acceder a sus datos.");
+
+  if (user.range === "vip") return Status.vipHot;
+
   for (let property of user?.properties) {
     const prop = property as Property;
-    if (prop && prop.status === 'available') {
+    if (prop && prop.status === "available") {
       available++;
     }
   }
@@ -94,6 +94,16 @@ async function getOwnersTelephone(id: string): Promise<number> {
   throw new Error("No fue posible encontrar datos sobre el dueño.");
 }
 
+async function getCart(id: string): Promise<Cart[]> {
+  const user = await userModel.findById(id).populate({ path: "cart" });
+
+  if (user && user.cart) {
+    return user?.cart;
+  }
+
+  throw new Error("Hubo un error al procesar sus datos.");
+}
+
 async function getOwnersId(id: string): Promise<string> {
   const owner: UserType | null = await userModel.findOne({ properties: id });
   if (owner) return owner.id;
@@ -106,6 +116,7 @@ export {
   getPropertyById,
   updateProperty,
   deleteProperty,
+  getCart,
   getOwnersTelephone,
   getOwnersId,
 };

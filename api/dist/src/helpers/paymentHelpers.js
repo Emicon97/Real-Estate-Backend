@@ -19,13 +19,13 @@ dotenv_1.default.config({ override: true });
 function getPaymentById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         const url = "https://api.mercadopago.com/checkout/preferences";
-        console.log('holaaa');
         const payment = yield axios.get(`${url}/${id}`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
             },
         });
+        console.log(payment.data);
         return payment.data;
     });
 }
@@ -48,6 +48,7 @@ function createPayment({ email, items, }) {
                 Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
             },
         });
+        console.log(payment.data);
         return payment.data.init_point;
     });
 }

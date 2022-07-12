@@ -7,17 +7,19 @@ import {
   updateProperties,
   deleteProperties,
   getOwnersTelephoneByProperty,
+  getPropertyByCart,
 } from "../controllers/propertyControllers";
 import { getOwnerById } from "../controllers/userControllers";
 import { TokenValidation } from "./../libs/JsonWebToken";
 
 const router = Router();
 
+router.get("/cart/:id", TokenValidation, getPropertyByCart);
 router.get("/getownersphone/:id", getOwnersTelephoneByProperty);
 router.get("/:id", getProperty);
 
 router.post("/search", searchProperties);
-router.post("/:id", postProperty);
+router.post("/:id", TokenValidation, postProperty);
 
 router.post(
   "/:id/search",

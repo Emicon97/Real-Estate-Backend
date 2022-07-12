@@ -18,6 +18,16 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const properties_1 = __importDefault(require("../models/properties"));
 const users_1 = __importDefault(require("./../models/users"));
 dotenv_1.default.config({ override: true });
+function getUserBySubscription(subscription) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = yield users_1.default.findOne({ subscription });
+        if (user) {
+            const updated = yield rangeManager(user._id);
+            return updated;
+        }
+    });
+}
+exports.getUserBySubscription = getUserBySubscription;
 function rangeManager(id) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield users_1.default
@@ -89,16 +99,6 @@ function propertyStatusManager(user, status) {
     });
 }
 exports.propertyStatusManager = propertyStatusManager;
-function getUserBySubscription(subscription) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const user = yield users_1.default.findOne({ subscription });
-        if (user) {
-            const updated = yield rangeManager(user._id);
-            return updated;
-        }
-    });
-}
-exports.getUserBySubscription = getUserBySubscription;
 function getSubscriptionById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         const url = "https://api.mercadopago.com/preapproval";
@@ -111,7 +111,7 @@ function getSubscriptionById(id) {
         return subscription.data;
     });
 }
-function createSubscription({ email, reason, }) {
+function createSubscription({ email, reason, id, }) {
     return __awaiter(this, void 0, void 0, function* () {
         const url = "https://api.mercadopago.com/preapproval";
         const body = {
@@ -131,6 +131,7 @@ function createSubscription({ email, reason, }) {
                 Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
             },
         });
+        yield users_1.default.findByIdAndUpdate(id, { subscription: subscription.data.id });
         return subscription.data.init_point;
     });
 }

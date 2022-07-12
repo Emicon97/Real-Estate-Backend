@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOwnersId = exports.getOwnersTelephone = exports.deleteProperty = exports.updateProperty = exports.getPropertyById = exports.createProperty = exports.getPropertyManager = void 0;
+exports.getOwnersId = exports.getOwnersTelephone = exports.getCart = exports.deleteProperty = exports.updateProperty = exports.getPropertyById = exports.createProperty = exports.getPropertyManager = void 0;
 const properties_1 = __importDefault(require("../models/properties"));
 const properties_2 = require("../models/properties");
 const users_1 = __importDefault(require("./../models/users"));
@@ -76,12 +76,12 @@ function visiblePropertyChecker(id) {
             .populate({ path: "properties" });
         var available = 0;
         if (!user)
-            throw new Error('No hemos podido acceder a sus datos.');
-        if (user.range === 'vip')
+            throw new Error("No hemos podido acceder a sus datos.");
+        if (user.range === "vip")
             return properties_2.Status.vipHot;
         for (let property of user === null || user === void 0 ? void 0 : user.properties) {
             const prop = property;
-            if (prop && prop.status === 'available') {
+            if (prop && prop.status === "available") {
                 available++;
             }
         }
@@ -114,6 +114,16 @@ function getOwnersTelephone(id) {
     });
 }
 exports.getOwnersTelephone = getOwnersTelephone;
+function getCart(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = yield users_1.default.findById(id).populate({ path: "cart" });
+        if (user && user.cart) {
+            return user === null || user === void 0 ? void 0 : user.cart;
+        }
+        throw new Error("Hubo un error al procesar sus datos.");
+    });
+}
+exports.getCart = getCart;
 function getOwnersId(id) {
     return __awaiter(this, void 0, void 0, function* () {
         const owner = yield users_1.default.findOne({ properties: id });

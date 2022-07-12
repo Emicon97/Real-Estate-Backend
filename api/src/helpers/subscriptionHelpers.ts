@@ -5,6 +5,14 @@ import { User } from "../models/users";
 import userModel from "./../models/users";
 dotenv.config({ override: true });
 
+async function getUserBySubscription(subscription: string) {
+  const user: any = await userModel.findOne({ subscription });
+  if (user) {
+    const updated: User | null = await rangeManager(user._id);
+    return updated;
+  }
+}
+
 async function rangeManager(id: string): Promise<User | null> {
   const user: User | null = await userModel
     .findById(id)
@@ -77,14 +85,6 @@ async function propertyStatusManager(user: User, status: string) {
   }
 }
 
-async function getUserBySubscription(subscription: string) {
-  const user: any = await userModel.findOne({ subscription });
-  if (user) {
-    const updated: User | null = await rangeManager(user._id);
-    return updated;
-  }
-}
-
 async function getSubscriptionById(id: string) {
   const url = "https://api.mercadopago.com/preapproval";
 
@@ -101,9 +101,11 @@ async function getSubscriptionById(id: string) {
 async function createSubscription({
   email,
   reason,
+  id,
 }: {
   email: string;
   reason: string;
+  id: string;
 }) {
   const url = "https://api.mercadopago.com/preapproval";
 
@@ -125,6 +127,8 @@ async function createSubscription({
       Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
     },
   });
+  
+  await userModel.findByIdAndUpdate(id, { subscription: subscription.data.id })
   return subscription.data.init_point;
 }
 

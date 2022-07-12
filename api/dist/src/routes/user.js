@@ -8,7 +8,7 @@ router.get("/:id", userControllers_1.getOwnerById);
 router.get("/", userControllers_1.getUsers);
 router.post("/", userControllers_1.postUser);
 router.put("/addfavs/:id", JsonWebToken_1.TokenValidation, userControllers_1.addFavs);
-router.put("/addcart/:id", JsonWebToken_1.TokenValidation, userControllers_1.addCart);
+router.put("/addcart/:id", userControllers_1.addCart);
 router.put("/:id", JsonWebToken_1.TokenValidation, userControllers_1.updateData);
 router.delete("/:id", JsonWebToken_1.TokenValidation, userControllers_1.banUser);
 exports.default = router;
