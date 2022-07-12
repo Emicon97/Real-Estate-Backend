@@ -80,11 +80,11 @@ async function cart(id: string, title: string): Promise<User> {
   const cartItems: Cart[] = user?.cart as Cart[];
   for (let property of cartItems) {
     if (property.title === title) {
-      const updated:User | null = await userModel.findByIdAndUpdate(id, { $pull: { cart } });
+      const updated = await userModel.findByIdAndUpdate(id, { $pull: { cart } }, {new: true});
       if (updated) return updated;
     }
   }
-  const added = await userModel.findByIdAndUpdate(id, { $push: { cart } });
+  const added = await userModel.findByIdAndUpdate(id, { $push: { cart } }, {new: true});
   if (added) return added;
   throw new Error ('No se pudo conectar con el carrito de compras.');
 }

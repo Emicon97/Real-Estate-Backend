@@ -96,12 +96,12 @@ function cart(id, title) {
         const cartItems = user === null || user === void 0 ? void 0 : user.cart;
         for (let property of cartItems) {
             if (property.title === title) {
-                const updated = yield users_1.default.findByIdAndUpdate(id, { $pull: { cart } });
+                const updated = yield users_1.default.findByIdAndUpdate(id, { $pull: { cart } }, { new: true });
                 if (updated)
                     return updated;
             }
         }
-        const added = yield users_1.default.findByIdAndUpdate(id, { $push: { cart } });
+        const added = yield users_1.default.findByIdAndUpdate(id, { $push: { cart } }, { new: true });
         if (added)
             return added;
         throw new Error('No se pudo conectar con el carrito de compras.');
