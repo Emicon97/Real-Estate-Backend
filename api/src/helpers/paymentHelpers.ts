@@ -4,14 +4,14 @@ dotenv.config({ override: true });
 
 async function getPaymentById(id: string) {
   const url = "https://api.mercadopago.com/checkout/preferences";
-  console.log('holaaa')
+  
   const payment = await axios.get(`${url}/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
     },
   });
-
+  console.log(payment.data)
   return payment.data;
 }
 
@@ -40,6 +40,7 @@ async function createPayment({
       Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
     },
   });
+  console.log(payment.data)
   return payment.data.init_point;
 }
 

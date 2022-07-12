@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Property } from "../models/properties";
-import { User } from "./../models/users";
+import { Cart, User } from "./../models/users";
 import {
   createProperty,
   getPropertyById,
@@ -8,8 +8,15 @@ import {
   updateProperty,
   getPropertyManager,
   getOwnersTelephone,
+  getCart,
 } from "../helpers/propertyHelpers";
 import { searchByUser, visibilityFilterAndSort } from "../helpers/filters";
+
+interface CartData {
+  cart: Cart[];
+  properties: Property[];
+}
+
 
 async function searchProperties(
   req: Request,
@@ -33,6 +40,29 @@ async function searchProperties(
       const sortProperties = visibilityFilterAndSort(allProperties);
       res.json(sortProperties);
     }
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
+    }
+  }
+}
+
+async function getPropertyByCart(req:Request, res: Response) {
+  try {
+    const { id } = req.params;
+
+    const cart:Cart[] = await getCart(id);
+    const properties:Property[] = [];
+    for (let property of cart) {
+      let prop = await getPropertyById(property.title);
+      properties.push(prop);
+    }
+    const totalCart:CartData = { cart, properties };
+    console.log(totalCart.cart);
+    res.json(totalCart);
   } catch (error: any) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -151,6 +181,7 @@ export {
   searchProperties,
   getPropertyByOwner,
   getProperty,
+  getPropertyByCart,
   updateProperties,
   deleteProperties,
   getOwnersTelephoneByProperty,
