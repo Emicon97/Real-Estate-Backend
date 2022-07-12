@@ -10,8 +10,8 @@ const router = Router();
 
 router.get("/:id", getSubscription);
 
-router.post("/", TokenValidation, postSubscription);
+router.post("/", postSubscription);
 
-router.put("/:id", TokenValidation, updateSubscription);
+router.put("/:id", updateSubscription);
 
 export default router;

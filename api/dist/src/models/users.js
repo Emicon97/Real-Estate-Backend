@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typegoose_1 = require("@typegoose/typegoose");
+const flags_1 = require("./flags");
 const properties_1 = require("./properties");
 var Range;
 (function (Range) {
@@ -78,6 +79,10 @@ __decorate([
     (0, typegoose_1.prop)(),
     __metadata("design:type", Array)
 ], User.prototype, "cart", void 0);
+__decorate([
+    (0, typegoose_1.prop)({ ref: () => flags_1.Flag }),
+    __metadata("design:type", Object)
+], User.prototype, "flags", void 0);
 User = __decorate([
     (0, typegoose_1.modelOptions)({ options: { allowMixed: typegoose_1.Severity.ALLOW } })
 ], User);

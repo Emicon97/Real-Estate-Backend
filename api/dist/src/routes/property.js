@@ -6,6 +6,7 @@ const userControllers_1 = require("../controllers/userControllers");
 const JsonWebToken_1 = require("./../libs/JsonWebToken");
 const router = (0, express_1.Router)();
 router.get("/cart/:id", JsonWebToken_1.TokenValidation, propertyControllers_1.getPropertyByCart);
+router.get("/onlycart/:id", JsonWebToken_1.TokenValidation, propertyControllers_1.getOnlyCart);
 router.get("/getownersphone/:id", propertyControllers_1.getOwnersTelephoneByProperty);
 router.get("/:id", propertyControllers_1.getProperty);
 router.post("/search", propertyControllers_1.searchProperties);

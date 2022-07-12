@@ -3,14 +3,16 @@ import {
   getModelForClass,
   ReturnModelType,
   DocumentType,
+  Ref,
 } from "@typegoose/typegoose";
+import { Comment } from "./comments";
 
 export enum Status {
   available = "available",
   hot = "hot",
   vipHot = "vipHot",
   invisible = "invisible",
-  reserved = "reserved"
+  reserved = "reserved",
 }
 enum Operation {
   sell = "sell",
@@ -59,6 +61,12 @@ export class Property {
 
   @prop({ type: String })
   public pictures: string[];
+
+  @prop({ ref: () => Comment })
+  public comments: Ref<Comment[]>;
+
+  @prop()
+  public payment: string;
 }
 
 type TPropertyModel = ReturnModelType<typeof Property>;

@@ -1,7 +1,7 @@
 import userModel from "../models/users";
 import { User, UserType } from "../models/users";
 import { Cart } from "./../models/users";
-import { propertyStatusManager } from "./subscriptionHelpers";
+import { propertyStatusManager, rangeManager } from "./subscriptionHelpers";
 
 async function getUserProperties(
   id: string,
@@ -24,9 +24,11 @@ async function getUserProperties(
 async function getUserById(id: string): Promise<User | null> {
   const user: User | null = await userModel
     .findById(id)
-    .populate({ path: "properties" });
+    .populate([{ path: "properties" }, { path: "flags" }]);
 
   if (user !== null) {
+
+    await rangeManager(id);
     return user;
   }
 
@@ -78,12 +80,13 @@ async function cart(id: string, title: string): Promise<User> {
   const cartItems: Cart[] = user?.cart as Cart[];
   for (let property of cartItems) {
     if (property.title === title) {
-      await userModel.findByIdAndUpdate(id, { $pull: { cart } });
-      return user;
+      const updated:User | null = await userModel.findByIdAndUpdate(id, { $pull: { cart } });
+      if (updated) return updated;
     }
   }
-  await userModel.findByIdAndUpdate(id, { $push: { cart } });
-  return user;
+  const added = await userModel.findByIdAndUpdate(id, { $push: { cart } });
+  if (added) return added;
+  throw new Error ('No se pudo conectar con el carrito de compras.');
 }
 
 async function deleteUser(id: string): Promise<User[]> {

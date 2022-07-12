@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createPayment = exports.getPaymentById = void 0;
 const axios = require("axios");
 const dotenv_1 = __importDefault(require("dotenv"));
+const properties_1 = __importDefault(require("../models/properties"));
 dotenv_1.default.config({ override: true });
 function getPaymentById(id) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -25,7 +26,11 @@ function getPaymentById(id) {
                 Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
             },
         });
-        console.log(payment.data);
+        for (let item of payment.data.items) {
+            yield properties_1.default.findByIdAndUpdate(item.title, {
+                status: "hot",
+            });
+        }
         return payment.data;
     });
 }
@@ -39,8 +44,8 @@ function createPayment({ email, items, }) {
             back_urls: {
                 failure: "/failure",
                 pending: "/pending",
-                success: "https://mikasa-nueva.vercel.app/success"
-            }
+                success: "https://mikasa-nueva.vercel.app/purchase",
+            },
         };
         const payment = yield axios.post(url, body, {
             headers: {
@@ -48,7 +53,11 @@ function createPayment({ email, items, }) {
                 Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
             },
         });
-        console.log(payment.data);
+        for (let item of payment.data.items) {
+            yield properties_1.default.findByIdAndUpdate(item.title, {
+                payment: payment.data.id,
+            });
+        }
         return payment.data.init_point;
     });
 }
