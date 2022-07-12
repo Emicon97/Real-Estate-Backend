@@ -45,10 +45,14 @@ async function createRefreshToken(code: string, id: string) {
 
 async function getRefreshByOwner(id: string): Promise<void> {
   const refresh: Refresh | null = await refreshModel.findOne({ owner: id });
-
-  if (refresh !== null) {
-    oAuth2Client.setCredentials({ refresh_token: refresh.token });
-    return;
+  
+  try {
+    if (refresh !== null) {
+      oAuth2Client.setCredentials({ refresh_token: refresh.token });
+      return;
+    }
+  } catch (error) {
+    console.log(error);
   }
 
   throw new Error("No ha dado autorización para acceder al calendario.");

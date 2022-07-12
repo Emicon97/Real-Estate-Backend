@@ -9,6 +9,8 @@ import contactRoutes from "./contact";
 import calendarRoutes from "./calendar";
 import subscriptionRoutes from "./subscription";
 import paymentRoutes from "./payment";
+import flagRoutes from "./flag";
+import commentRoutes from "./comment";
 
 const router = Router();
 
@@ -21,5 +23,7 @@ router.use("/contact", contactRoutes);
 router.use("/subscription", subscriptionRoutes);
 router.use("/calendar", calendarRoutes);
 router.use("/payment", paymentRoutes);
+router.use("/flag", flagRoutes);
+router.use("/comment", commentRoutes);
 
 export = router;

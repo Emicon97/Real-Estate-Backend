@@ -1,6 +1,5 @@
 import {
   prop,
-  Ref,
   getModelForClass,
   ReturnModelType,
   DocumentType,

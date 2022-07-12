@@ -35,8 +35,9 @@ function getUserById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield users_1.default
             .findById(id)
-            .populate({ path: "properties" });
+            .populate([{ path: "properties" }, { path: "flags" }]);
         if (user !== null) {
+            yield (0, subscriptionHelpers_1.rangeManager)(id);
             return user;
         }
         throw new Error("Hubo un error al procesar sus datos.");
@@ -95,12 +96,15 @@ function cart(id, title) {
         const cartItems = user === null || user === void 0 ? void 0 : user.cart;
         for (let property of cartItems) {
             if (property.title === title) {
-                yield users_1.default.findByIdAndUpdate(id, { $pull: { cart } });
-                return user;
+                const updated = yield users_1.default.findByIdAndUpdate(id, { $pull: { cart } });
+                if (updated)
+                    return updated;
             }
         }
-        yield users_1.default.findByIdAndUpdate(id, { $push: { cart } });
-        return user;
+        const added = yield users_1.default.findByIdAndUpdate(id, { $push: { cart } });
+        if (added)
+            return added;
+        throw new Error('No se pudo conectar con el carrito de compras.');
     });
 }
 exports.cart = cart;
