@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateSubscriptionById = exports.createSubscription = exports.propertyStatusManager = exports.getUserBySubscription = void 0;
+exports.updateSubscriptionById = exports.createSubscription = exports.propertyStatusManager = exports.rangeManager = exports.getUserBySubscription = void 0;
 const axios = require("axios");
 const dotenv_1 = __importDefault(require("dotenv"));
 const properties_1 = __importDefault(require("../models/properties"));
@@ -53,6 +53,7 @@ function rangeManager(id) {
         throw new Error("Algo salió mal.");
     });
 }
+exports.rangeManager = rangeManager;
 function propertyStatusManager(user, status) {
     return __awaiter(this, void 0, void 0, function* () {
         if (status === "free") {

@@ -7,6 +7,7 @@ import {
   modelOptions,
   Severity,
 } from "@typegoose/typegoose";
+import { Flag } from "./flags";
 import { Property } from "./properties";
 
 enum Range {
@@ -14,7 +15,7 @@ enum Range {
   premium = "premium",
   vip = "vip",
   admin = "admin",
-  banned = "banned"
+  banned = "banned",
 }
 
 export interface Cart {
@@ -23,7 +24,7 @@ export interface Cart {
   unit_price: number;
 }
 
-@modelOptions({options: { allowMixed: Severity.ALLOW }})
+@modelOptions({ options: { allowMixed: Severity.ALLOW } })
 export class User {
   @prop({ required: true })
   public name: string;
@@ -65,7 +66,10 @@ export class User {
   public subscription: string;
 
   @prop()
-  public cart:Cart[];
+  public cart: Cart[];
+
+  @prop({ ref: () => Flag })
+  public flags: Ref<Flag>;
 }
 
 type TUserType = ReturnModelType<typeof User>;

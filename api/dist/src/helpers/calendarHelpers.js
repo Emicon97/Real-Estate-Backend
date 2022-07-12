@@ -61,9 +61,14 @@ exports.createRefreshToken = createRefreshToken;
 function getRefreshByOwner(id) {
     return __awaiter(this, void 0, void 0, function* () {
         const refresh = yield refresh_token_1.default.findOne({ owner: id });
-        if (refresh !== null) {
-            oAuth2Client.setCredentials({ refresh_token: refresh.token });
-            return;
+        try {
+            if (refresh !== null) {
+                oAuth2Client.setCredentials({ refresh_token: refresh.token });
+                return;
+            }
+        }
+        catch (error) {
+            console.log(error);
         }
         throw new Error("No ha dado autorización para acceder al calendario.");
     });

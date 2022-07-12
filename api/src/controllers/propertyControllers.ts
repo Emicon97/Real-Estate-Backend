@@ -61,8 +61,23 @@ async function getPropertyByCart(req:Request, res: Response) {
       properties.push(prop);
     }
     const totalCart:CartData = { cart, properties };
-    console.log(totalCart.cart);
     res.json(totalCart);
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(404).json(error);
+    } else {
+      console.log("Unexpected Error", error);
+    }
+  }
+}
+
+async function getOnlyCart(req:Request, res: Response) {
+  try {
+    const { id } = req.params;
+
+    const cart:Cart[] = await getCart(id);
+    res.json(cart);
   } catch (error: any) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -182,6 +197,7 @@ export {
   getPropertyByOwner,
   getProperty,
   getPropertyByCart,
+  getOnlyCart,
   updateProperties,
   deleteProperties,
   getOwnersTelephoneByProperty,
