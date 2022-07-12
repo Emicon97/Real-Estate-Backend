@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOwnersTelephoneByProperty = exports.deleteProperties = exports.updateProperties = exports.getProperty = exports.getPropertyByOwner = exports.searchProperties = exports.postProperty = void 0;
+exports.getOwnersTelephoneByProperty = exports.deleteProperties = exports.updateProperties = exports.getPropertyByCart = exports.getProperty = exports.getPropertyByOwner = exports.searchProperties = exports.postProperty = void 0;
 const propertyHelpers_1 = require("../helpers/propertyHelpers");
 const filters_1 = require("../helpers/filters");
 function searchProperties(req, res, next) {
@@ -40,6 +40,32 @@ function searchProperties(req, res, next) {
     });
 }
 exports.searchProperties = searchProperties;
+function getPropertyByCart(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { id } = req.params;
+            const cart = yield (0, propertyHelpers_1.getCart)(id);
+            const properties = [];
+            for (let property of cart) {
+                let prop = yield (0, propertyHelpers_1.getPropertyById)(property.title);
+                properties.push(prop);
+            }
+            const totalCart = { cart, properties };
+            console.log(totalCart.cart);
+            res.json(totalCart);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                res.status(404).json(error);
+            }
+            else {
+                console.log("Unexpected Error", error);
+            }
+        }
+    });
+}
+exports.getPropertyByCart = getPropertyByCart;
 function getPropertyByOwner(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
