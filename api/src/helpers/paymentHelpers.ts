@@ -52,7 +52,7 @@ async function createPayment({
       payment: payment.data.id,
     });
   }
-  await purchaseMail(email);
+  purchaseMail(email);
   return payment.data.init_point;
 }
 
