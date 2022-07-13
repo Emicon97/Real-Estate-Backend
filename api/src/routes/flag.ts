@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { getContact, postContactForm } from "../controllers/contactControllers";
+import { getReportsByOwner, postReport } from "../controllers/flagControllers";
 import { TokenValidation } from "../libs/JsonWebToken";
 
 const router = Router();
 
-router.get("/:id", TokenValidation, getContact);
+router.get("/:id", TokenValidation, getReportsByOwner);
 
-router.post("/", TokenValidation, postContactForm);
+router.post("/", postReport);
 
 export default router;

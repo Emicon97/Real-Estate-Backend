@@ -1,14 +1,12 @@
 import { Request, Response } from "express";
-import {
-  commentCreate,
-} from "../helpers/commentHelpers";
+import { commentCreate } from "../helpers/commentHelpers";
 
 async function postComment(req: Request, res: Response) {
   try {
     const { id } = req.params;
     const data = req.body;
-    const contact = await commentCreate(id, data);
-    res.status(201).json(contact);
+    const comment = await commentCreate(id, data);
+    res.status(201).json(comment);
   } catch (error: any) {
     if (error instanceof Error) {
       console.log(error.message);
