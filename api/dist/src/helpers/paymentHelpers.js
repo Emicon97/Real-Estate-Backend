@@ -16,6 +16,7 @@ exports.createPayment = exports.getPaymentById = void 0;
 const axios = require("axios");
 const dotenv_1 = __importDefault(require("dotenv"));
 const properties_1 = __importDefault(require("../models/properties"));
+const email_1 = require("./email");
 dotenv_1.default.config({ override: true });
 function getPaymentById(id) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -58,7 +59,7 @@ function createPayment({ email, items, }) {
                 payment: payment.data.id,
             });
         }
-        // await purchaseMail(email);
+        (0, email_1.purchaseMail)(email);
         return payment.data.init_point;
     });
 }
