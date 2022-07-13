@@ -6,6 +6,6 @@ const router = Router();
 
 router.get("/:id", TokenValidation, getReportsByOwner);
 
-router.post("/", postReport);
+router.post("/:id", postReport);
 
 export default router;
