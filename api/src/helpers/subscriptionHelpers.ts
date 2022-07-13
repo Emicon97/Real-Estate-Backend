@@ -14,29 +14,34 @@ async function getUserBySubscription(subscription: string) {
 }
 
 async function rangeManager(id: string): Promise<User | null> {
-  const user: User | null = await userModel
-    .findById(id)
-    .populate({ path: "properties" });
-    
-  if (user?.subscription) {
-    const updated: Promise<User | null> = getSubscriptionById(
-      user.subscription
-    ).then(async (response) => {
-      if (response.status === "pending" || response.status === "cancelled") {
-        await propertyStatusManager(user, "free");
-        return await userModel.findByIdAndUpdate(id, { range: "free" });
-      }
-      if (response.reason === "Mikasa Nueva Premium") {
-        await propertyStatusManager(user, "premium");
-        return await userModel.findByIdAndUpdate(id, { range: "premium" });
-      } else {
-        await propertyStatusManager(user, "vip");
-        return await userModel.findByIdAndUpdate(id, { range: "vip" });
-      }
-    });
-    return updated;
+  try {
+    const user: User | null = await userModel
+      .findById(id)
+      .populate({ path: "properties" });
+      
+    if (user?.subscription) {
+      const updated: Promise<User | null> = getSubscriptionById(
+        user.subscription
+      ).then(async (response) => {
+        if (response.status === "pending" || response.status === "cancelled") {
+          await propertyStatusManager(user, "free");
+          return await userModel.findByIdAndUpdate(id, { range: "free" });
+        }
+        if (response.reason === "Mikasa Nueva Premium") {
+          await propertyStatusManager(user, "premium");
+          return await userModel.findByIdAndUpdate(id, { range: "premium" });
+        } else {
+          await propertyStatusManager(user, "vip");
+          return await userModel.findByIdAndUpdate(id, { range: "vip" });
+        }
+      });
+      return updated;
+    }
+    return user;
+  } catch (error) {
+    console.log(error);
+    return null;
   }
-  return user;
 }
 
 async function propertyStatusManager(user: User, status: string) {
