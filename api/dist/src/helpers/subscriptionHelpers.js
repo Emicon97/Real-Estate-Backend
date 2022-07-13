@@ -17,7 +17,6 @@ const axios = require("axios");
 const dotenv_1 = __importDefault(require("dotenv"));
 const properties_1 = __importDefault(require("../models/properties"));
 const users_1 = __importDefault(require("./../models/users"));
-const email_1 = require("./email");
 dotenv_1.default.config({ override: true });
 function getUserBySubscription(subscription) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -142,7 +141,7 @@ function createSubscription({ email, reason, id, }) {
             },
         });
         yield users_1.default.findByIdAndUpdate(id, { subscription: subscription.data.id });
-        yield (0, email_1.greetingsMail)(email);
+        // await greetingsMail(email);
         return subscription.data.init_point;
     });
 }

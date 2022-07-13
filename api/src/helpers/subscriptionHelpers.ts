@@ -135,7 +135,7 @@ async function createSubscription({
     },
   });
   await userModel.findByIdAndUpdate(id, { subscription: subscription.data.id });
-  await greetingsMail(email);
+  // await greetingsMail(email);
   return subscription.data.init_point;
 }
 
