@@ -81,7 +81,7 @@ __decorate([
 ], User.prototype, "cart", void 0);
 __decorate([
     (0, typegoose_1.prop)({ ref: () => flags_1.Flag }),
-    __metadata("design:type", Object)
+    __metadata("design:type", Array)
 ], User.prototype, "flags", void 0);
 User = __decorate([
     (0, typegoose_1.modelOptions)({ options: { allowMixed: typegoose_1.Severity.ALLOW } })

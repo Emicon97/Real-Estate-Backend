@@ -69,7 +69,7 @@ export class User {
   public cart: Cart[];
 
   @prop({ ref: () => Flag })
-  public flags: Ref<Flag>;
+  public flags: Ref<Flag>[];
 }
 
 type TUserType = ReturnModelType<typeof User>;

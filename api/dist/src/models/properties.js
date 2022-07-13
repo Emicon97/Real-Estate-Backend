@@ -85,7 +85,7 @@ __decorate([
 ], Property.prototype, "pictures", void 0);
 __decorate([
     (0, typegoose_1.prop)({ ref: () => comments_1.Comment }),
-    __metadata("design:type", Object)
+    __metadata("design:type", Array)
 ], Property.prototype, "comments", void 0);
 __decorate([
     (0, typegoose_1.prop)(),
