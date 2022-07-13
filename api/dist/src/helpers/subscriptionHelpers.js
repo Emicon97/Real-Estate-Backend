@@ -35,7 +35,8 @@ function rangeManager(id) {
             const user = yield users_1.default
                 .findById(id)
                 .populate({ path: "properties" });
-            // if (user && user.range === "admin") return user;
+            if (user && user.range === "admin")
+                return user;
             if (user === null || user === void 0 ? void 0 : user.subscription) {
                 const updated = getSubscriptionById(user.subscription).then((response) => __awaiter(this, void 0, void 0, function* () {
                     if (response.status === "pending" || response.status === "cancelled") {
@@ -140,8 +141,8 @@ function createSubscription({ email, reason, id, }) {
                 Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
             },
         });
-        yield (0, email_1.greetingsMail)(email);
         yield users_1.default.findByIdAndUpdate(id, { subscription: subscription.data.id });
+        yield (0, email_1.greetingsMail)(email);
         return subscription.data.init_point;
     });
 }
