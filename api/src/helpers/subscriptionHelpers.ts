@@ -36,7 +36,7 @@ async function rangeManager(id: string): Promise<User | null> {
     });
     return updated;
   }
-  throw new Error("Algo salió mal.");
+  return user;
 }
 
 async function propertyStatusManager(user: User, status: string) {
