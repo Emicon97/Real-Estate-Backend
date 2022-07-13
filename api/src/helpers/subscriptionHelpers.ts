@@ -100,7 +100,7 @@ async function getSubscriptionById(id: string) {
       Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
     },
   });
-
+  
   return subscription.data;
 }
 
@@ -134,7 +134,7 @@ async function createSubscription({
     },
   });
   
-  await userModel.findByIdAndUpdate(id, { subscription: subscription.data.id })
+  await userModel.findByIdAndUpdate(id, { subscription: subscription.data.id });
   return subscription.data.init_point;
 }
 
@@ -159,8 +159,7 @@ async function updateSubscriptionById(
         transaction_amount: reason === "Mikasa Nueva Premium" ? 1500 : 20000,
         currency_id: "ARS",
       },
-      back_url: "https://mikasa-nueva.vercel.app/success",
-      status,
+      back_url: "https://mikasa-nueva.vercel.app/success"
     };
     const subscription = await axios.put(`${url}/${id}`, body, {
       headers: {
@@ -187,7 +186,7 @@ async function updateSubscriptionById(
         Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
       },
     });
-
+    
     return subscription.data.init_point;
   }
 }

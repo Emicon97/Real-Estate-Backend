@@ -12,7 +12,7 @@ async function getPaymentById(id: string) {
       Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
     },
   });
-
+  
   for (let item of payment.data.items) {
     await propertyModel.findByIdAndUpdate(item.title, {
       status: "hot",
