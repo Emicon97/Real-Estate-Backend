@@ -50,7 +50,7 @@ function rangeManager(id) {
             }));
             return updated;
         }
-        throw new Error("Algo salió mal.");
+        return user;
     });
 }
 exports.rangeManager = rangeManager;
