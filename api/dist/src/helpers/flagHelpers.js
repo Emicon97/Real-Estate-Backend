@@ -12,23 +12,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getContactByProperty = exports.createContactForm = void 0;
-const contact_1 = __importDefault(require("./../models/contact"));
-function createContactForm(data) {
+exports.getReportsByDenounced = exports.reportOwner = void 0;
+const flags_1 = __importDefault(require("../models/flags"));
+const propertyHelpers_1 = require("./propertyHelpers");
+function reportOwner(id, reason) {
     return __awaiter(this, void 0, void 0, function* () {
-        const contact = yield contact_1.default.create(data);
-        const savedContact = yield contact.save();
-        return savedContact;
+        const denounced = yield (0, propertyHelpers_1.getOwnersId)(id);
+        const report = yield flags_1.default.create({ denounced, reason });
+        const savedReport = yield report.save();
+        return savedReport;
     });
 }
-exports.createContactForm = createContactForm;
-function getContactByProperty(property) {
+exports.reportOwner = reportOwner;
+function getReportsByDenounced(denounced) {
     return __awaiter(this, void 0, void 0, function* () {
-        const contact = yield contact_1.default.find({ property });
-        if (contact.length) {
-            return contact;
+        const report = yield flags_1.default.find({ denounced });
+        if (report.length) {
+            return report;
         }
         throw new Error("No hay contactos para esta propiedad.");
     });
 }
-exports.getContactByProperty = getContactByProperty;
+exports.getReportsByDenounced = getReportsByDenounced;

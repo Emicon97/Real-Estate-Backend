@@ -9,13 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postContactForm = exports.getContact = void 0;
-const contactHelpers_1 = require("../helpers/contactHelpers");
-function getContact(req, res) {
+exports.postReport = exports.getReportsByOwner = void 0;
+const flagHelpers_1 = require("../helpers/flagHelpers");
+function getReportsByOwner(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
-            const contact = yield (0, contactHelpers_1.getContactByProperty)(id);
+            const contact = yield (0, flagHelpers_1.getReportsByDenounced)(id);
             res.status(201).json(contact);
         }
         catch (error) {
@@ -29,13 +29,14 @@ function getContact(req, res) {
         }
     });
 }
-exports.getContact = getContact;
-function postContactForm(req, res) {
+exports.getReportsByOwner = getReportsByOwner;
+function postReport(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const data = req.body;
-            const contact = yield (0, contactHelpers_1.createContactForm)(data);
-            res.status(201).json(contact);
+            const { id } = req.params;
+            const { reason } = req.body;
+            const report = yield (0, flagHelpers_1.reportOwner)(id, reason);
+            res.status(201).json(report);
         }
         catch (error) {
             if (error instanceof Error) {
@@ -48,4 +49,4 @@ function postContactForm(req, res) {
         }
     });
 }
-exports.postContactForm = postContactForm;
+exports.postReport = postReport;
