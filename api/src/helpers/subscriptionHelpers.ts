@@ -18,7 +18,7 @@ async function rangeManager(id: string): Promise<User | null> {
     const user: User | null = await userModel
       .findById(id)
       .populate({ path: "properties" });
-      
+    if (user && user.range === "admin") return user;
     if (user?.subscription) {
       const updated: Promise<User | null> = getSubscriptionById(
         user.subscription
