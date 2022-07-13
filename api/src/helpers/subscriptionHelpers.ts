@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import propertyModel, { Property } from "../models/properties";
 import { User } from "../models/users";
 import userModel from "./../models/users";
+import { greetingsMail } from "./email";
 dotenv.config({ override: true });
 
 async function getUserBySubscription(subscription: string) {
@@ -133,7 +134,7 @@ async function createSubscription({
       Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
     },
   });
-  
+  await greetingsMail(email);
   await userModel.findByIdAndUpdate(id, { subscription: subscription.data.id });
   return subscription.data.init_point;
 }

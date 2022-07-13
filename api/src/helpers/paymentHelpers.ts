@@ -1,6 +1,7 @@
 const axios = require("axios");
 import dotenv from "dotenv";
 import propertyModel from "../models/properties";
+import { purchaseMail } from "./email";
 dotenv.config({ override: true });
 
 async function getPaymentById(id: string) {
@@ -51,6 +52,7 @@ async function createPayment({
       payment: payment.data.id,
     });
   }
+  await purchaseMail(email);
   return payment.data.init_point;
 }
 
