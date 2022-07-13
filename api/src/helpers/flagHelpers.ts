@@ -1,12 +1,18 @@
 import flagModel, { Flag, FlagType } from "../models/flags";
+import userModel, { User } from "../models/users";
 import { getOwnersId } from "./propertyHelpers";
 
-async function reportOwner(id: string, reason: string): Promise<Flag> {
+async function reportOwner(id: string, reason: string): Promise<User | null> {
   const denounced = await getOwnersId(id);
   const report: FlagType = await flagModel.create({ denounced, reason });
 
   const savedReport: Flag = await report.save();
-  return savedReport;
+  const done: User | null = await userModel.findByIdAndUpdate(
+    denounced,
+    { $push: { flags: report } },
+    { new: true }
+  );
+  return done;
 }
 
 async function getReportsByDenounced(denounced: string): Promise<Flag[]> {
