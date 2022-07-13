@@ -14,13 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getReportsByDenounced = exports.reportOwner = void 0;
 const flags_1 = __importDefault(require("../models/flags"));
+const users_1 = __importDefault(require("../models/users"));
 const propertyHelpers_1 = require("./propertyHelpers");
 function reportOwner(id, reason) {
     return __awaiter(this, void 0, void 0, function* () {
         const denounced = yield (0, propertyHelpers_1.getOwnersId)(id);
         const report = yield flags_1.default.create({ denounced, reason });
         const savedReport = yield report.save();
-        return savedReport;
+        const done = yield users_1.default.findByIdAndUpdate(denounced, { $push: { flags: report } }, { new: true });
+        return done;
     });
 }
 exports.reportOwner = reportOwner;
