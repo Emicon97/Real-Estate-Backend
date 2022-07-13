@@ -6,6 +6,6 @@ const router = Router();
 
 router.get("/:id", getPayment);
 
-router.post("/", postPayment);
+router.post("/", TokenValidation, postPayment);
 
 export default router;

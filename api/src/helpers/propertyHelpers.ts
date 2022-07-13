@@ -38,7 +38,9 @@ async function getAllProperties(): Promise<Property[]> {
 }
 
 async function getPropertyById(id: string): Promise<Property> {
-  const propById: Property | null = await propertyModel.findById(id);
+  const propById: Property | null = await propertyModel
+    .findById(id)
+    .populate({ path: "comments" });
   if (propById !== null) {
     return propById;
   }
