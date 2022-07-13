@@ -11,6 +11,7 @@ import subscriptionRoutes from "./subscription";
 import paymentRoutes from "./payment";
 import flagRoutes from "./flag";
 import commentRoutes from "./comment";
+import emailRoutes from "./email";
 
 const router = Router();
 
@@ -25,5 +26,6 @@ router.use("/calendar", calendarRoutes);
 router.use("/payment", paymentRoutes);
 router.use("/flag", flagRoutes);
 router.use("/comment", commentRoutes);
+router.use("/email", emailRoutes);
 
 export = router;
