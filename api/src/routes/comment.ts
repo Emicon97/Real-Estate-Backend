@@ -4,6 +4,6 @@ import { TokenValidation } from "../libs/JsonWebToken";
 
 const router = Router();
 
-router.post("/:id", postComment);
+router.post("/:id", TokenValidation, postComment);
 
 export default router;
