@@ -12,23 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getContactByProperty = exports.createContactForm = void 0;
-const contact_1 = __importDefault(require("./../models/contact"));
-function createContactForm(data) {
+exports.commentCreate = void 0;
+const comments_1 = __importDefault(require("../models/comments"));
+const properties_1 = __importDefault(require("../models/properties"));
+function commentCreate(id, data) {
     return __awaiter(this, void 0, void 0, function* () {
-        const contact = yield contact_1.default.create(data);
-        const savedContact = yield contact.save();
+        const comments = yield comments_1.default.create(data);
+        const savedContact = yield comments.save();
+        yield properties_1.default.findByIdAndUpdate(id, { $push: { comments } });
         return savedContact;
     });
 }
-exports.createContactForm = createContactForm;
-function getContactByProperty(property) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const contact = yield contact_1.default.find({ property });
-        if (contact.length) {
-            return contact;
-        }
-        throw new Error("No hay contactos para esta propiedad.");
-    });
-}
-exports.getContactByProperty = getContactByProperty;
+exports.commentCreate = commentCreate;

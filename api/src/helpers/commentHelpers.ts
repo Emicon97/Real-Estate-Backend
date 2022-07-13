@@ -1,21 +1,12 @@
-import { Contact, ContactType } from "../models/contact";
-import contactModel from "./../models/contact";
+import commentModel, { Comment, CommentType } from "../models/comments";
+import propertyModel from "../models/properties";
 
-async function createContactForm(data: Contact): Promise<Contact> {
-  const contact: ContactType = await contactModel.create(data);
+async function commentCreate(id:string, data: Comment): Promise<Comment> {
+  const comments: CommentType = await commentModel.create(data);
 
-  const savedContact: Contact = await contact.save();
+  const savedContact: Comment = await comments.save();
+  await propertyModel.findByIdAndUpdate(id, { $push: { comments } });
   return savedContact;
 }
 
-async function getContactByProperty(property: string): Promise<Contact[]> {
-  const contact: Contact[] = await contactModel.find({ property });
-
-  if (contact.length) {
-    return contact;
-  }
-
-  throw new Error("No hay contactos para esta propiedad.");
-}
-
-export { createContactForm, getContactByProperty };
+export { commentCreate };
