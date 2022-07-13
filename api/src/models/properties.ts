@@ -63,7 +63,7 @@ export class Property {
   public pictures: string[];
 
   @prop({ ref: () => Comment })
-  public comments: Ref<Comment[]>;
+  public comments: Ref<Comment>[];
 
   @prop()
   public payment: string;

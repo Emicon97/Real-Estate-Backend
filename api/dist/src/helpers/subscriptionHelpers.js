@@ -34,6 +34,8 @@ function rangeManager(id) {
             const user = yield users_1.default
                 .findById(id)
                 .populate({ path: "properties" });
+            if (user && user.range === "admin")
+                return user;
             if (user === null || user === void 0 ? void 0 : user.subscription) {
                 const updated = getSubscriptionById(user.subscription).then((response) => __awaiter(this, void 0, void 0, function* () {
                     if (response.status === "pending" || response.status === "cancelled") {

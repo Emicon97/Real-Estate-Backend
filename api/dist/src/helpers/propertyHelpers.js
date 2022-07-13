@@ -50,9 +50,7 @@ function getAllProperties() {
 }
 function getPropertyById(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const propById = yield properties_1.default
-            .findById(id)
-            .populate({ path: "comments" });
+        const propById = yield properties_1.default.findById(id).populate({ path: "comments" });
         if (propById !== null) {
             return propById;
         }
