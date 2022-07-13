@@ -1,11 +1,9 @@
 const { Router } = require("express");
-import { getPayment, postPayment } from "../controllers/paymentController";
+import { postComment } from "../controllers/commentControllers";
 import { TokenValidation } from "../libs/JsonWebToken";
 
 const router = Router();
 
-router.get("/:id", getPayment);
-
-router.post("/", postPayment);
+router.post("/:id", TokenValidation, postComment);
 
 export default router;

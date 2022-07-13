@@ -155,8 +155,7 @@ function updateSubscriptionById(id, { status, reason, }) {
                     transaction_amount: reason === "Mikasa Nueva Premium" ? 1500 : 20000,
                     currency_id: "ARS",
                 },
-                back_url: "https://mikasa-nueva.vercel.app/success",
-                status,
+                back_url: "https://mikasa-nueva.vercel.app/success"
             };
             const subscription = yield axios.put(`${url}/${id}`, body, {
                 headers: {
