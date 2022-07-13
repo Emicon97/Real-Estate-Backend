@@ -1,13 +1,10 @@
 import { Request, Response } from "express";
-import {
-  createContactForm,
-  getContactByProperty,
-} from "../helpers/contactHelpers";
+import { getReportsByDenounced, reportOwner } from "../helpers/flagHelpers";
 
-async function getContact(req: Request, res: Response) {
+async function getReportsByOwner(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    const contact = await getContactByProperty(id);
+    const contact = await getReportsByDenounced(id);
     res.status(201).json(contact);
   } catch (error: any) {
     if (error instanceof Error) {
@@ -19,11 +16,12 @@ async function getContact(req: Request, res: Response) {
   }
 }
 
-async function postContactForm(req: Request, res: Response) {
+async function postReport(req: Request, res: Response) {
   try {
-    const data = req.body;
-    const contact = await createContactForm(data);
-    res.status(201).json(contact);
+    const { id } = req.params;
+    const { reason } = req.body;
+    const report = await reportOwner(id, reason);
+    res.status(201).json(report);
   } catch (error: any) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -34,4 +32,4 @@ async function postContactForm(req: Request, res: Response) {
   }
 }
 
-export { getContact, postContactForm };
+export { getReportsByOwner, postReport };

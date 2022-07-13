@@ -1,21 +1,22 @@
-import { Contact, ContactType } from "../models/contact";
-import contactModel from "./../models/contact";
+import flagModel, { Flag, FlagType } from "../models/flags";
+import { getOwnersId } from "./propertyHelpers";
 
-async function createContactForm(data: Contact): Promise<Contact> {
-  const contact: ContactType = await contactModel.create(data);
+async function reportOwner(id: string, reason: string): Promise<Flag> {
+  const denounced = await getOwnersId(id);
+  const report: FlagType = await flagModel.create({ denounced, reason });
 
-  const savedContact: Contact = await contact.save();
-  return savedContact;
+  const savedReport: Flag = await report.save();
+  return savedReport;
 }
 
-async function getContactByProperty(property: string): Promise<Contact[]> {
-  const contact: Contact[] = await contactModel.find({ property });
+async function getReportsByDenounced(denounced: string): Promise<Flag[]> {
+  const report: Flag[] = await flagModel.find({ denounced });
 
-  if (contact.length) {
-    return contact;
+  if (report.length) {
+    return report;
   }
 
   throw new Error("No hay contactos para esta propiedad.");
 }
 
-export { createContactForm, getContactByProperty };
+export { reportOwner, getReportsByDenounced };

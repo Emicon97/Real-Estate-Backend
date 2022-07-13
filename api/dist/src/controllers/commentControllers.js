@@ -16,8 +16,8 @@ function postComment(req, res) {
         try {
             const { id } = req.params;
             const data = req.body;
-            const contact = yield (0, commentHelpers_1.commentCreate)(id, data);
-            res.status(201).json(contact);
+            const comment = yield (0, commentHelpers_1.commentCreate)(id, data);
+            res.status(201).json(comment);
         }
         catch (error) {
             if (error instanceof Error) {
