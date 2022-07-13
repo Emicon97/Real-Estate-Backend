@@ -170,7 +170,7 @@ async function updateSubscriptionById(
       auto_recurring: {
         frequency: 1,
         frequency_type: "months",
-        transaction_amount: 0,
+        transaction_amount: 5,
         currency_id: "ARS",
       },
       back_url: `https://mikasa-nueva.vercel.app/goodbye/${id}`,
@@ -182,6 +182,7 @@ async function updateSubscriptionById(
         Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
       },
     });
+
     return subscription.data.init_point;
   }
 }
