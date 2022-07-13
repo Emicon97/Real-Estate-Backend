@@ -30,27 +30,33 @@ function getUserBySubscription(subscription) {
 exports.getUserBySubscription = getUserBySubscription;
 function rangeManager(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const user = yield users_1.default
-            .findById(id)
-            .populate({ path: "properties" });
-        if (user === null || user === void 0 ? void 0 : user.subscription) {
-            const updated = getSubscriptionById(user.subscription).then((response) => __awaiter(this, void 0, void 0, function* () {
-                if (response.status === "pending" || response.status === "cancelled") {
-                    yield propertyStatusManager(user, "free");
-                    return yield users_1.default.findByIdAndUpdate(id, { range: "free" });
-                }
-                if (response.reason === "Mikasa Nueva Premium") {
-                    yield propertyStatusManager(user, "premium");
-                    return yield users_1.default.findByIdAndUpdate(id, { range: "premium" });
-                }
-                else {
-                    yield propertyStatusManager(user, "vip");
-                    return yield users_1.default.findByIdAndUpdate(id, { range: "vip" });
-                }
-            }));
-            return updated;
+        try {
+            const user = yield users_1.default
+                .findById(id)
+                .populate({ path: "properties" });
+            if (user === null || user === void 0 ? void 0 : user.subscription) {
+                const updated = getSubscriptionById(user.subscription).then((response) => __awaiter(this, void 0, void 0, function* () {
+                    if (response.status === "pending" || response.status === "cancelled") {
+                        yield propertyStatusManager(user, "free");
+                        return yield users_1.default.findByIdAndUpdate(id, { range: "free" });
+                    }
+                    if (response.reason === "Mikasa Nueva Premium") {
+                        yield propertyStatusManager(user, "premium");
+                        return yield users_1.default.findByIdAndUpdate(id, { range: "premium" });
+                    }
+                    else {
+                        yield propertyStatusManager(user, "vip");
+                        return yield users_1.default.findByIdAndUpdate(id, { range: "vip" });
+                    }
+                }));
+                return updated;
+            }
+            return user;
         }
-        return user;
+        catch (error) {
+            console.log(error);
+            return null;
+        }
     });
 }
 exports.rangeManager = rangeManager;
